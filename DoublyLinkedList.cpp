@@ -57,10 +57,10 @@ class DoublyLinkedList {
 
   void insertNode(int pos, int val) {
     if (pos <= 0) {
-      cout << "Insert at front, call insertFront()==>" << endl;
+      cout << "Insert at front, call insertFront() ==>" << endl;
       insertFront(val);
     } else if (pos >= m_size) {
-      cout << "Insert at back, call insertBack()==>" << endl;
+      cout << "Insert at back, call insertBack() ==>" << endl;
       insertBack(val);
     } else {
       ListNode *ptr1, *ptr2;
@@ -116,7 +116,7 @@ class DoublyLinkedList {
 
   void updateNode(int pos, int val) {
     if (pos < 0 || pos > m_size - 1) {
-      cout << "No ListNode for update" << endl;
+      cout << "No ListNode for update." << endl;
       return;
     }
     ListNode* ptr = m_head;
@@ -124,7 +124,7 @@ class DoublyLinkedList {
       ptr = ptr->next;
     } 
     ptr->val = val;
-    cout << "Update a ListNode at position pos of a DoublyLinkedList." << endl;
+    cout << "Update a ListNode at position pos of a DoublyLinkedList...\n";
   }
 
   ListNode* findNode(int val) {
@@ -142,7 +142,7 @@ class DoublyLinkedList {
 
   ListNode* getNode(int pos) {
     if (pos < 0 || pos > m_size - 1) {
-      cout << "Wrong position" << endl;
+      cout << "Invalid position." << endl;
       return nullptr;
     } else {
       ListNode* ptr = m_head;
@@ -201,22 +201,23 @@ int main(int argc, char* argv[]) {
 
   cout << "------------------------\n";
   DoublyLinkedList* lst3 = new DoublyLinkedList();
-  lst3->insertFront(234);
-  lst3->insertBack(33);
-  lst3->insertNode(2, -12);
-  lst3->insertNode(2, 5);
-  lst3->insertNode(0, 123);
-  lst3->insertNode(2, 32);
-  lst3->findNode(234);
+  lst3->insertFront(10);
+  lst3->insertBack(20);
+  lst3->insertNode(2, -30);
+  lst3->insertNode(2, 40);
+  lst3->insertNode(0, 50);
+  lst3->insertNode(2, 60);
+
+  lst3->findNode(50);
   cout << lst3->getSize() << endl;
   lst3->output();
-  cout << lst1->getNode(0)->val << endl;
-  lst3->updateNode(-1, 10);
-  lst3->updateNode(6, 10);
-  lst3->updateNode(0, 124);
-  lst3->output();
-  cout << lst1->getNode(0)->val << endl;
+  lst3->updateNode(-1, 100);
+  lst3->updateNode(6, 600);
+  lst3->updateNode(0, 123);
+  lst3->findNode(50);
   lst3->findNode(123);
+  lst3->output();
+  cout << lst3->getNode(0)->val << endl;
   delete lst3;
 
   return 0;
