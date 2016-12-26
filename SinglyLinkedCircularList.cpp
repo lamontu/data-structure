@@ -61,6 +61,7 @@ void GetElem(LinkList L, int loc, int* pvalue ) {
   LinkList p = L->next;  // p is pointing to head node.
   int j = 0;
   if ( loc < 1 || loc > ListLength(L)) {  // if loc is invalid
+    cout << "Invalid location" << endl;
     exit(0);
   }
   while (j < loc) {
@@ -116,6 +117,7 @@ void ListInsert(LinkList* L, int loc, int value) {
   LinkList q, s;
   int j = 0;
   if (loc < 1 || loc > ListLength(*L) + 1) {
+    cout << "Invalid location" << endl;
     exit(0);
   }
   while (j < loc - 1) {
@@ -140,6 +142,7 @@ void ListDelete(LinkList* L, int loc, int* pvalue) {
   LinkList q;
   int j = 0;
   if (loc < 1 || loc > ListLength(*L)) {
+    cout << "Invalid location" << endl;
     exit(0);
   }
   while (j < loc - 1) {
@@ -205,6 +208,8 @@ int main(int argc, char* argv[]) {
   ListInsert(&lst, 8, 88);
   cout << "After insert a node:" << endl;
   TravelList(lst);
+
+  // GetElem(lst, 0, &val);
 
   DestroyList(&lst);
 
