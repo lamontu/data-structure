@@ -29,8 +29,9 @@ int main(int argc, char* argv[]) {
   cout << lst.Find(400) << endl;
   cout << lst.Find(300) << endl;
 
-  cout << lst.FindCircle() << endl;
-
+  cout << lst.GetTail() << endl;
+  lst.Invert();
+  cout << lst.GetTail() << endl;
 
   cout << "## convert SList<int> to const SList<int>:" << endl; 
   const SList<int> lst2 = (const SList<int>)lst;
@@ -42,6 +43,9 @@ int main(int argc, char* argv[]) {
   cout << node2.data << endl;
 
   cout << "------------------------" << endl;
+
+  cout << lst.FindCircle() << endl;
+  
   SList<int> lst3 = lst;
   cout << lst.FindCross(lst3) << endl;
   // No idea about creating two intersecting SList objects 

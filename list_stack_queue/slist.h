@@ -28,23 +28,23 @@ class SList {
   SList<T>& operator=(const SList<T>& other);
   ~SList();
   void Invert();
-  int IsEmpty() const;
+  bool IsEmpty() const;
   int GetCount() const;
-  int AddHead(const T data);
-  int AddTail(const T data);
   int InsertBefore(const int pos, const T data);
   int InsertAfter(const int pos, const T data);
+  int AddHead(const T data);
+  int AddTail(const T data);
   void RemoveAt(const int pos);
   void RemoveHead();
   void RemoveTail();
   void RemoveAll();
+  void SetAt(const int pos, T data);
+  T& GetAt(const int pos);
+  T GetAt(const int pos) const;
   T& GetTail();
   T GetTail() const;
   T& GetHead();
   T GetHead() const;
-  T& GetAt(const int pos);
-  T GetAt(const int pos) const;
-  void SetAt(const int pos, T data);
   int Find(const T data) const;
   int FindCircle() const;
   int FindCross(SList& testlist);
@@ -107,7 +107,7 @@ inline void SList<T>::Invert() {
 }
 
 template<typename T>
-inline int SList<T>::IsEmpty() const {
+inline bool SList<T>::IsEmpty() const {
   return 0 == m_nCount;
 }
 
@@ -115,16 +115,6 @@ template<typename T>
 inline int SList<T>::GetCount() const {
   return m_nCount;
 } 
-
-template<typename T>
-inline int SList<T>::AddHead(const T data) {
-  return InsertBefore(1, data);
-}
-
-template<typename T>
-inline int SList<T>::AddTail(const T data) {
-  return InsertAfter(GetCount(), data);
-}
 
 /* Return the position of the new node if success.
  * Return 0 if fail.
@@ -209,6 +199,16 @@ inline int SList<T>::InsertAfter(const int pos, const T data) {
 }
 
 template<typename T>
+inline int SList<T>::AddHead(const T data) {
+  return InsertBefore(1, data);
+}
+
+template<typename T>
+inline int SList<T>::AddTail(const T data) {
+  return InsertAfter(GetCount(), data);
+}
+
+template<typename T>
 inline void SList<T>::RemoveAt(const int pos) {
   assert(1 <= pos && pos <= m_nCount);
 
@@ -255,9 +255,40 @@ inline void SList<T>::RemoveAll() {
     delete m_pNodeHead;
     m_pNodeHead = pTmpNode; 
   }
-  // m_pNodeHead = nullptr;
   m_nCount = 0;
 } 
+
+template<typename T>
+inline void SList<T>::SetAt(const int pos, T data) {
+  assert(1 <= pos && pos <= m_nCount);
+  Node<T>* pTmpNode = m_pNodeHead;
+  for (int i = 1; i < pos; ++i) {
+    pTmpNode = pTmpNode->next;
+  } 
+  pTmpNode->data = data;
+}
+
+template<typename T>
+inline T& SList<T>::GetAt(const int pos) {
+  assert(1 <= pos && pos <= m_nCount);
+  Node<T>* pTmpNode = m_pNodeHead;
+  for (int i = 1; i < pos; ++i) {
+    pTmpNode = pTmpNode->next;
+  }
+  std::cout << "GetAt() is called." << std::endl;
+  return pTmpNode->data;   
+}
+
+template<typename T>
+inline T SList<T>::GetAt(const int pos) const {
+  assert(1 <= pos && pos <= m_nCount);
+  Node<T>* pTmpNode = m_pNodeHead;
+  for (int i = 1; i < pos; ++i) {
+    pTmpNode = pTmpNode->next;
+  }
+  std::cout << "GetAt() const is called." << std::endl;
+  return pTmpNode->data;   
+}
 
 template<typename T>
 inline T& SList<T>::GetTail() {
@@ -293,38 +324,6 @@ template<typename T>
 inline T SList<T>::GetHead() const {
   assert(0 != m_nCount);
   return m_pNodeHead->data;
-}
-
-template<typename T>
-inline T& SList<T>::GetAt(const int pos) {
-  assert(1 <= pos && pos <= m_nCount);
-  Node<T>* pTmpNode = m_pNodeHead;
-  for (int i = 1; i < pos; ++i) {
-    pTmpNode = pTmpNode->next;
-  }
-  std::cout << "GetAt() is called." << std::endl;
-  return pTmpNode->data;   
-}
-
-template<typename T>
-inline T SList<T>::GetAt(const int pos) const {
-  assert(1 <= pos && pos <= m_nCount);
-  Node<T>* pTmpNode = m_pNodeHead;
-  for (int i = 1; i < pos; ++i) {
-    pTmpNode = pTmpNode->next;
-  }
-  std::cout << "GetAt() const is called." << std::endl;
-  return pTmpNode->data;   
-}
-
-template<typename T>
-inline void SList<T>::SetAt(const int pos, T data) {
-  assert(1 <= pos && pos <= m_nCount);
-  Node<T>* pTmpNode = m_pNodeHead;
-  for (int i = 1; i < pos; ++i) {
-    pTmpNode = pTmpNode->next;
-  } 
-  pTmpNode->data = data;
 }
 
 /* Return the position of the node that has the target data if success.
