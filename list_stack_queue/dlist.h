@@ -2,6 +2,9 @@
  * No dummy node, all node is data node.
  */
 
+#ifndef __DLIST_H__
+#define __DLIST_H__
+
 #include <iostream>
 #include <cassert>
 #include <new>
@@ -359,3 +362,5 @@ inline int DList<T>::Find(const T data) const {
   }
   return 0;
 }
+
+#endif  // __DLIST_H__

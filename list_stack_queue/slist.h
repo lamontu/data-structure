@@ -2,6 +2,9 @@
  * No dummy node, all node is data node.
  */
 
+#ifndef __SLIST_H__
+#define __SLIST_H__
+
 #include <iostream>
 #include <cassert>
 #include <new>
@@ -389,3 +392,5 @@ inline int SList<T>::FindCross(SList<T>& test_list) {
   m_nCount -= test_list.m_nCount;
   return cross;  
 }
+
+#endif  // __SLIST_H__
