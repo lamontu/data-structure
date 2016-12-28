@@ -30,7 +30,7 @@ class StackArray {
   bool IsFull();
   bool Resize(int newmaxsize);
   bool Push(const T& data);
-  bool Pop(T* data);
+  bool Pop(T* data=nullptr);
   bool Top(T* data) const;
 };
 
