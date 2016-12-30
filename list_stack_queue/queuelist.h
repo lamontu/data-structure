@@ -19,7 +19,7 @@ class QueueList {
   bool IsEmpty() const;
   int GetCount() const;
   void MakeEmpty();
-  bool EnQueue(const T data);
+  bool EnQueue(const T& data);
   T DeQueue();
   T& GetFront();
   T GetFront() const;
@@ -52,7 +52,7 @@ inline void QueueList<T>::MakeEmpty() {
 }
 
 template<typename T>
-inline bool QueueList<T>::EnQueue(const T data) {
+inline bool QueueList<T>::EnQueue(const T& data) {
   return slist.AddTail(data);
 }
 
