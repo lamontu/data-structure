@@ -61,9 +61,11 @@ class BinaryTree {
   void InOrderTraverse(funtype Visit) const;
   void PostOrderTraverse(funtype Visit) const;
   void LevelOrderTraverse(funtype Visit) const;
-  
- private:
+
+ protected:
   BTNode<T>* m_root;
+
+ private:
   BTNode<T>* _Copy(BTNode<T>* pnode);
   void _Create1(BTNode<T>*& tree, T ch[], int n, const T& c, int i);
   void _Create2(BTNode<T>*& tree, T ch1[], T ch2[], int low, int high, int& k);

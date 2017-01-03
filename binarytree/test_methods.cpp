@@ -21,16 +21,16 @@ int main(int argc, char* argv[]) {
   int LevelOrder[] = {1, 2, 3, 4, 5, 6, 7};
   int PreOrder[] = {1, 2, 4, 5, 3, 6, 7};
   int InOrder[] = {4, 2, 5, 1, 6, 3, 7};  
-
+/*
   cout << "## Create a tree using a PreOrderTraverse array "
        << "and an InOrderTraverse array:" << endl;
   BinaryTree<int> bt;
   bt.Create2(PreOrder, InOrder, 7);
-/*
- * cout << "## Create a tree from a level order traverse result:" << endl;
- * BinaryTree<int> bt;
- * bt.Create1(LevelOrder, 7, 100);
- */
+*/
+  cout << "## Create a tree from a level order traverse result:" << endl;
+  BinaryTree<int> bt;
+  bt.Create1(LevelOrder, 7, 100);
+ 
   bt.IsEmpty() ? cout << "Empty \n" : cout << "Not empty \n";
   cout << "Root data: " << bt.Root()->data << endl;
   cout << "Nodes count: " << bt.NodesCount() << endl;
