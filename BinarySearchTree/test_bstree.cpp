@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
   cout << "p15: " << p15->data << endl;
   BTNode<int>* pre15 = bst.Predecessor(p15);
   cout << "pre15: " << pre15->data << endl;
-    
 
   BTNode<int>* p2 = bst.Insert(2);
   cout << "Insert p2: " << p2->data << endl;
@@ -74,8 +73,6 @@ int main(int argc, char* argv[]) {
   cout << "Level order traverse:" << endl;
   bst6.LevelOrderTraverse(pfun);  cout << endl;
   bst6.InOrderTraverse(pfun);  cout << endl;
-
-   
 
   cout << "================================" << endl;
   return 0;
