@@ -164,7 +164,6 @@ BTNode<T>* BinaryTree<T>::Locate(const T& elem) const {
 
 template<typename T>
 BTNode<T>* BinaryTree<T>::Parent(const BTNode<T>* pnode) const {
-  assert(pnode);
   return _Parent(m_root, pnode);
 }
 
@@ -399,8 +398,7 @@ BTNode<T>* BinaryTree<T>::_Locate(BTNode<T>* pnode,
 template<typename T>
 BTNode<T>* BinaryTree<T>::_Parent(BTNode<T>* root,
                                   const BTNode<T>* pnode) const {
-  assert(root);
-  if (root == pnode) {
+  if (root == nullptr || root == pnode) {
     return nullptr; 
   }
   if (root->lchild == pnode || root->rchild == pnode) {

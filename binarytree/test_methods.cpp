@@ -47,6 +47,12 @@ int main(int argc, char* argv[]) {
   bt.InOrderTraverseRec(pfun);  cout << endl;
   bt.PostOrderTraverseRec(pfun);  cout << endl;
 
+  BTNode<int>* father = bt.Parent(bt.Root());
+  if (father == nullptr) {
+    cout << "Parent of root: nullptr" << endl;
+  }
+ 
+
   cout << "LeftChild: " << bt.LeftChild()->data << endl;
   cout << "RightChild: " << bt.RightChild()->data << endl;
 
