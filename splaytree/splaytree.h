@@ -83,6 +83,8 @@ void SplayTree<T>::destroy(SplayTreeNode<T>* & tree) {
   if (tree->right != nullptr) {
     destroy(tree->right);
   }
+  delete tree;
+  tree = nullptr;
 }
 
 template<typename T>
