@@ -97,7 +97,7 @@ class SinglyLinkedList {
       ptr1->next = ptr2->next;
       if (ptr2->next == nullptr) {
         m_tail = ptr1;
-        cout << "Delete a ListNode from a multiple-node SinglyLinkedList...\n";
+        cout << "Delete the last ListNode from a multiple-node SinglyLinkedList...\n";
       }
       cout << "Delete a ListNode at postion pos of a SinglyLinkedList...\n";
       delete ptr2;
