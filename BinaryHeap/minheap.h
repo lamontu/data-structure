@@ -29,6 +29,7 @@ class MinHeap {
 
   inline bool isEmpty() const;
   inline void makeEmpty();
+  inline int size() const;
 
   inline void insert(const T& x);
   inline void findMin(T& x);
@@ -77,6 +78,11 @@ inline bool MinHeap<T>::isEmpty() const {
 template<typename T>
 inline void MinHeap<T>::makeEmpty() {
   currentSize = 0;
+}
+
+template<typename T>
+inline int MinHeap<T>::size() const {
+  return currentSize;
 }
 
 // Insert item x, allowing duplicates.

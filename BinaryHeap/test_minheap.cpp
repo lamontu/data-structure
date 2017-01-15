@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
     rand_num = rand() % M;
     h.insert(rand_num);
   }
+  cout << "Size of heap h: " << h.size() << endl;
   h.makeEmpty();
   h.deleteMin();
 
