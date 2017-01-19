@@ -1,4 +1,7 @@
-/* binomial_heap.h */
+/* binomial_heap.h 
+ * Binomial heap consists of some binomial trees in order of their degree.
+ * The roots of all binomial trees form a singly linked list.
+ */
 
 #ifndef __BINOMIAL_HEAP_H__
 #define __BINOMIAL_HEAP_H__
@@ -103,6 +106,7 @@ BinomialNode<T>* BinomialHeap<T>::search(BinomialNode<T>* root, T key) {
       if (child != nullptr) return child;
       parent = parent->next;
     }
+    // parent = parent->next;  // Equivalent to above
   }
   return nullptr;
 }
