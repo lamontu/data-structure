@@ -156,7 +156,7 @@ AVLTreeNode<T>* AVLTree<T>::insert(T key, AVLTreeNode<T>* & tree) {
 
 template<typename T>
 void AVLTree<T>::insert(T key) {
-  insert(key, m_root);
+  m_root = insert(key, m_root);
 }
 
 // Return the root pointer of the modified AVLTree
