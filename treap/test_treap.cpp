@@ -2,6 +2,8 @@
 
 #include "treap.h"
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 void Visit(const int& a) {
   cout << a << ", ";
@@ -18,11 +20,19 @@ int main(int argc, char* argv[]) {
   Treap<int> tree;
   srand(0);
   int a = 0;
+  vector<int> vec;
   cout << "## Add elements int treap:" << endl;
   for (int i = 0; i < K; ++i) {
     a = rand() % M;
+    vec.push_back(a);
     cout << a << ", ";
     tree.Insert(a);
+  }
+  cout << endl;
+  cout << "## Sort the elements:" << endl;
+  sort(vec.begin(), vec.end());
+  for (auto it = vec.begin(); it != vec.end(); ++it) {
+    cout << *it << ", ";
   }
   cout << endl;
 

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int COUNT;
+int COUNT;  // Count different key
 
 template<typename T>
 struct TreapNode {
@@ -66,6 +66,7 @@ class Treap {
   void in_order_traverse(TreapNode<T>* root, FuncType Visit) const;
   void rotate_left(TreapNode<T>* & node);
   void rotate_right(TreapNode<T>* & node);
+  //TreapNode<T>* insert(TreapNode<T>* & root, TreapNode<T>* node);
   TreapNode<T>* insert(TreapNode<T>* & root, T key);
   TreapNode<T>* remove(TreapNode<T>* & root, TreapNode<T>* node);
 };
@@ -196,6 +197,46 @@ void Treap<T>::rotate_right(TreapNode<T>* & node) {
   lchild->Update();
   node = lchild;
 }
+
+/*
+template<typename T>
+TreapNode<T>* Treap<T>::insert(TreapNode<T>* & root, TreapNode<T>* node) {
+  if (nullptr == node) return root;
+  if (nullptr == root) {
+    root = node;
+  } else if (node->key < root->key) {
+    root->left = insert(root->left, node);
+    if (root->priority > root->left->priority) {
+      rotate_right(root);
+    } else {
+      root->Update();
+    }
+  } else if (node->key > root->key) {
+    root->right = insert(root->right, node);
+    if (root->priority > root->right->priority) {
+      rotate_left(root);
+    } else {
+      root->Update();
+    }
+  } else {
+    root->count++;
+    root->Update();
+  }
+  return root;
+}
+
+template<typename T>
+void Treap<T>::Insert(T key) {
+  TreapNode<T>* node;
+  try {
+    node = new TreapNode<T>(key);
+    COUNT++;
+  } catch (std::bad_alloc&) {
+    return;
+  }
+  root_ = insert(root_, node);
+}
+*/
 
 template<typename T>
 TreapNode<T>* Treap<T>::insert(TreapNode<T>* & root, T key) {
