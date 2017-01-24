@@ -75,7 +75,7 @@ MatrixUdg::MatrixUdg() {
       return;
     }
     matrix_[p1][p2] = 1;
-    matrix_[p2][p1] = 1;
+    matrix_[p2][p1] = 1;  // This is different from directed graph.
   }
 }
 
@@ -90,7 +90,7 @@ MatrixUdg::MatrixUdg(char vertexes[], int vlen, char edges[][2], int elen) {
     p1 = get_position(edges[i][0]);
     p2 = get_position(edges[i][1]);
     matrix_[p1][p2] = 1;
-    matrix_[p2][p1] = 1;
+    matrix_[p2][p1] = 1;  // This is different from directed graph.
   }
 }
 

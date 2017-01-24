@@ -96,6 +96,8 @@ ListUdg::ListUdg() {
     } else {
       link_last(vertexes_[p1].first_edge, node1);
     }
+
+    /* This is different from directed graph. */
     node2 = new ENode();
     node2->vertex_index = p1;
     if (nullptr == vertexes_[p2].first_edge) {
@@ -103,6 +105,7 @@ ListUdg::ListUdg() {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
+
   }
 }
 
@@ -128,6 +131,8 @@ ListUdg::ListUdg(char vertexes[], int vlen, char edges[][2], int elen) {
     } else {
       link_last(vertexes_[p1].first_edge, node1);
     }
+
+    /* This is different from directed graph. */
     node2 = new ENode();
     node2->vertex_index = p1;
     if (nullptr == vertexes_[p2].first_edge) {
@@ -135,6 +140,7 @@ ListUdg::ListUdg(char vertexes[], int vlen, char edges[][2], int elen) {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
+
   }
 }
 
