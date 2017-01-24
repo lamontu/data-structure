@@ -30,6 +30,7 @@ class ListDg {
   // ~ListDg() {  }
   void DFS() const;
   void BFS() const;
+  int TopologicalSort() const;
   void Print() const;
 
  private:
@@ -206,6 +207,77 @@ void ListDg::BFS() const {
   cout << endl;
 }
 
+int ListDg::TopologicalSort() const {
+  int i, j;
+  int index = 0;
+  int head = 0;
+  int rear = 0;
+  int* queue;  // There's also implementation using stack.
+  int* ins;  // Array store the in-degree of vertexes
+  char* tops;
+  ENode* node;
+
+  ins = new int[vertex_num_];
+  queue = new int[vertex_num_];
+  tops = new char[vertex_num_];
+  memset(ins, 0, vertex_num_ * sizeof(int));
+  memset(queue, 0, vertex_num_ * sizeof(int));
+  memset(tops, 0, vertex_num_ * sizeof(char));
+
+  // Count the in-degree of each vertex
+  for (i = 0; i < vertex_num_; ++i) {
+    node = vertexes_[i].first_edge;
+    while (node != nullptr) {
+      ins[node->vertex_index]++;
+      node = node->next_edge;
+    }
+  }
+  // Add the vertex with in-degree 0 into the array queue
+  for (i = 0; i < vertex_num_; ++i) {
+    if (0 == ins[i]) {
+      queue[rear++] = i;  // enqueue
+    }
+  }
+  while (head != rear) {
+    j = queue[head++];  // dequeue
+    tops[index++] = vertexes_[j].data;
+    node = vertexes_[j].first_edge;
+    while (node != nullptr) {
+      ins[node->vertex_index]--;
+      if (0 == ins[node->vertex_index]) {
+        queue[rear++] = node->vertex_index;
+      }
+      node = node->next_edge;
+    }
+  }
+
+  if (index != vertex_num_) {
+    cout << "Graph has a cycle." << endl;
+    delete queue;
+    queue = nullptr;
+    delete ins;
+    ins = nullptr;
+    delete tops;
+    tops = nullptr;
+    return 1;
+  }
+
+  cout << "## Topological Sort: ";
+  for (i = 0; i < vertex_num_; ++i) {
+    cout << tops[i] << ", ";
+  }
+  cout << endl;
+
+  delete queue;
+  queue = nullptr;
+  delete ins;
+  ins = nullptr;
+  delete tops;
+  tops = nullptr;
+
+  return 0;
+}
+
 void ListDg::Print() const {
   int i, j;
   ENode* node;
@@ -223,10 +295,11 @@ void ListDg::Print() const {
 }
 
 int main(int argc, char* argv[]) {
-  char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
+  //char vertexes[] = {'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
+  char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
   char edges[][2] = {
-    {'A', 'C'}, {'A', 'D'}, {'A', 'F'}, {'B', 'C'},
-    {'C', 'D'}, {'E', 'G'}, {'F', 'G'}
+    {'H', 'E'}, {'H', 'F'}, {'G', 'E'}, {'G', 'F'},
+    {'G', 'B'}, {'F', 'C'}, {'F', 'D'}, {'C', 'A'}
   };
   int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
   int elen = sizeof(edges) / sizeof(edges[0]);
@@ -235,6 +308,7 @@ int main(int argc, char* argv[]) {
   pDg = new ListDg(vertexes, vlen, edges, elen);
   pDg->DFS();
   pDg->BFS();
+  pDg->TopologicalSort();
   pDg->Print();
 
   delete pDg;
