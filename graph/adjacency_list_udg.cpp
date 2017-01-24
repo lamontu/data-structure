@@ -27,7 +27,7 @@ class ListUdg {
  public:
   ListUdg();
   ListUdg(char vertexes[], int vlen, char edges[][2], int elen);
-  ~ListUdg();
+  // ~ListUdg() {  }
   void DFS() const;
   void BFS() const;
   void Print() const;
@@ -236,6 +236,9 @@ int main(int argc, char* argv[]) {
   pUdg->DFS();
   pUdg->BFS();
   pUdg->Print();
+
+  delete pUdg;
+  pUdg = nullptr;
 
   return 0;
 }

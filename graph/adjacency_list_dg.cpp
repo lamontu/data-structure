@@ -27,7 +27,7 @@ class ListDg {
  public:
   ListDg();
   ListDg(char vertexes[], int vlen, char edges[][2], int elen);
-  ~ListDg();
+  // ~ListDg() {  }
   void DFS() const;
   void BFS() const;
   void Print() const;
@@ -236,6 +236,9 @@ int main(int argc, char* argv[]) {
   pDg->DFS();
   pDg->BFS();
   pDg->Print();
+
+  delete pDg;
+  pDg = nullptr;
 
   return 0;
 }

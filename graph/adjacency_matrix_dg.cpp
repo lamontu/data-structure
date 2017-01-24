@@ -18,7 +18,7 @@ class MatrixDg {
  public:
   MatrixDg();
   MatrixDg(char vertexes[], int vlen, char edges[][2], int elen);
-  ~MatrixDg() {  }
+  // ~MatrixDg() {  }
   void DFS() const;
   void BFS() const;
   void Print() const;
@@ -195,6 +195,9 @@ int main(int argc, char* argv[]) {
   pDg->DFS();
   pDg->BFS();
   pDg->Print();
+
+  delete pDg;
+  pDg = nullptr;
 
   return 0;
 }
