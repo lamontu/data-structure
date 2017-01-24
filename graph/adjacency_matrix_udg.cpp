@@ -19,12 +19,34 @@ class MatrixUdg {
   MatrixUdg();
   MatrixUdg(char vertexes[], int vlen, char edges[][2], int elen);
   ~MatrixUdg() {  }
-  void Print();
+  void DFS() const;
+  void BFS() const;
+  void Print() const;
 
  private:
   char read_char();
-  int get_position(char ch);
+  int get_position(char ch) const;
+  int first_vertex(int v) const;
+  int next_vertex(int v, int w) const;
+  void dfs(int i, int* visited) const;
 };
+
+char MatrixUdg::read_char() {
+  char ch;
+  // Input one character one time
+  do {
+    cin >> ch;
+  } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
+  return ch;
+}
+
+int MatrixUdg::get_position(char ch) const {
+  int i;
+  for (i = 0; i < vertex_num_; ++i) {
+    if(vertexes_[i] == ch) return i;
+  }
+  return -1;
+}
 
 MatrixUdg::MatrixUdg() {
   char c1, c2;
@@ -72,24 +94,83 @@ MatrixUdg::MatrixUdg(char vertexes[], int vlen, char edges[][2], int elen) {
   }
 }
 
-char MatrixUdg::read_char() {
-  char ch;
-  // Input one character one time
-  do {
-    cin >> ch;
-  } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
-  return ch;
-}
-
-int MatrixUdg::get_position(char ch) {
+int MatrixUdg::first_vertex(int v) const {
   int i;
+  if (v < 0 || v > (vertex_num_ - 1)) return -1;
   for (i = 0; i < vertex_num_; ++i) {
-    if(vertexes_[i] == ch) return i;
+    if (1 == matrix_[v][i]) return i;
   }
   return -1;
 }
 
-void MatrixUdg::Print() {
+int MatrixUdg::next_vertex(int v, int w) const {
+  int i;
+  if (v < 0 || v > (vertex_num_ - 1) || w < 0 || w > (vertex_num_ - 1)) {
+    return -1;
+  }
+  for (i = w + 1; i < vertex_num_; ++i) {
+    if (1 == matrix_[v][i]) return i;
+  }
+  return -1;
+}
+
+void MatrixUdg::dfs(int i, int* visited) const {
+  int w;
+  visited[i] = 1;
+  cout << vertexes_[i] << ", ";
+  for (w = first_vertex(i); w >= 0; w = next_vertex(i, w)) {
+    if (!visited[w]) {
+      dfs(w, visited);
+    }
+  }
+}
+
+void MatrixUdg::DFS() const {
+  int i;
+  int visited[MAX];
+  for (i = 0; i < vertex_num_; ++i) {
+    visited[i] = 0;
+  }
+  cout << "DFS: ";
+  for (i = 0; i < vertex_num_; ++i) {
+    if (!visited[i]) {
+      dfs(i, visited);
+    }
+  }
+  cout << endl;
+}
+
+void MatrixUdg::BFS() const {
+  int head = 0;
+  int rear = 0;
+  int queue[MAX];
+  int visited[MAX];
+  int i, j, k;
+  for (i = 0; i < vertex_num_; ++i) {
+    visited[i] = 0;
+  }
+  cout << "BFS: ";
+  for (i = 0; i < vertex_num_; ++i) {
+    if (!visited[i]) {
+      visited[i] = 1;
+      cout << vertexes_[i] << ", ";
+      queue[rear++] = i;
+    }
+    while (head != rear) {
+      j = queue[head++];
+      for (k = first_vertex(j); k >= 0; k = next_vertex(j, k)) {
+        if (!visited[k]) {
+          visited[k] = 1;
+          cout << vertexes_[k] << ", ";
+          queue[rear++] = k;
+        }
+      }
+    }
+  }
+  cout << endl;
+} 
+
+void MatrixUdg::Print() const {
   int i, j;
   cout << "Matrix Graph:" << endl;
   for (i = 0; i < vertex_num_; ++i) {
@@ -109,8 +190,10 @@ int main(int argc, char* argv[]) {
   int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
   int elen = sizeof(edges) / sizeof(edges[0]);
   MatrixUdg* pUdg;
-  // pUdg = new MatrixUdg(vertexes, vlen, edges, elen);
-  pUdg = new MatrixUdg();  // Mannually input
+  // pUdg = new MatrixUdg();  // Manually input
+  pUdg = new MatrixUdg(vertexes, vlen, edges, elen);
+  pUdg->DFS();
+  pUdg->BFS();
   pUdg->Print();
   return 0;
 }
