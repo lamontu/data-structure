@@ -1,0 +1,363 @@
+/* adjacency_list_udg_weight.cpp
+ * Adjacency List of Undirected Graph with Weight
+ */
+
+#include <iostream>
+
+using namespace std;
+
+const int MAX = 100;
+const int INF = ~(0x1 << 31);
+
+// Store the information of an edge
+class EData {
+ public:
+  char start;
+  char end;
+  int weight;
+
+  EData() {  }
+  EData(char s, char e, int w) : start(s), end(e), weight(w) {  }
+};
+
+class ListUdg {
+ private:
+  struct ENode {
+    int vertex_index;
+    int weight;
+    ENode* next_edge;
+  };
+
+  struct VNode {
+    char data;
+    ENode* first_edge;
+  };
+
+  int vertex_num_;
+  int edge_num_;
+  VNode vertexes_[MAX];
+
+ public:
+  ListUdg();
+  ListUdg(char vertexes[], int vlen, EData* edges[], int elen);
+  // ~ListUdg() {  }
+  void DFS() const;
+  void BFS() const;
+  void Print() const;
+  void Kruskal() const;
+
+ private:
+  char read_char();
+  int get_position(char ch) const;
+  void link_last(ENode* list, ENode* node) const;
+  void dfs(int i, int* visited) const;
+  int get_weight(int start, int end) const;
+  EData* get_edges() const;
+  void sort_edges(EData* edges, int elen) const;
+  int get_end(int vends[], int i) const;
+};
+
+char ListUdg::read_char() {
+  char ch;
+  do {
+    cin >> ch;
+  } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
+  return ch;
+}
+
+int ListUdg::get_position(char ch) const {
+  int i;
+  for (i = 0; i < vertex_num_; ++i) {
+    if(vertexes_[i].data == ch) return i;
+  }
+  return -1;
+}
+
+void ListUdg::link_last(ENode* list, ENode* node) const {
+  ENode* p = list;
+  while (p->next_edge) {
+    p = p->next_edge;
+  }
+  p->next_edge = node;
+}
+
+ListUdg::ListUdg() {
+  char c1, c2;
+  int weight;
+  int v, e;
+  int i, p1, p2;
+  ENode *node1, *node2;
+
+  cout << "Input vertex number:";
+  cin >> vertex_num_;
+  cout << "Input edge number:";
+  cin >> edge_num_;
+  if (vertex_num_ < 1 || edge_num_ < 0
+      || (edge_num_ > (vertex_num_ * (vertex_num_ - 1)))) {
+    cout << "Input error: invalid parameters!" << endl;
+    return;
+  }
+  for (i = 0; i < vertex_num_; ++i) {
+    cout << "vertex(" << i <<"): ";
+    vertexes_[i].data = read_char();
+    vertexes_[i].first_edge = nullptr;
+  }
+  for (i = 0; i < edge_num_; ++i) {
+    cout << "edge(" << i << "): ";
+    c1 = read_char();
+    c2 = read_char();
+    cin >> weight;
+    p1 = get_position(c1);
+    p2 = get_position(c2);
+
+    node1 = new ENode();
+    node1->vertex_index = p2;
+    node1->weight = weight;
+    if (nullptr == vertexes_[p1].first_edge) {
+      vertexes_[p1].first_edge = node1;
+    } else {
+      link_last(vertexes_[p1].first_edge, node1);
+    }
+
+    node2 = new ENode();
+    node2->vertex_index = p1;
+    node2->weight = weight;
+    if (nullptr == vertexes_[p2].first_edge) {
+      vertexes_[p2].first_edge = node2;
+    } else {
+      link_last(vertexes_[p2].first_edge, node2);
+    }
+  }
+}
+
+ListUdg::ListUdg(char vertexes[], int vlen, EData* edges[], int elen) {
+  char c1, c2;
+  int weight;
+  int i, p1, p2;
+  ENode *node1, *node2;
+  vertex_num_ = vlen;
+  edge_num_ = elen;
+  for (i = 0; i < vertex_num_; ++i) {
+    vertexes_[i].data = vertexes[i];
+    vertexes_[i].first_edge = nullptr;
+  }
+  for (i = 0; i < edge_num_; ++i) {
+    c1 = edges[i]->start;
+    c2 = edges[i]->end;
+    weight = edges[i]->weight;
+    p1 = get_position(c1);
+    p2 = get_position(c2);
+
+    node1 = new ENode();
+    node1->vertex_index = p2;
+    node1->weight = weight;
+    if (nullptr == vertexes_[p1].first_edge) {
+      vertexes_[p1].first_edge = node1;
+    } else {
+      link_last(vertexes_[p1].first_edge, node1);
+    }
+
+    node2 = new ENode();
+    node2->vertex_index = p1;
+    node2->weight = weight;
+    if (nullptr == vertexes_[p2].first_edge) {
+      vertexes_[p2].first_edge = node2;
+    } else {
+      link_last(vertexes_[p2].first_edge, node2);
+    }
+  }
+}
+
+void ListUdg::dfs(int i, int* visited) const {
+  ENode* node;
+  visited[i] = 1;
+  cout << vertexes_[i].data <<", ";
+  node = vertexes_[i].first_edge;
+  while (node != nullptr) {
+    if (!visited[node->vertex_index]) {
+      dfs(node->vertex_index, visited);
+    }
+    node = node->next_edge;
+  }
+}
+
+void ListUdg::DFS() const {
+  int i;
+  int visited[MAX];
+  for (i = 0; i < vertex_num_; ++i) {
+    visited[i] = 0;
+  }
+  cout << "DFS: ";
+  for (i = 0; i < vertex_num_; ++i) {
+    if (!visited[i]) {
+      dfs(i, visited);
+    }
+  }
+  cout << endl;
+}
+
+void ListUdg::BFS() const {
+  int head = 0;
+  int rear = 0;
+  int queue[MAX];
+  int visited[MAX];
+  int i, j, k;
+  ENode* node;
+  for (i = 0; i < vertex_num_; ++i) {
+    visited[i] = 0;
+  }
+  cout << "BFS: ";
+  for (i = 0; i < vertex_num_; ++i) {
+    if (!visited[i]) {
+      visited[i] = 1;
+      cout << vertexes_[i].data << ", ";
+      queue[rear++] = i;
+    }
+    while (head != rear) {
+      j = queue[head++];
+      node = vertexes_[j].first_edge;
+      while (node != nullptr) {
+        k = node->vertex_index;
+        if (!visited[k]) {
+          visited[k] = 1;
+          cout << vertexes_[k].data << ", ";
+          queue[rear++] = k;
+        }
+        node = node->next_edge;
+      }
+    }
+  }
+  cout << endl;
+}
+
+void ListUdg::Print() const {
+  int i, j;
+  ENode* node;
+  cout << "List Graph:" << endl;
+  for (i = 0; i < vertex_num_; ++i) {
+    cout << i << "(" << vertexes_[i].data << "): ";
+    node = vertexes_[i].first_edge;
+    while (node != nullptr) {
+      cout << node->vertex_index << "("
+           << vertexes_[node->vertex_index].data << ")";
+      node = node->next_edge;
+    }
+    cout << endl;
+  }
+}
+
+int ListUdg::get_weight(int start, int end) const {
+  ENode* node;
+  if (start == end) return 0;
+  node = vertexes_[start].first_edge;
+  while (node != nullptr) {
+    if (end == node->vertex_index) {
+      return node->weight;
+    }
+    node = node->next_edge;
+  }
+  return INF;
+}
+
+EData* ListUdg::get_edges() const {
+  int i, j;
+  int index = 0;
+  ENode* node;
+  EData* edges;
+
+  edges = new EData[edge_num_];
+  for (i = 0; i < vertex_num_; ++i) {
+    node = vertexes_[i].first_edge;
+    while (node != nullptr) {
+      if (node->vertex_index > i) {
+        edges[index].start = vertexes_[i].data;
+        edges[index].end = vertexes_[node->vertex_index].data;
+        edges[index].weight = node->weight;
+        index++;
+      }
+      node = node->next_edge;
+    }
+  }
+  return edges;
+}
+
+// Selection sort
+void ListUdg::sort_edges(EData* edges, int elen) const {
+  int i, j;
+  int min;
+  for (i = 0; i < elen - 1; ++i) {
+    min = i;
+    for (j = i + 1; j < elen; ++j) {
+      if (edges[min].weight > edges[j].weight) {
+        min = j;
+      }
+    }
+    if (min == i) continue;
+    swap(edges[min], edges[i]);
+  }
+}
+
+int ListUdg::get_end(int vends[], int i) const {
+  while (vends[i] != 0) {
+    i = vends[i];
+  }
+  return i;
+}
+
+void ListUdg::Kruskal() const {
+  int i, m, n, p1, p2;
+  int length;
+  int index = 0;
+  int vends[MAX] = {0};
+  EData* edges;  // All edges of the graph 
+  EData rets[MAX];  // The edges of the kruskal spanning tree
+
+  edges = get_edges();
+  sort_edges(edges, edge_num_);
+
+  for (i = 0; i < edge_num_; ++i) {
+    p1 = get_position(edges[i].start);
+    p2 = get_position(edges[i].end);
+    m = get_end(vends, p1);
+    n = get_end(vends, p2);
+    if (m != n) {
+      vends[m] = n;
+      rets[index++] = edges[i];
+    }
+  }
+  delete edges;
+  edges = nullptr;
+
+  length = 0;
+  for (i = 0; i < index; ++i) {
+    length += rets[i].weight;
+  }
+  cout << "Kruskal = " << length << ": ";
+  for (i = 0; i < index; ++i) {
+    cout << "(" << rets[i].start << "," << rets[i].end << ") ";
+  }
+  cout << endl;
+}
+
+int main(int argc, char* argv[]) {
+  char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
+  EData* edges[] = {
+    new EData('A', 'B', 12), new EData('A', 'F', 16), new EData('A', 'G', 14),
+    new EData('B', 'C', 10), new EData('B', 'F', 7), new EData('C', 'D', 3),
+    new EData('C', 'E', 5), new EData('C', 'F', 6), new EData('D', 'E', 4),
+    new EData('E', 'F', 2), new EData('E', 'G', 8), new EData('F', 'G', 9),
+  };
+  int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
+  int elen = sizeof(edges) / sizeof(edges[0]);
+  ListUdg* pUdg;
+  // pUdg = new ListUdg();  // Manually input
+  pUdg = new ListUdg(vertexes, vlen, edges, elen);
+  pUdg->DFS();
+  pUdg->BFS();
+  pUdg->Print();
+  pUdg->Kruskal();
+
+  delete pUdg;
+  pUdg = nullptr;
+  return 0;
+}
