@@ -35,13 +35,16 @@ class MatrixUdg {
   void BFS() const;
   void Print() const;
   void Kruskal() const;
+  void Prim(int start) const;
 
  private:
   char read_char();
   int get_position(char ch) const;
+
   int first_vertex(int v) const;
   int next_vertex(int v, int w) const;
   void dfs(int i, int* visited) const;
+
   EData* get_edges() const;
   void sort_edges(EData* edges, int elen) const;
   int get_end(int vends[], int i) const;
@@ -290,6 +293,64 @@ void MatrixUdg::Kruskal() const {
   cout << endl;
 }
 
+void MatrixUdg::Prim(int start) const {
+  int min, i, j, k, m, n, sum;
+  int index = 0;
+  char prims[MAX];
+  int weights[MAX];
+  
+  prims[index++] = vertexes_[start];
+  /* Initialize the weight of edges that connect each vertex with the spanning
+   * tree which only contains vertex start.
+   */
+  for (i = 0; i < vertex_num_; ++i) {
+    weights[i] = matrix_[start][i];
+  }
+
+  for (i = 0; i < vertex_num_; ++i) {
+    if (start == i) continue;
+    j = 0;
+    k = 0;
+    min = INF;
+    while (j < vertex_num_) {
+      if (weights[j] != 0 && weights[j] < min) {
+        min = weights[j];
+        k = j;
+      }
+      j++;
+    }
+    prims[index++] = vertexes_[k];
+    weights[k] = 0; 
+    /* Update the weight of edges that connect each vertex with the spanning
+     * tree which adds a new vertex k.
+     */
+    for (j = 0; j < vertex_num_; ++j) {
+      if (weights[j] != 0 && matrix_[k][j] < weights[j]) {
+        weights[j] = matrix_[k][j];
+      }
+    }
+  }
+
+  sum = 0;
+  for (i = 1; i < index; ++i) {
+    min = INF;
+    n = get_position(prims[i]);
+    for (j = 0; j < i; ++j) {
+      m = get_position(prims[j]);
+      if (matrix_[m][n] < min) {
+        min = matrix_[m][n];
+      }
+    }
+    sum += min;
+  }
+
+  cout << "Prim(" << vertexes_[start] << ") = " << sum << ": ";
+  for (i = 0; i < index; ++i) {
+    cout << prims[i] << ", ";
+  }
+  cout << endl;
+}
+
 int main(int argc, char* argv[]) {
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
   int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
@@ -309,6 +370,7 @@ int main(int argc, char* argv[]) {
   pUdg->BFS();
   pUdg->Print();
   pUdg->Kruskal();
+  pUdg->Prim(0);
 
   delete pUdg;
   pUdg = nullptr;

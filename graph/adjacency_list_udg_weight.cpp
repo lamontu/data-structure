@@ -45,16 +45,20 @@ class ListUdg {
   void BFS() const;
   void Print() const;
   void Kruskal() const;
+  void Prim(int start) const;
 
  private:
   char read_char();
   int get_position(char ch) const;
   void link_last(ENode* list, ENode* node) const;
+
   void dfs(int i, int* visited) const;
-  int get_weight(int start, int end) const;
+
   EData* get_edges() const;
   void sort_edges(EData* edges, int elen) const;
   int get_end(int vends[], int i) const;
+
+  int get_weight(int start, int end) const;
 };
 
 char ListUdg::read_char() {
@@ -246,19 +250,6 @@ void ListUdg::Print() const {
   }
 }
 
-int ListUdg::get_weight(int start, int end) const {
-  ENode* node;
-  if (start == end) return 0;
-  node = vertexes_[start].first_edge;
-  while (node != nullptr) {
-    if (end == node->vertex_index) {
-      return node->weight;
-    }
-    node = node->next_edge;
-  }
-  return INF;
-}
-
 EData* ListUdg::get_edges() const {
   int i, j;
   int index = 0;
@@ -339,6 +330,81 @@ void ListUdg::Kruskal() const {
   cout << endl;
 }
 
+int ListUdg::get_weight(int start, int end) const {
+  ENode* node;
+  if (start == end) return 0;
+  node = vertexes_[start].first_edge;
+  while (node != nullptr) {
+    if (end == node->vertex_index) {
+      return node->weight;
+    }
+    node = node->next_edge;
+  }
+  return INF;
+}
+
+void ListUdg::Prim(int start) const {
+  int min, i, j, k, m, n, tmp, sum;
+  int index = 0;
+  char prims[MAX];
+  int weights[MAX];
+
+  prims[index++] = vertexes_[start].data;
+
+  /* Initialize the weight of edges that connect each vertex with spanning
+   * tree which only contains vertex start.
+   */
+  for (i = 0; i < vertex_num_; ++i) {
+    weights[i] = get_weight(start, i);
+  }
+
+  for (i = 0; i < vertex_num_; ++i) {
+    if (start == i) continue;
+    j = 0;
+    k = 0;
+    min = INF;
+    while (j < vertex_num_) {
+      if (weights[j] != 0 && weights[j] < min) {
+        min = weights[j];
+        k = j;
+      }
+      j++;
+    }
+    prims[index++] = vertexes_[k].data;
+    weights[k] = 0;
+
+    /* Update the weight of edges that connect each vertex with spanning
+     * tree which adds a new vertex k.
+     */
+    for (j = 0; j < vertex_num_; ++j) {
+      tmp = get_weight(k, j);
+      if (weights[j] != 0 && tmp < weights[j]) {
+        weights[j] = tmp;
+      }
+    }
+  }
+
+  sum = 0;
+  for (i = 1; i < index; ++i) {
+    min = INF;
+    n = get_position(prims[i]);
+    for (j = 0; j < i; ++j) {
+      m = get_position(prims[j]);
+      tmp = get_weight(m, n);
+      if (tmp < min) {
+        min = tmp;
+      }
+    }
+    sum += min;
+  }
+
+  cout << "Prim(" << vertexes_[start].data << ") = " << sum << ": ";
+  for (i = 0; i < index; ++i) {
+    cout << prims[i] << ", ";
+  }
+  cout << endl;
+}
+
 int main(int argc, char* argv[]) {
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
   EData* edges[] = {
@@ -356,6 +422,7 @@ int main(int argc, char* argv[]) {
   pUdg->BFS();
   pUdg->Print();
   pUdg->Kruskal();
+  pUdg->Prim(0);
 
   delete pUdg;
   pUdg = nullptr;
