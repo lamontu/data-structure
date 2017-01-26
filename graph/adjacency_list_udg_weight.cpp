@@ -541,6 +541,11 @@ int main(int argc, char* argv[]) {
 
   cout << "Floyd path:" << endl;
   for (int i = 0; i < vlen; ++i) {
+    cout << setw(4) << vertexes[i];
+  }
+  cout << endl;
+  cout << "   -------------------------" << endl;
+  for (int i = 0; i < vlen; ++i) {
     for (int j = 0; j < vlen; ++j) {
       cout << setw(4) << vertexes[path[i][j]];
     }
