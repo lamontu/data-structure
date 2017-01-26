@@ -46,6 +46,7 @@ class ListUdg {
   void Print() const;
   void Kruskal() const;
   void Prim(int start) const;
+  void Dijkstra(int source, int previous[], int distance[]);
 
  private:
   char read_char();
@@ -405,6 +406,53 @@ void ListUdg::Prim(int start) const {
   cout << endl;
 }
 
+void ListUdg::Dijkstra(int source, int previous[], int distance[]) {
+  int i, j, k;
+  int min, tmp;
+  int flag[MAX];
+
+  // Initialize the distance between vertex source and each vertex.
+  for (i = 0; i < vertex_num_; ++i) {
+    flag[i] = 0;  // Distance between vertex i and source has not been found.
+    distance[i] = get_weight(source, i);
+    if (distance[i] != INF) {
+      previous[i] = source;  // Denote the previous vertex of vertex i.
+    }
+  }
+  // Add vertex source and mark it as finished.
+  flag[source] = 1;
+  previous[source] = -1;
+
+  // Add vertex k and mark it as finished.
+  for (i = 1; i < vertex_num_; ++i) {
+    min = INF;
+    for (j = 0; j < vertex_num_; ++j) {
+      if (flag[j] == 0 && distance[j] < min) {
+        min = distance[j];
+        k = j;
+      }
+    }
+    flag[k] = 1;
+
+    // Update the distance between vertex source and remaining vertexes.
+    for (j = 0; j < vertex_num_; ++j) {
+      tmp = get_weight(k, j);
+      tmp = (tmp == INF ? INF : (min + tmp));
+      if (flag[j] == 0 && tmp < distance[j]) {
+        distance[j] = tmp;
+        previous[j] = k;
+      }
+    }
+  }
+
+  cout << "Dijkstra(" << vertexes_[source].data << "): " << endl;
+  for (i = 0; i < vertex_num_; ++i) {
+    cout << "  shortest(" << vertexes_[source].data << ", "
+         << vertexes_[i].data << ") = " << distance[i] << endl;
+  }
+}
+
+
 int main(int argc, char* argv[]) {
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
   EData* edges[] = {
@@ -423,6 +471,23 @@ int main(int argc, char* argv[]) {
   pUdg->Print();
   pUdg->Kruskal();
   pUdg->Prim(0);
+
+  int prev[MAX] = {0};
+  int dist[MAX] = {0};
+  int vs = 3;
+  int vt = 5;
+  pUdg->Dijkstra(vs, prev, dist);
+  for (int i = 0; i < 20; ++i) {
+    cout << prev[i] << ", ";
+  }
+  cout << endl;
+  cout << "Path between vertex " << vertexes[vt]
+       << " and " << vertexes[vs] << ": ";
+  do {
+    cout << vertexes[vt] << "<-";
+    vt = prev[vt];
+  } while (vt != vs);
+  cout << vertexes[vs] << endl;
 
   delete pUdg;
   pUdg = nullptr;
