@@ -2,6 +2,7 @@
  * Adjacency Matrix of Undirected Graph with Weight
  */
 
+#include <iomanip>
 #include <iostream>
 
 using namespace std;
@@ -37,6 +38,7 @@ class MatrixUdg {
   void Kruskal() const;
   void Prim(int start) const;
   void Dijkstra(int source, int previous[], int distance[]);
+  void Floyd(int path[][MAX], int distance[][MAX]);
 
  private:
   char read_char();
@@ -212,7 +214,11 @@ void MatrixUdg::Print() const {
   cout << "Matrix Graph:" << endl;
   for (i = 0; i < vertex_num_; ++i) {
     for (j = 0; j < vertex_num_; ++j) {
-      cout << matrix_[i][j] << ", ";
+      if (matrix_[i][j] == INF) {
+        cout << setw(4) << "INF";
+      } else {
+        cout << setw(4) << matrix_[i][j];
+      }
     }
     cout << endl;
   }
@@ -397,6 +403,48 @@ void MatrixUdg::Dijkstra(int source, int previous[], int distance[]) {
   }
 }
 
+void MatrixUdg::Floyd(int path[][MAX], int distance[][MAX]) {
+  int i, j, k;
+  int tmp;
+
+  for (i = 0; i < vertex_num_; ++i) {
+    for (j = 0; j < vertex_num_; ++j) {
+      distance[i][j] = matrix_[i][j];
+      path[i][j] = j;  // Vertex j is on the path from vertex i to j.
+    }
+  }
+
+  for (k = 0; k < vertex_num_; ++k) {
+    for (i = 0; i < vertex_num_; ++i) {
+      for (j = 0; j < vertex_num_; ++j) {
+        tmp = (distance[i][k] == INF || distance[k][j] == INF)
+              ? INF : (distance[i][k] + distance[k][j]);
+        if (distance[i][j] > tmp) {
+          distance[i][j] = tmp;
+          path[i][j] = path[i][k];
+        }
+      }
+    }
+  }
+
+  cout << "Floyd:" << endl;
+  for (i = 0; i < vertex_num_; ++i) {
+    cout << setw(4) << vertexes_[i];
+  }
+  cout <<  endl;
+  cout << "   -------------------------" << endl;
+  for (i = 0; i < vertex_num_; ++i) {
+    for (j = 0; j < vertex_num_; ++j) {
+      if (distance[i][j] == INF) {
+        cout << setw(4) << "INF";
+      } else {
+        cout << setw(4) << distance[i][j];
+      }
+    }
+    cout << endl;
+  }
+}
+
 int main(int argc, char* argv[]) {
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
   int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
@@ -418,23 +466,54 @@ int main(int argc, char* argv[]) {
   pUdg->Kruskal();
   pUdg->Prim(0);
 
+  cout << "## Test Dijkstra algorithm:" << endl;
   int prev[MAX] = {0};
   int dist[MAX] = {0};
   int vs = 3;
   int vt = 5;
   pUdg->Dijkstra(vs, prev, dist);
+  cout << "Previous vertex:" << endl;
   for (int i = 0; i < 20; ++i) {
     cout << prev[i] << ", ";
   }
   cout << endl;
   cout << "Path between vertex " << vertexes[vt]
        << " and " << vertexes[vs] << ": ";
-  do {
+  while (vt != vs) {
     cout << vertexes[vt] << "<-";
     vt = prev[vt];
-  } while (vt != vs);
+  }
   cout << vertexes[vs] << endl;
-  
+
+  cout << "## Test Floyd algorithm:" << endl;
+  int path[MAX][MAX] = {0};
+  int floyd_distance[MAX][MAX] = {0};
+  pUdg->Floyd(path, floyd_distance);
+
+  cout << "Floyd path:" << endl;
+  for (int i = 0; i < vlen; ++i) {
+    cout << setw(4) << vertexes[i];
+  }
+  cout <<  endl;
+  cout << "   -------------------------" << endl;
+  for (int i = 0; i < vlen; ++i) {
+    for (int j = 0; j < vlen; ++j) {
+      cout << setw(4) << vertexes[path[i][j]];
+    }
+    cout << endl;
+  }
+  vs = 0;
+  vt = 3;
+  int k = path[vs][vt];
+  cout << vertexes[vs] << "->";
+  while (k != vt) {
+    cout << vertexes[k] << "->";
+    vs = path[k][vt];
+    k = path[vs][vt];
+    cout << vertexes[vs] << "->";
+  }
+  cout << vertexes[vt] << endl;
+
   delete pUdg;
   pUdg = nullptr;
   return 0;
