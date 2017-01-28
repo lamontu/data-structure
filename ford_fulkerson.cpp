@@ -1,4 +1,4 @@
-/* ford_fulerson.cpp */
+/* ford_fulkerson.cpp */
 
 #include <iostream>
 #include <vector>
