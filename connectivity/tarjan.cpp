@@ -28,7 +28,7 @@ void input() {
 
 void Tarjan(int i, int fa) {
   father[i] = fa;
-  dfn[i] = low[i] = tim++;
+  dfn[i] = low[i] = ++tim;
   for (int j = 0; j < G[i].size(); ++j) {
     int k = G[i][j];
     if (dfn[k] == 0) {
@@ -79,10 +79,14 @@ int main(int argc, char* argv[]) {
 
   memset(dfn, 0, sizeof(dfn));
   memset(father, 0, sizeof(father));
-  memset(low, -1, sizeof(low));
+  memset(low, 0, sizeof(low));
   memset(is_cut, false, sizeof(is_cut));
 
   Count();
+  for (int i = 0; i < 20; ++i) {
+    cout << dfn[i] << ", ";
+  }
+  cout << endl;
 
   return 0;
 }
