@@ -42,20 +42,20 @@ void Tarjan(int i, int fa) {
 
 void Count() {
   int rootson = 0;
-  Tarjan(1, 0);
-  for (int i = 2; i <= n; ++i) {
+  Tarjan(0, -1);
+  for (int i = 1; i < n; ++i) {
     int v = father[i];
-    if (v == 1) {
+    if (v == 0) {
       rootson++;
     } else {
-      if (low[i] >= dfn[i]) {
+      if (low[i] >= dfn[v]) {
         is_cut[v] = true;
       }
     }
   }
 
   if (rootson > 1) {
-    is_cut[1] = true;
+    is_cut[0] = true;
   }
 
   for (int i = 0; i < n; ++i) {
@@ -65,9 +65,9 @@ void Count() {
   }
   cout << endl;
 
-  for (int i = 1; i <= n; ++i) {
+  for (int i = 0; i < n; ++i) {
     int v = father[i];
-    if (v > 0 && low[i] > dfn[v]) {
+    if (v != -1 && low[i] > dfn[v]) {
       cout << "(" << v << ", " << i << ")" << ", ";
     }
   }
