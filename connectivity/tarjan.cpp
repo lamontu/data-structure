@@ -31,7 +31,7 @@ void Tarjan(int i, int fa) {
   dfn[i] = low[i] = tim++;
   for (int j = 0; j < G[i].size(); ++j) {
     int k = G[i][j];
-    if (dfn[k] == -1) {
+    if (dfn[k] == 0) {
       Tarjan(k, i);
       low[i] = min(low[i], low[k]);
     } else if (fa != k) {
@@ -77,7 +77,7 @@ void Count() {
 int main(int argc, char* argv[]) {
   input();
 
-  memset(dfn, -1, sizeof(dfn));
+  memset(dfn, 0, sizeof(dfn));
   memset(father, 0, sizeof(father));
   memset(low, -1, sizeof(low));
   memset(is_cut, false, sizeof(is_cut));
