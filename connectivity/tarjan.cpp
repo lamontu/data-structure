@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
   input();
 
   memset(dfn, 0, sizeof(dfn));
-  memset(father, 0, sizeof(father));
+  memset(father, -1, sizeof(father));
   memset(low, 0, sizeof(low));
   memset(is_cut, false, sizeof(is_cut));
 
