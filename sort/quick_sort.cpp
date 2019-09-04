@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// 前后指针法
 int partition(int* arr, int low, int high) {
     int pivot = arr[high];
     int i = low;
@@ -18,11 +19,29 @@ int partition(int* arr, int low, int high) {
     return i;
 }
 
+// 挖坑法
+int partition2(int* arr, int low, int high) {
+    int pivot = arr[high]; 
+    while (low < high) {
+        while (low < high && arr[low] <= pivot) {
+            ++low;
+        }
+        arr[high] = arr[low];
+        while (low < high && arr[high] >= pivot) {
+            --high;
+        }
+        arr[low] = arr[high];
+    }
+    arr[high] = pivot;
+    return high;  // Same as the initial pivot index
+}
+
+
 void quick_sort_recurse(int* arr, int low, int high) {
     if (low >= high) {
         return;
     }
-    int index = partition(arr, low, high);
+    int index = partition2(arr, low, high);
     quick_sort_recurse(arr, low, index - 1);
     quick_sort_recurse(arr, index + 1, high);
 }
