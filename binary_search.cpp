@@ -61,6 +61,82 @@ int firstGreat(int array[], int length, int value) {
   return left < length ? left : -1;
 }
 
+// Return first position x, array[x] == value
+int bsearchFirstEqual(int array[], int length, int value) {
+    int low = 0, high = length - 1;
+    while (low <= high) {
+        int middle = low + ((high - low) >> 1);
+        if (array[middle] > value) {
+            high = middle - 1;
+        } else if (array[middle] < value) {
+            low = middle + 1;
+        } else {
+            if ((middle == 0) || array[middle - 1] != value) {
+                return middle;
+            } else {
+                high = middle - 1;
+            }
+        }
+    }
+    return -1;
+}
+
+// Return last position x, array[x] == value
+int bsearchLastEqual(int array[], int length, int value) {
+    int low = 0, high = length - 1;
+    while (low <= high) {
+        int middle = low + ((high - low) >> 1);
+        if (array[middle] > value) {
+            high = middle - 1;
+        } else if (array[middle] < value) {
+            low = middle + 1;
+        } else {
+            if ((middle == length - 1) || array[middle + 1] != value) {
+                return middle;
+            } else {
+                low = middle + 1;
+            }
+        }
+    }
+    return -1;
+}
+
+// Return first  position x, array[x] >= value
+int bsearchFirstGreaterEqual(int array[], int length, int value) {
+    int low = 0, high = length - 1;
+    while (low <= high) {
+        int middle = low + ((high - low) >> 1);
+        if (array[middle] >= value) {
+            if ((middle == 0) || array[middle - 1] < value) {
+                return middle;
+            } else {
+                high = middle - 1;
+            }
+        } else {
+            low = middle + 1;
+        }
+    }
+    return -1;
+}
+
+// Return last  position x, array[x] <= value
+int bsearchLastLessEqual(int array[], int length, int value) {
+    int low = 0, high = length - 1;
+    while (low <= high) {
+        int middle = low + ((high - low) >> 1);
+        if (array[middle] > value) {
+            high = middle - 1;
+        } else {
+            if ((middle == length - 1) || array[middle + 1] > value) {
+                return middle;
+            } else {
+                low = middle + 1;
+            }
+        }
+    }
+    return -1;
+}
+
 int main(int argc, char* argv[]) {
   int arr[] = {1, 1, 2, 4, 7, 9, 9};
 
