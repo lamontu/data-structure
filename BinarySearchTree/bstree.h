@@ -69,7 +69,7 @@ BTNode<T>* BSTree<T>::_FindRec(const T& data, BTNode<T>* p) const {
   if (data < p->data) {
     return _FindRec(data, p->lchild); 
   } else {
-    return _Find(data, p->rchild);
+    return _FindRec(data, p->rchild);
   }
 }
 

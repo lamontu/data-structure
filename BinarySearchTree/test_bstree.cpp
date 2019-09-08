@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
   BTNode<int>* bmax = bst.FindMax();
   cout << "maximum data: " << bmax->data << endl;
 
-  BTNode<int>* p10 = bst.Find(10);
+  BTNode<int>* p10 = bst.FindRec(10);
   cout << "p10: " << p10->data << endl;
   BTNode<int>* suc10 = bst.Successor(p10);
   cout << "suc10: " << suc10->data << endl;
