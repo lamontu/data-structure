@@ -15,7 +15,7 @@ class BSTree : public BinaryTree<T> {
   BTNode<T>* FindMax() const;
   BTNode<T>* Predecessor(BTNode<T>* p) const;
   BTNode<T>* Successor(BTNode<T>* p) const;
-  virtual BTNode<T>* Insert(const T& data); 
+  virtual BTNode<T>* InsertRec(const T& data); 
   virtual BTNode<T>* Delete(const T& data); 
 
  private:
@@ -23,7 +23,7 @@ class BSTree : public BinaryTree<T> {
   BTNode<T>* _Find(const T& data, BTNode<T>* p) const;
   BTNode<T>* _FindMin(BTNode<T>* p) const;
   BTNode<T>* _FindMax(BTNode<T>* p) const;
-  virtual BTNode<T>* _Insert(const T& data, BTNode<T>* & p);
+  virtual BTNode<T>* _InsertRec(const T& data, BTNode<T>* & p);
   virtual BTNode<T>* _Delete(const T& data, BTNode<T>* & p);
 };
 
@@ -51,8 +51,8 @@ BTNode<T>* BSTree<T>::FindMax() const {
 }
 
 template<typename T>
-BTNode<T>* BSTree<T>::Insert(const T& data) {
-  return _Insert(data, this->m_root);
+BTNode<T>* BSTree<T>::InsertRec(const T& data) {
+  return _InsertRec(data, this->m_root);
 }
 
 template<typename T>
@@ -139,7 +139,7 @@ BTNode<T>* BSTree<T>::Successor(BTNode<T>* p) const {
  * Return p if p != nullptr
  */
 template<typename T>
-BTNode<T>* BSTree<T>::_Insert(const T& data, BTNode<T>* & p) {  // By reference
+BTNode<T>* BSTree<T>::_InsertRec(const T& data, BTNode<T>* & p) {  // By reference
   if (nullptr == p) {  // Stop condition
     try {
       p = new BTNode<T>;
@@ -153,9 +153,9 @@ BTNode<T>* BSTree<T>::_Insert(const T& data, BTNode<T>* & p) {  // By reference
       this->m_root = p;
     }
   } else if (data < p->data) {
-    _Insert(data, p->lchild);
+    _InsertRec(data, p->lchild);
   } else if (data > p->data) {
-    _Insert(data, p->rchild);
+    _InsertRec(data, p->rchild);
   }
   /* Else data is in the tree already, we'll do nothing. */
   return p;

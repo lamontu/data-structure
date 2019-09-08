@@ -43,8 +43,8 @@ int main(int argc, char* argv[]) {
   BTNode<int>* pre15 = bst.Predecessor(p15);
   cout << "pre15: " << pre15->data << endl;
 
-  BTNode<int>* p2 = bst.Insert(2);
-  cout << "Insert p2: " << p2->data << endl;
+  BTNode<int>* p2 = bst.InsertRec(2);
+  cout << "InsertRec p2: " << p2->data << endl;
   BTNode<int>* bmin2 = bst.FindMin();
   cout << "New minimum data: " << bmin2->data << endl;
 
@@ -59,8 +59,8 @@ int main(int argc, char* argv[]) {
   BSTree<int> bst6(pnode);
   BTNode<int>* p6min = bst6.FindMin();
   cout << "minimum data of bst6: " << p6min->data << endl;
-  bst6.Insert(7);
-  bst6.Insert(8);
+  bst6.InsertRec(7);
+  bst6.InsertRec(8);
   cout << "Root data: " << bst6.Root()->data << endl;
   cout << "Nodes count: " << bst6.NodesCount() << endl;
   cout << "Leaf count: " << bst6.LeafCount() << endl;
