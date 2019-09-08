@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
   cout << "Nodes count: " << bst6.NodesCount() << endl;
   cout << "Leaf count: " << bst6.LeafCount() << endl;
   cout << "Depth: " << bst6.Depth() << endl;
-  bst6.Delete(6);
+  bst6.DeleteRec(6);
   cout << "Root data: " << bst6.Root()->data << endl;
   cout << "Nodes count: " << bst6.NodesCount() << endl;
   cout << "Leaf count: " << bst6.LeafCount() << endl;

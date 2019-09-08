@@ -15,8 +15,8 @@ class BSTree : public BinaryTree<T> {
   BTNode<T>* FindMax() const;
   BTNode<T>* Predecessor(BTNode<T>* p) const;
   BTNode<T>* Successor(BTNode<T>* p) const;
-  virtual BTNode<T>* InsertRec(const T& data); 
-  virtual BTNode<T>* Delete(const T& data); 
+  virtual BTNode<T>* InsertRec(const T& data);
+  virtual BTNode<T>* DeleteRec(const T& data); 
 
  private:
   BTNode<T>* _FindRec(const T& data, BTNode<T>* p) const;
@@ -24,7 +24,7 @@ class BSTree : public BinaryTree<T> {
   BTNode<T>* _FindMin(BTNode<T>* p) const;
   BTNode<T>* _FindMax(BTNode<T>* p) const;
   virtual BTNode<T>* _InsertRec(const T& data, BTNode<T>* & p);
-  virtual BTNode<T>* _Delete(const T& data, BTNode<T>* & p);
+  virtual BTNode<T>* _DeleteRec(const T& data, BTNode<T>* & p);
 };
 
 
@@ -55,9 +55,10 @@ BTNode<T>* BSTree<T>::InsertRec(const T& data) {
   return _InsertRec(data, this->m_root);
 }
 
+
 template<typename T>
-BTNode<T>* BSTree<T>::Delete(const T& data) {
-  return _Delete(data, this->m_root);
+BTNode<T>* BSTree<T>::DeleteRec(const T& data) {
+  return _DeleteRec(data, this->m_root);
 }
 
 template<typename T>
@@ -167,17 +168,17 @@ BTNode<T>* BSTree<T>::_InsertRec(const T& data, BTNode<T>* & p) {  // By referen
  * Return nullptr if no target data
  */
 template<typename T>
-BTNode<T>* BSTree<T>::_Delete(const T& data, BTNode<T>* & p) {
+BTNode<T>* BSTree<T>::_DeleteRec(const T& data, BTNode<T>* & p) {
   assert(p);
 
   if (data < p->data) {
-    p->lchild = _Delete(data, p->lchild);
+    p->lchild = _DeleteRec(data, p->lchild);
   } else if (data > p->data) {
-    p->rchild = _Delete(data, p->rchild);
+    p->rchild = _DeleteRec(data, p->rchild);
   } else if (p->lchild && p->rchild) {  // Found target node with 2 children
     BTNode<T>* pTmp = _FindMin(p->rchild);  // Replace with the successor node
     p->data = pTmp->data;
-    p->rchild = _Delete(p->data, p->rchild);
+    p->rchild = _DeleteRec(p->data, p->rchild);
   } else {  // Found target node with one or zero child
     BTNode<T>* pTmp = p;
     if (nullptr == p->lchild) {
