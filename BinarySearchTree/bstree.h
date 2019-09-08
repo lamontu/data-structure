@@ -16,7 +16,9 @@ class BSTree : public BinaryTree<T> {
   BTNode<T>* Predecessor(BTNode<T>* p) const;
   BTNode<T>* Successor(BTNode<T>* p) const;
   virtual BTNode<T>* InsertRec(const T& data);
+  virtual BTNode<T>* Insert(const T& data);
   virtual BTNode<T>* DeleteRec(const T& data); 
+  virtual BTNode<T>* Delete(const T& data); 
 
  private:
   BTNode<T>* _FindRec(const T& data, BTNode<T>* p) const;
@@ -55,10 +57,100 @@ BTNode<T>* BSTree<T>::InsertRec(const T& data) {
   return _InsertRec(data, this->m_root);
 }
 
+// Return the new inserted node
+template<typename T>
+BTNode<T>* BSTree<T>::Insert(const T& data) {
+  BTNode<T>* p = nullptr;
+
+  if (this->m_root == nullptr) {
+    try {
+      p = new BTNode<T>;
+      p->data = data;
+      this->m_root = p;
+      return p;
+    } catch (std::bad_alloc&) {
+      return nullptr;
+    }
+  }
+
+  p = this->m_root;
+  while (p != nullptr) {
+    if (data > p->data) {
+      if (p->rchild == nullptr) {
+        p->rchild = new BTNode<T>;
+        p->rchild->data = data;
+        return p->rchild;
+      }
+      p = p->rchild;
+    } else {
+      if (p->lchild == nullptr) {
+        p->lchild = new BTNode<T>;
+        p->lchild->data = data;
+        return p->lchild;
+      }
+      p = p->lchild;
+    }
+  }
+  
+  return p;
+}
 
 template<typename T>
 BTNode<T>* BSTree<T>::DeleteRec(const T& data) {
   return _DeleteRec(data, this->m_root);
+}
+
+// Return the deleted node
+template<typename T>
+BTNode<T>* BSTree<T>::Delete(const T& data) {
+  BTNode<T>* p = this->m_root;  // p point to the target node to be delete.
+  BTNode<T>* pp = nullptr;  // pp point to the parent of p.
+  while (p != nullptr && p->data != data) {
+    pp = p;
+    if (data > p->data) {
+      p = p->rchild;
+    } else {
+      p = p->lchild;
+    }
+  }
+  if (p == nullptr) {  // Not found target data
+    return p;
+  }
+
+  // Transfer the target node with 2 children to a target node with 0 or 1 child
+  if (p->lchild != nullptr && p->rchild != nullptr) {
+      // Use the minimum node of right subtree to replace the target node
+      // Can also use the maximum node of the left subtree to replace the target ndoe
+      BTNode<T>* minP = p->rchild;  // minP point the minimum node of the right subtree.
+      BTNode<T>* minPP = p;  // minPP point to the parent of minP.
+      while (minP->lchild != nullptr) {
+        minPP = minP;
+        minP = minP->lchild;
+      }
+      p->data = minP->data;  // Replace target node data with the minP node
+      p = minP;  // minP is now the node to be delete with 0 or 1 child.
+      pp = minPP;
+  }
+
+  // Target node with only 0 or 1 child
+  // Find the child of the target ndoe
+  BTNode<T>* child = nullptr;
+  if (p->lchild != nullptr) {
+    child = p->lchild;
+  } else if (p->rchild != nullptr) {
+    child = p->rchild;
+  }
+
+  if (pp == nullptr) {
+    this->m_root = child;
+  } else if (pp->lchild == p) {
+    pp->lchild = child;
+  } else {
+    pp->rchild = child;
+  }
+
+  return p;
+
 }
 
 template<typename T>
