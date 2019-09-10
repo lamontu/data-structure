@@ -11,9 +11,27 @@ class Heap {
     data = new int[length_input];
     size = 0;
   }
+  Heap(int* arr, int length) {
+    data = new int[length];
+    for (int i = 0; i < length; ++i) {
+      data[i] = arr[i];
+    }
+    size = length;
+
+    buildHeap();
+  }
   ~Heap() {
     delete [] data;
   }
+  
+  // Build a heap from an existing array
+  void buildHeap() {
+    // Heapify from the last non-leaf node to the root
+    for (int i = size / 2 - 1; i >= 0; --i) {
+      heapify(i, size);
+    }
+  }
+
   void push(int value) {
     data[size] = value;
     int current = size;
@@ -34,7 +52,7 @@ class Heap {
   int top() {
     return data[0];
   }
-  void update(int pos, int n) {
+  void heapify(int pos, int n) {
     int lchild = 2 * pos + 1, rchild = 2 * pos + 2;
     int max_value = pos;
     if (lchild < n && data[lchild] > data[max_value]) {
@@ -45,18 +63,18 @@ class Heap {
     }
     if (max_value != pos) {
       swap(data[pos], data[max_value]);
-      update(max_value, n);
+      heapify(max_value, n);
     }
   }
   void pop() {
     swap(data[0], data[size - 1]);
     size--;
-    update(0, size);
+    heapify(0, size);
   }
   void heap_sort() {
     for (int i = size - 1; i >= 1; --i) {
       swap(data[i], data[0]);
-      update(0, i);
+      heapify(0, i);
     }
   }
 };
@@ -72,6 +90,13 @@ int main() {
   cout << heap.top() << endl;
   heap.heap_sort();
   heap.output();
+
+  cout <<  "========" << endl;
+  Heap heap2(arr, 10);
+  heap2.output();
+  cout << heap2.top() << endl;
+  heap2.heap_sort();
+  heap2.output();
 
   return 0;
 }
