@@ -11,13 +11,13 @@ const int MAX = 100;
 class ListUdg {
  private:
   struct ENode {
-    int vertex_index;
+    int vertex_index;  // The vertex this edge points to
     ENode* next_edge;
   };
 
   struct VNode {
     char data;
-    ENode* first_edge;
+    ENode* first_edge;  // Store all jointed edges in a singly linked list
   };
 
   int vertex_num_;
@@ -164,7 +164,7 @@ void ListUdg::DFS() const {
     visited[i] = 0;
   }
   cout << "DFS: ";
-  for (i = 0; i < vertex_num_; ++i) {
+  for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
     if (!visited[i]) {
       dfs(i, visited);
     }
@@ -183,7 +183,7 @@ void ListUdg::BFS() const {
     visited[i] = 0;
   }
   cout << "BFS: ";
-  for (i = 0; i < vertex_num_; ++i) {
+  for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
     if (!visited[i]) {
       visited[i] = 1;
       cout << vertexes_[i].data << ", ";
