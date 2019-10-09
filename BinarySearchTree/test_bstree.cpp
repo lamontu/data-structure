@@ -28,6 +28,12 @@ int main(int argc, char* argv[]) {
   cout << "### In Order Traverse:" << endl;
   bst.InOrderTraverse(pfun);  cout << endl;
 
+  cout << "### Pre Order Traverse:" << endl;
+  bst.PreOrderTraverse(pfun);  cout << endl;
+
+  cout << "### Post Order Traverse:" << endl;
+  bst.PostOrderTraverse(pfun);  cout << endl;
+
   BTNode<int>* bmin = bst.FindMin();
   cout << "minimum data: " << bmin->data << endl;
   BTNode<int>* bmax = bst.FindMax();
