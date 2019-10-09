@@ -486,78 +486,80 @@ template<typename T>
 void BinaryTree<T>::PreOrderTraverse(BTNode<T>* pnode,
                                      funtype Visit) const {
   stack<BTNode<T>*> S;
-  BTNode<T>* p = pnode;
+  BTNode<T>* curr = pnode;
 
   /*
-  while (p != nullptr || !S.empty()) {
-    while (p != nullptr) {
-      Visit(p->data);  // Position difference from InOrderTraverse
-      S.push(p);
-      p = p->lchild;
+  while (curr != nullptr || !S.empty()) {
+    while (curr != nullptr) {
+      Visit(curr->data);  // Position difference from InOrderTraverse
+      S.push(curr);
+      curr = curr->lchild;
     }
     if (!S.empty()) {
-      p = S.top();
+      curr = S.top();
       S.pop();
-      p = p->rchild;
+      curr = curr->rchild;
     }
   }
   */
 
-  S.push(p);
+  S.push(curr);
   while (!S.empty()) {
-    p = S.top();
+    curr = S.top();
     S.pop();
-    Visit(p->data);
+    Visit(curr->data);
 
     // Push rchild and then lchild.
     // Right child is pushed first so that left child is processed first.
-    if (p->rchild != nullptr) {
-      S.push(p->rchild);
+    if (curr->rchild != nullptr) {
+      S.push(curr->rchild);
     }
-    if (p->lchild != nullptr) {
-      S.push(p->lchild);
+    if (curr->lchild != nullptr) {
+      S.push(curr->lchild);
     }
   }
+
 }
 
 template<typename T>
 void BinaryTree<T>::InOrderTraverse(BTNode<T>* pnode,
                                     funtype Visit) const {
   stack<BTNode<T>*> S;
-  BTNode<T>* p = pnode;
+  BTNode<T>* curr = pnode;
 
   /*
-  while (p != nullptr || !S.empty()) {
-    while (p != nullptr) {
-      S.push(p);
-      p = p->lchild;
+  while (curr != nullptr || !S.empty()) {
+    while (curr != nullptr) {
+      S.push(curr);
+      curr = curr->lchild;
     }
     if (!S.empty()) {
-      p = S.top();
-      Visit(p->data);  // Position difference from PreOrderTraverse 
+      curr = S.top();
+      Visit(curr->data);  // Position difference from PreOrderTraverse 
       S.pop();
-      p = p->rchild;
+      curr = curr->rchild;
     }
   }
   */
 
-  while (p != nullptr || !S.empty())
+  while (curr != nullptr || !S.empty())
   {
-    if (p != nullptr) {
+    if (curr != nullptr) {
       // If current node is not null, push it to stack to defer it,
       // And then move to its left child
-      S.push(p);
-      p = p->lchild;
+      S.push(curr);
+      curr = curr->lchild;
     }
     else {
       // If current node is null, pop an element from stack to visit it,
       // And then move to its right child.
-      p = S.top();
+      curr = S.top();
       S.pop();
-      Visit(p->data);
-      p = p->rchild;
+      Visit(curr->data);
+      curr = curr->rchild;
     }
   }
+
 }
 
 template<typename T>
@@ -565,6 +567,8 @@ void BinaryTree<T>::PostOrderTraverse(BTNode<T>* pnode,
                                       funtype Visit) const {
   stack<BTNode<T>*> S;
   BTNode<T>* curr = pnode;
+
+  /*
   BTNode<T>* prev = nullptr;
   while (curr != nullptr || !S.empty()) {
     while (curr != nullptr) {
@@ -581,6 +585,30 @@ void BinaryTree<T>::PostOrderTraverse(BTNode<T>* pnode,
       curr = curr->rchild;
     }
   }
+  */
+  
+  stack<BTNode<T>*> VisitStack;
+  S.push(curr);
+  while (!S.empty()) {
+    curr = S.top();
+    S.pop();
+    VisitStack.push(curr);
+
+    // Push lchild and then rchild.
+    // Left child is pushed first so that right child is pushed to VisitStack first.
+    if (curr->lchild != nullptr) {
+      S.push(curr->lchild);
+    }
+    if (curr->rchild != nullptr) {
+      S.push(curr->rchild);
+    }
+  }
+  while (!VisitStack.empty()) {
+    Visit(VisitStack.top()->data);
+    VisitStack.pop();
+  }
+
+
 }
 
 template<typename T>
