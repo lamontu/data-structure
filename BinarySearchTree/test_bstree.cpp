@@ -25,14 +25,21 @@ int main(int argc, char* argv[]) {
   cout << "Depth: " << bst.Depth() << endl;
   cout << "### Level order traverse:" << endl;
   bst.LevelOrderTraverse(pfun);  cout << endl;
-  cout << "### In Order Traverse:" << endl;
-  bst.InOrderTraverse(pfun);  cout << endl;
-
+  
   cout << "### Pre Order Traverse:" << endl;
   bst.PreOrderTraverse(pfun);  cout << endl;
+  cout << "### FSA Pre Order Traverse:" << endl;
+  bst.TraverseByFSA(pfun, 1);  cout << endl;
+
+  cout << "### In Order Traverse:" << endl;
+  bst.InOrderTraverse(pfun);  cout << endl;
+  cout << "### FSA In Order Traverse:" << endl;
+  bst.TraverseByFSA(pfun, 2);  cout << endl;
 
   cout << "### Post Order Traverse:" << endl;
   bst.PostOrderTraverse(pfun);  cout << endl;
+  cout << "### FSA Post Order Traverse:" << endl;
+  bst.TraverseByFSA(pfun, 3);  cout << endl;
 
   BTNode<int>* bmin = bst.FindMin();
   cout << "minimum data: " << bmin->data << endl;

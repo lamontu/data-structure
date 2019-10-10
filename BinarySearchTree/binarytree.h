@@ -11,13 +11,20 @@
 
 using namespace std;
 
+enum NodeState {
+  Initial,
+  LeftChildProcessed,
+  RightChildProcessed,
+};
+
 template<typename T>
 struct BTNode {
   T data;
   BTNode<T>* lchild;
   BTNode<T>* rchild;
-  BTNode(T data=T(), BTNode<T>* lchild=nullptr, BTNode<T>* rchild=nullptr)
-    : data(data), lchild(lchild), rchild(rchild) {  }
+  enum NodeState state;
+  BTNode(T data=T(), BTNode<T>* lchild=nullptr, BTNode<T>* rchild=nullptr, int state=0)
+    : data(data), lchild(lchild), rchild(rchild), state(Initial) {  }
 };
 
 template<typename T>
@@ -61,6 +68,7 @@ class BinaryTree {
   void InOrderTraverse(funtype Visit) const;
   void PostOrderTraverse(funtype Visit) const;
   void LevelOrderTraverse(funtype Visit) const;
+  void TraverseByFSA(funtype Visit, int order) const;
 
  protected:
   BTNode<T>* m_root;
@@ -85,6 +93,7 @@ class BinaryTree {
   void InOrderTraverse(BTNode<T>* p, funtype Visit) const;
   void PostOrderTraverse(BTNode<T>* p, funtype Visit) const;
   void LevelOrderTraverse(BTNode<T>* p, funtype Visit) const;
+  void TraverseByFSA(BTNode<T>* p, funtype Visit, int order) const;
 };
 
 
@@ -304,6 +313,10 @@ void BinaryTree<T>::LevelOrderTraverse(funtype Visit) const {
   LevelOrderTraverse(m_root, Visit);
 }
 
+template<typename T>
+void BinaryTree<T>::TraverseByFSA(funtype Visit, int order) const {
+  TraverseByFSA(m_root, Visit, order);
+}
 
 /* Private Member functions */
 
@@ -483,6 +496,41 @@ void BinaryTree<T>::PostOrderTraverseRec(const BTNode<T>* pnode,
 }
 
 template<typename T>
+void BinaryTree<T>::TraverseByFSA(BTNode<T>* pnode,
+                                     funtype Visit, int order) const {
+  stack<BTNode<T>*> S;
+  BTNode<T>* curr = pnode;
+
+  S.push(curr);
+  while (!S.empty()) {
+    curr = S.top();
+    if (curr->state == Initial) {  // Initial state
+      if (order == 1) {  // preorder traverse
+        Visit(curr->data);
+      }
+      if (curr->lchild != nullptr) {
+        S.push(curr->lchild);
+      }
+      curr->state = LeftChildProcessed;
+    } else if (curr->state == LeftChildProcessed) { // Left child processed state
+      if (order == 2) {  // inorder traverse
+        Visit(curr->data);
+      }
+      if (curr->rchild != nullptr) {
+        S.push(curr->rchild);
+      }
+      curr->state = RightChildProcessed;
+    } else if (curr->state == RightChildProcessed) {  // Right child processed state
+      if (order == 3) {  // postorder traverse
+        Visit(curr->data);
+      }
+      S.pop();
+      curr->state = Initial;
+    }
+  }
+}
+
+template<typename T>
 void BinaryTree<T>::PreOrderTraverse(BTNode<T>* pnode,
                                      funtype Visit) const {
   stack<BTNode<T>*> S;
@@ -607,7 +655,6 @@ void BinaryTree<T>::PostOrderTraverse(BTNode<T>* pnode,
     Visit(VisitStack.top()->data);
     VisitStack.pop();
   }
-
 
 }
 
