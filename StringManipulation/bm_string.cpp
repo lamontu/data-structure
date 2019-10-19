@@ -4,7 +4,7 @@ using namespace std;
 
 const int CHAR_SET_SIZE = 256;
 
-void bad_character_rule(char pattern[], int size, int bad_chars[]) {
+void bad_character_rule(const char pattern[], int size, int bad_chars[]) {
     for (int i = 0; i < CHAR_SET_SIZE; ++i) {
         bad_chars[i] = -1;
     }
@@ -14,7 +14,7 @@ void bad_character_rule(char pattern[], int size, int bad_chars[]) {
     }
 }
 
-void good_suffix_shift(char pattern[], int size, int suffix[], bool prefix[]) {
+void good_suffix_shift(const char pattern[], int size, int suffix[], bool prefix[]) {
     for (int i = 0; i < size; ++i) {
         suffix[i] = -1;
         prefix[i] = false;
@@ -23,11 +23,9 @@ void good_suffix_shift(char pattern[], int size, int suffix[], bool prefix[]) {
         // For every i, we find the overlap size between pattern[0, i] and pattern[0, size-1]
         // Find the greatest overlap and its start index in pattern[0, i]
         int j = i;
-        int overlap_size= 0;
-        while (j >= 0 && pattern[j] == pattern[size - 1 - overlap_size]) {
-            --j;
-            ++overlap_size;
-            suffix[overlap_size] = j + 1;
+        int overlap_size = 1;
+        while (j >= 0 && pattern[j] == pattern[size - overlap_size]) {
+            suffix[overlap_size++] = j--;
         }
         if (j == -1) {
             prefix[overlap_size] = true;
@@ -50,7 +48,7 @@ int shift_by_good_suffix(int bad_char_index, int pattern_size, int suffix[], boo
     return pattern_size;
 }
 
-int boyer_moore(char target[], int target_size, char pattern[], int pattern_size) {
+int boyer_moore(const char target[], int target_size, const char pattern[], int pattern_size) {
     int bad_chars[CHAR_SET_SIZE];
     bad_character_rule(pattern, pattern_size, bad_chars);
     int suffix[pattern_size];
@@ -74,15 +72,20 @@ int boyer_moore(char target[], int target_size, char pattern[], int pattern_size
             y = shift_by_good_suffix(j, pattern_size, suffix, prefix);
         }
         i = i + (x > y ? x : x);
+        cout << "bad char move: " << x << "; " << "good suffix move: " << y << endl;
     }
     return -1;
 
 }
 
 int main() {
-    char pattern[3] = {'a', 'b'};
-    char target [5] = {'b', 'c', 'a', 'b'};
-    int pos = boyer_moore(target, 5, pattern, 3);
+    string strPattern("abracadabra");
+    string strTarget("WHICH FINALLY HALTS.  AT THAT POINT...");
+    const char* pattern = strPattern.c_str();
+    const int pattern_size = strPattern.length();
+    const char* target = strTarget.c_str();
+    const int target_size = strTarget.length();
+    int pos = boyer_moore(target, target_size, pattern, pattern_size);
     cout << "position = " << pos << endl;
     return 0;
 }
