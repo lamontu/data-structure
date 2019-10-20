@@ -14,7 +14,7 @@ void create_next(const char pattern[], int size, int next[]) {
     for (int i = 1; i < size; ++i) {
         // Calcualte next[i] based on next[i-1]
         // end_index = next[i-1];
-        while (end_index != -1 && pattern[end_index + 1] != pattern[i]) {
+        while (end_index > -1 && pattern[end_index + 1] != pattern[i]) {
             end_index = next[end_index];
         }
         if (pattern[end_index + 1] == pattern[i]) {
@@ -46,15 +46,15 @@ vector<int> kmp(const char target[], int target_size, const char pattern[], int 
 }
 
 int main() {
-    string strPattern("ababaca");
-    string strTarget("bacbababadababacababacambabacaddababacasdsd");
+    string strPattern("abacbab");
+    string strTarget("ababacbabacbabcababs");
     const char* pattern = strPattern.c_str();
     const int pattern_size = strPattern.length();
     const char* target = strTarget.c_str();
     const int target_size = strTarget.length();
     vector<int> positions = kmp(target, target_size, pattern, pattern_size);
     for (int i = 0; i < positions.size(); ++i) {
-        cout << "position = " << positions[i] << ", " << endl;
+        cout << "position = " << positions[i] << ", ";
     }
     return 0;
 }
