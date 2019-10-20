@@ -25,8 +25,8 @@ void good_suffix_shift(const char pattern[], int size, int suffixes[], bool pref
         prefix[i] = false;
     }
     for (int i = 0; i < size - 1; ++i) {
-        // For every i, we find the overlap size between pattern[0, i] and pattern[0, size-1]
-        // Find the greatest overlap and its start index in pattern[0, i]
+        // For every i, we find the overlap suffix size between pattern[0, i] and pattern[0, size-1]
+        // Find the greatest overlap and its begin index in the pattern.
         int begin_index = i;
         int overlap_size = 1;
         while (begin_index >= 0 && pattern[begin_index] == pattern[size - overlap_size]) {
