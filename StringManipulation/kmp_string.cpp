@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -24,7 +25,8 @@ void create_next(const char pattern[], int size, int next[]) {
     }
 }
 
-int kmp(const char target[], int target_size, const char pattern[], int pattern_size) {
+vector<int> kmp(const char target[], int target_size, const char pattern[], int pattern_size) {
+    vector<int> positons;
     int next[pattern_size];
     create_next(pattern, pattern_size, next);
     int j = 0;
@@ -36,20 +38,23 @@ int kmp(const char target[], int target_size, const char pattern[], int pattern_
             ++j;
         }
         if (j == pattern_size) {
-            return i - pattern_size + 1;
+            positons.push_back(i-pattern_size+1);
+            j = next[j - 1] + 1;
         }
     }
-    return -1;
+    return positons;
 }
 
 int main() {
-    string strPattern("AT THAT");
-    string strTarget("WHICH FINALLY HALTS.  AT THAT POINT...");
+    string strPattern("ababaca");
+    string strTarget("bacbababadababacababacambabacaddababacasdsd");
     const char* pattern = strPattern.c_str();
     const int pattern_size = strPattern.length();
     const char* target = strTarget.c_str();
     const int target_size = strTarget.length();
-    int pos = kmp(target, target_size, pattern, pattern_size);
-    cout << "position = " << pos << endl;
+    vector<int> positions = kmp(target, target_size, pattern, pattern_size);
+    for (int i = 0; i < positions.size(); ++i) {
+        cout << "position = " << positions[i] << ", " << endl;
+    }
     return 0;
 }
