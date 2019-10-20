@@ -14,20 +14,25 @@ void bad_character_rule(const char pattern[], int size, int bad_chars[]) {
     }
 }
 
-void good_suffix_shift(const char pattern[], int size, int suffix[], bool prefix[]) {
+// suffixes[k] = j
+// For every k, there is a good suffix(pattern[size-k,size-1]) of the pattern
+// Find the last occurence of subsequence(pattern[j,j+k-1]) that match the good suffix(pattern[size-k,size-1])
+// suffixes' index(k) is the length of the good-suffix(pattern[size-k, size-1])
+// suffixes' value(j) is the begin index of the last occurred subsequence(pattern[j,j+k-1])
+void good_suffix_shift(const char pattern[], int size, int suffixes[], bool prefix[]) {
     for (int i = 0; i < size; ++i) {
-        suffix[i] = -1;
+        suffixes[i] = -1;
         prefix[i] = false;
     }
     for (int i = 0; i < size - 1; ++i) {
         // For every i, we find the overlap size between pattern[0, i] and pattern[0, size-1]
         // Find the greatest overlap and its start index in pattern[0, i]
-        int j = i;
+        int begin_index = i;
         int overlap_size = 1;
-        while (j >= 0 && pattern[j] == pattern[size - overlap_size]) {
-            suffix[overlap_size++] = j--;
+        while (begin_index >= 0 && pattern[begin_index] == pattern[size - overlap_size]) {
+            suffixes[overlap_size++] = begin_index--;
         }
-        if (j == -1) {
+        if (begin_index == -1) {
             prefix[overlap_size] = true;
         }
     }
@@ -79,7 +84,7 @@ int boyer_moore(const char target[], int target_size, const char pattern[], int 
 }
 
 int main() {
-    string strPattern("abracadabra");
+    string strPattern("AT THAT");
     string strTarget("WHICH FINALLY HALTS.  AT THAT POINT...");
     const char* pattern = strPattern.c_str();
     const int pattern_size = strPattern.length();
