@@ -11,7 +11,7 @@ struct TrieNode {
   char letter;
   TrieNode* branches[letter_count];
 
-  TrieNode() : letter(0), count(1), Completed(false) {
+  TrieNode(char letter=0) : letter(letter), count(1), Completed(false) {
     for (int i = 0; i < letter_count; ++i) {
       branches[i] = nullptr;
     }
@@ -28,8 +28,8 @@ class Trie {
     destroy(m_root);
   }
 
-  TrieNode* create() {
-    TrieNode* pnode = new TrieNode();
+  TrieNode* create(char letter=0) {
+    TrieNode* pnode = new TrieNode(letter);
     return pnode;
   }
 
@@ -41,12 +41,11 @@ class Trie {
     while (*str != 0) {
       char index = *str - 'a';
       if (!pnode->branches[index]) {
-        pnode->branches[index] = create();
+        pnode->branches[index] = create(index);
       } else {
         pnode->branches[index]->count++;
       }
       pnode = pnode->branches[index];
-      pnode->letter = *str;
       str++;
     }
     pnode->Completed = true;
