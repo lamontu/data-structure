@@ -24,19 +24,19 @@ class SkipList {
     int key;
     string value;
     vector<Node*> forward;
-    Node(int k, const string& v, int level)
+    Node(int k, const string& v, size_t level)
       : key(k), value(v), forward(level, nullptr) {  }
   };
 
-  int random_level() const;
+  size_t random_level() const;
 
-  static int node_level(const Node* v);
-  static Node* make_node(int key, string val, int level);
+  static size_t node_level(const Node* v);
+  static Node* make_node(int key, string val, size_t level);
   Node* lower_bound(int key) const;
   vector<Node*> predecessors(int key) const;
 
-  const float Probability;
-  const int MaxLevel;
+  const double Probability;
+  const size_t MaxLevel;
   Node* head;
   Node* NIL;
 }; 
@@ -93,10 +93,10 @@ void SkipList::Insert(int key, const string& new_value) {
     return;
   }
 
-  const int new_level = random_level();
+  const size_t new_level = random_level();
   auto new_node_ptr = make_node(key, new_value, new_level);
 
-  for (int i = 0; i < new_level; ++i) {
+  for (size_t i = 0; i < new_level; ++i) {
     new_node_ptr->forward[i] = preds[i]->forward[i];
     preds[i]->forward[i] = new_node_ptr;
   }
@@ -116,16 +116,16 @@ void SkipList::Erase(int key) {
   delete node;
 }
 
-int SkipList::node_level(const Node* v) {
+size_t SkipList::node_level(const Node* v) {
   return v->forward.size();
 }
 
-SkipList::Node* SkipList::make_node(int key, string val, int level) {
+SkipList::Node* SkipList::make_node(int key, string val, size_t level) {
   return new Node(key, val, level);
 }
 
-int SkipList::random_level() const {
-  int v = 1;
+size_t SkipList::random_level() const {
+  size_t v = 1;
   // This is important for the time complexity
   while (((double)rand() / RAND_MAX) < Probability && v < MaxLevel) {
     v++;
