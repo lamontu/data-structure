@@ -1,17 +1,19 @@
-/* trie.h */
+#ifndef TRIE_TRIE_H_
+#define TRIE_TRIE_H_
+#include <queue>
 
-#ifndef __TRIE_H__
-#define __TRIE_H__
+static const int letter_count = 26;
 
 struct TrieNode {
-  static const int letter_count = 26;
-
-  int count;
+  TrieNode* branches[letter_count];
+  TrieNode* failure;
+  int count;  // not used
+  int level;  // pattern length when Completed is true
   bool Completed;
   char letter;
-  TrieNode* branches[letter_count];
 
-  TrieNode(char letter=0) : letter(letter), count(1), Completed(false) {
+  explicit TrieNode(char character = 0, int length = 0) : failure(nullptr),
+            count(1), level(length), Completed(false), letter(character) {
     for (int i = 0; i < letter_count; ++i) {
       branches[i] = nullptr;
     }
@@ -23,13 +25,14 @@ class Trie {
   TrieNode* m_root;
 
  public:
-  Trie(TrieNode* init=nullptr) : m_root(init) {  }
+  explicit Trie(TrieNode* init = nullptr) : m_root(init) {  }
   ~Trie() {
     destroy(m_root);
+    m_root = nullptr;
   }
 
-  TrieNode* create(char letter=0) {
-    TrieNode* pnode = new TrieNode(letter);
+  TrieNode* create(char letter = 0, int level = 0) {
+    TrieNode* pnode = new TrieNode(letter, level);
     return pnode;
   }
 
@@ -38,10 +41,11 @@ class Trie {
       m_root = create();
     }
     TrieNode* pnode = m_root;
-    while (*str != 0) {
+    while (str != nullptr && *str != 0) {
       char index = *str - 'a';
+      if (index < 0) break;
       if (!pnode->branches[index]) {
-        pnode->branches[index] = create(index);
+        pnode->branches[index] = create(index, pnode->level + 1);
       } else {
         pnode->branches[index]->count++;
       }
@@ -53,13 +57,12 @@ class Trie {
 
   void destroy(TrieNode* pnode) {
     if (!pnode) return;
-    for (int i = 0; i < TrieNode::letter_count; ++i) {
+    for (int i = 0; i < letter_count; ++i) {
       if (pnode->branches[i] != nullptr) {
         destroy(pnode->branches[i]);
       }
     }
     delete pnode;
-    pnode = nullptr;
   }
 
   bool find(const char* str) {
@@ -72,6 +75,39 @@ class Trie {
     } while (*str != 0);
     return pnode->Completed;
   }
+
+  void buildFailurePointer() {
+    std::queue<TrieNode*> nodeQueue;
+    m_root->failure = nullptr;
+    nodeQueue.push(m_root);
+    while (!nodeQueue.empty()) {
+      TrieNode* current_node = nodeQueue.front();
+      nodeQueue.pop();
+      for (int i = 0; i < letter_count; ++i) {
+        TrieNode* current_child = current_node->branches[i];
+        if (current_child == nullptr) {
+          continue;
+        }
+        if (current_node == m_root) {
+          current_child->failure = m_root;
+        } else {
+          TrieNode* fail_node = current_node->failure;
+          while (fail_node != nullptr) {
+            TrieNode* fail_child = fail_node->branches[i];
+            if (fail_child != nullptr) {
+              current_child->failure = fail_child;
+              break;
+            }
+            fail_node = fail_node->failure;
+          }
+          if (fail_node == nullptr) {
+            current_child->failure = m_root;
+          }
+        }
+        nodeQueue.push(current_child);
+      }
+    }
+  }
 };
 
-#endif  // __TRIE_H__
+#endif  // TRIE_TRIE_H_

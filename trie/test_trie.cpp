@@ -1,9 +1,7 @@
-/* test_trie.cpp */
-
-#include "trie.h"
+#include <sys/time.h>
 #include <iostream>
 #include <fstream>
-#include <sys/time.h>
+#include "trie.h"
 
 using namespace std;
 
@@ -12,7 +10,7 @@ int main(int argc, char* argv[]) {
 
   Trie trie;
   long time_sp = 0;
-  ifstream stream_in("./dict_linux.txt", std::ifstream::in);
+  ifstream stream_in("./trie/dict_linux.txt", std::ifstream::in);
   if (stream_in.is_open()) {
     int count = 0;
     int lineLength = 1024;
