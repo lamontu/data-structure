@@ -1,6 +1,10 @@
 #ifndef TRIE_TRIE_H_
 #define TRIE_TRIE_H_
 #include <queue>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 static const int letter_count = 26;
 
@@ -76,6 +80,7 @@ class Trie {
     return pnode->Completed;
   }
 
+  // Aho-Corasick algorithm: Construct trie with failure pointer
   void buildFailurePointer() {
     std::queue<TrieNode*> nodeQueue;
     m_root->failure = nullptr;
@@ -107,6 +112,33 @@ class Trie {
         nodeQueue.push(current_child);
       }
     }
+  }
+
+  // Aho-Corasick algorithm: match target using trie with failure pointer
+  void match(const char* target) {
+    int length = strlen(target);
+    TrieNode* pnode = m_root;
+    int count = 0;
+    for (int i = 0; i < length; ++i) {
+      char index =  target[i] - 'a';
+      if (index < 0) return;
+      while (pnode->branches[index] == nullptr && pnode != m_root) {
+        pnode = pnode->failure;
+      }
+      pnode = pnode->branches[index];
+      if (pnode == nullptr) pnode = m_root;
+      TrieNode* tmp = pnode;
+      while (tmp != m_root) {
+        if (tmp->Completed) {
+          count++;
+          int size = tmp->level;
+          int pos = i - size + 1;
+          cout << "Matched at postion: " <<  pos << ", size: " << size << endl;
+        }
+        tmp = tmp->failure;
+      }
+    }
+    cout << "Target: " << target << " matched count: " << count << endl;
   }
 };
 
