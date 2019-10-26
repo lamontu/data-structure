@@ -126,7 +126,9 @@ class Trie {
         pnode = pnode->failure;
       }
       pnode = pnode->branches[index];
-      if (pnode == nullptr) pnode = m_root;
+      if (pnode == nullptr) {
+        continue;
+      }
       TrieNode* tmp = pnode;
       while (tmp != m_root) {
         if (tmp->Completed) {
