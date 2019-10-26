@@ -8,7 +8,7 @@
 template<typename T>
 class BSTree : public BinaryTree<T> {
  public:
-  BSTree(BTNode<T>* p=nullptr) : BinaryTree<T>(p) {  }
+  explicit BSTree(BTNode<T>* p = nullptr) : BinaryTree<T>(p) {  }
   BTNode<T>* FindRec(const T& data) const;
   BTNode<T>* Find(const T&) const;
   BTNode<T>* FindMin() const;
@@ -17,8 +17,8 @@ class BSTree : public BinaryTree<T> {
   BTNode<T>* Successor(BTNode<T>* p) const;
   virtual BTNode<T>* InsertRec(const T& data);
   virtual BTNode<T>* Insert(const T& data);
-  virtual BTNode<T>* DeleteRec(const T& data); 
-  virtual BTNode<T>* Delete(const T& data); 
+  virtual BTNode<T>* DeleteRec(const T& data);
+  virtual BTNode<T>* Delete(const T& data);
 
  private:
   BTNode<T>* _FindRec(const T& data, BTNode<T>* p) const;
@@ -150,7 +150,6 @@ BTNode<T>* BSTree<T>::Delete(const T& data) {
   }
 
   return p;
-
 }
 
 template<typename T>

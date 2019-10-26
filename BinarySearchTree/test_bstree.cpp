@@ -1,7 +1,7 @@
 /* test_bstree.cpp */
 
-#include "bstree.h"
 #include <iostream>
+#include "./bstree.h"
 
 using namespace std;
 

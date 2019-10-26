@@ -14,23 +14,24 @@ using namespace std;
 enum NodeState {
   Initial,
   LeftChildProcessed,
-  RightChildProcessed,
+  RightChildProcessed
 };
 
 template<typename T>
 struct BTNode {
-  T data;
   BTNode<T>* lchild;
   BTNode<T>* rchild;
+  T data;
   enum NodeState state;
-  BTNode(T data=T(), BTNode<T>* lchild=nullptr, BTNode<T>* rchild=nullptr, int state=0)
-    : data(data), lchild(lchild), rchild(rchild), state(Initial) {  }
+  explicit BTNode(T value = T(), BTNode<T>* left = nullptr,
+    BTNode<T>* right = nullptr)
+    : lchild(left), rchild(right), data(value) { state = Initial; }
 };
 
 template<typename T>
 class BinaryTree {
  public:
-  BinaryTree(BTNode<T>* init_root=nullptr);
+  explicit BinaryTree(BTNode<T>* init_root = nullptr);
   BinaryTree(const BinaryTree<T>& rhs);
   BinaryTree<T>& operator=(const BinaryTree<T>& rhs);
   ~BinaryTree();
@@ -51,8 +52,8 @@ class BinaryTree {
   BTNode<T>* RightSibling(const BTNode<T>* pnode) const;
   void SetLeft(BTNode<T>* pnode);
   void SetRight(BTNode<T>* pnode);
-  bool AttachLeft(BTNode<T>* p);
-  bool AttachRight(BTNode<T>* p);
+  bool AttachLeft(BTNode<T>* * p);
+  bool AttachRight(BTNode<T>* * p);
   BTNode<T>* DetachLeft();
   BTNode<T>* DetachRight();
 
@@ -78,7 +79,7 @@ class BinaryTree {
   void _Create1(BTNode<T>*& tree, T ch[], int n, const T& c, int i);
   void _Create2(BTNode<T>*& tree, T ch1[], T ch2[], int low, int high, int& k);
   void _Destroy(BTNode<T>*& tree);
-  
+
   void _NodesCount(const BTNode<T>* pnode, unsigned int& unCount) const;
   void _LeafCount(const BTNode<T>* pnode, unsigned int& unCount) const;
   void _Depth(const BTNode<T>* pnode, unsigned int& unCount) const;
@@ -195,7 +196,7 @@ BTNode<T>* BinaryTree<T>::RightSibling(const BTNode<T>* pnode) const {
   assert(pnode);
   BTNode<T>* father;
   father = Parent(pnode);
-  if (father != nullptr) { 
+  if (father != nullptr) {
     assert(father->rchild != pnode);
     if (father->lchild == pnode) {
       return father->rchild;
@@ -209,7 +210,7 @@ void BinaryTree<T>::SetLeft(BTNode<T>* pnode) {
   if (nullptr == m_root) return;
   BTNode<T>* old_left = LeftChild();
   _Destroy(old_left);
-  m_root->lchild = pnode; 
+  m_root->lchild = pnode;
 }
 
 template<typename T>
@@ -217,22 +218,22 @@ void BinaryTree<T>::SetRight(BTNode<T>* pnode) {
   if (nullptr == m_root) return;
   BTNode<T>* old_right = RightChild();
   _Destroy(old_right);
-  m_root->rchild = pnode; 
+  m_root->rchild = pnode;
 }
 
 template<typename T>
-bool BinaryTree<T>::AttachLeft(BTNode<T>* pnode) {
-  if (pnode == this->Root() || IsEmpty() || LeftChild()) return false;
-  m_root->lchild = pnode;
-  pnode = nullptr;  // Forbid access to the tree below the root node
+bool BinaryTree<T>::AttachLeft(BTNode<T>* * pnode) {
+  if (*pnode == this->Root() || IsEmpty() || LeftChild()) return false;
+  m_root->lchild = *pnode;
+  *pnode = nullptr;  // Forbid access to the tree below the root node
   return true;
 }
 
 template<typename T>
-bool BinaryTree<T>::AttachRight(BTNode<T>* pnode) {
-  if (pnode == this->Root() || IsEmpty() || RightChild()) return false;
-  m_root->rchild = pnode;
-  pnode = nullptr;
+bool BinaryTree<T>::AttachRight(BTNode<T>* * pnode) {
+  if (*pnode == this->Root() || IsEmpty() || RightChild()) return false;
+  m_root->rchild = *pnode;
+  *pnode = nullptr;  // Forbid access to the tree below the root node
   return true;
 }
 
@@ -264,7 +265,7 @@ template<typename T>
 unsigned int BinaryTree<T>::LeafCount() const {
   unsigned int unCount = 0;
   _LeafCount(m_root, unCount);
-  return unCount; 
+  return unCount;
 }
 
 template<typename T>
@@ -328,7 +329,7 @@ BTNode<T>* BinaryTree<T>::_Copy(BTNode<T>* pnode) {
     try {
       pNewNode = new BTNode<T>;
     } catch(std::bad_alloc&) {
-      return nullptr; 
+      return nullptr;
     }
     pNewNode->data = pnode->data;
     pNewNode->lchild = _Copy(pnode->lchild);
@@ -380,13 +381,14 @@ void BinaryTree<T>::_Create1(BTNode<T>* & tree,
 template<typename T>
 void BinaryTree<T>::_Create2(BTNode<T>*& tree, T ch1[], T ch2[],
                              int low, int high, int& k) {
-  int i;
   if (low > high) {
     tree = nullptr;
   } else {
     tree = new BTNode<T>;
     tree->data = ch1[k];
-    for (i = low; i <= high && ch2[i] != ch1[k]; ++i);
+    int i;
+    for (i = low; i <= high && ch2[i] != ch1[k]; ++i)
+    {}
     if (ch2[i] == ch1[k]) {
       ++k;
       _Create2(tree->lchild, ch1, ch2, low, i - 1, k);
@@ -412,7 +414,7 @@ template<typename T>
 BTNode<T>* BinaryTree<T>::_Parent(BTNode<T>* root,
                                   const BTNode<T>* pnode) const {
   if (root == nullptr || root == pnode) {
-    return nullptr; 
+    return nullptr;
   }
   if (root->lchild == pnode || root->rchild == pnode) {
     return root;
@@ -512,7 +514,7 @@ void BinaryTree<T>::TraverseByFSA(BTNode<T>* pnode,
         S.push(curr->lchild);
       }
       curr->state = LeftChildProcessed;
-    } else if (curr->state == LeftChildProcessed) { // Left child processed state
+    } else if (curr->state == LeftChildProcessed) {  // Left child processed state
       if (order == 2) {  // inorder traverse
         Visit(curr->data);
       }
@@ -566,7 +568,6 @@ void BinaryTree<T>::PreOrderTraverse(BTNode<T>* pnode,
       S.push(curr->lchild);
     }
   }
-
 }
 
 template<typename T>
@@ -590,15 +591,13 @@ void BinaryTree<T>::InOrderTraverse(BTNode<T>* pnode,
   }
   */
 
-  while (curr != nullptr || !S.empty())
-  {
+  while (curr != nullptr || !S.empty()) {
     if (curr != nullptr) {
       // If current node is not null, push it to stack to defer it,
       // And then move to its left child
       S.push(curr);
       curr = curr->lchild;
-    }
-    else {
+    } else {
       // If current node is null, pop an element from stack to visit it,
       // And then move to its right child.
       curr = S.top();
@@ -607,7 +606,6 @@ void BinaryTree<T>::InOrderTraverse(BTNode<T>* pnode,
       curr = curr->rchild;
     }
   }
-
 }
 
 template<typename T>
@@ -634,7 +632,7 @@ void BinaryTree<T>::PostOrderTraverse(BTNode<T>* pnode,
     }
   }
   */
-  
+
   stack<BTNode<T>*> VisitStack;
   S.push(curr);
   while (!S.empty()) {
@@ -655,7 +653,6 @@ void BinaryTree<T>::PostOrderTraverse(BTNode<T>* pnode,
     Visit(VisitStack.top()->data);
     VisitStack.pop();
   }
-
 }
 
 template<typename T>
@@ -674,7 +671,7 @@ void BinaryTree<T>::LevelOrderTraverse(BTNode<T>* pnode,
     if (p->rchild != nullptr) {
       Q.push(p->rchild);
     }
-  }    
+  }
 }
 
 #endif  // __BINARYTREE_H__
