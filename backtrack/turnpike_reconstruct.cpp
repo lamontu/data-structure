@@ -83,6 +83,7 @@ int main(int argc, char* argv[]) {
   cin >> n2;
   if (n2 < 1) {
     cout << "Invalid n2." << endl;
+    exit(0);
   }
 
   for (i = 0; i < n2; ++i) {
