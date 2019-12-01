@@ -8,16 +8,16 @@
 
 using namespace std;
 
-bool TurnpikeReconstruct(int idx, vector<int>& x, map<int, int>& dist_set,
-                         const int far) {
-  if (idx == 0) return true;
+bool TurnpikeReconstruct(vector<int>& x, map<int, int>& dist_set,
+                         const int position_count, const int far) {
+  if (position_count == 0) return true;
 
   int cur_n, cur_far, i;
   map<int, int>::iterator it;
 
   /* p_n = 0
    * p_n-1 = far
-   * p_n-2 = d_max
+   * p_n-2 = cur_far
    */
   cur_n = (int)x.size();
   cur_far = dist_set.rbegin()->first;
@@ -33,7 +33,7 @@ bool TurnpikeReconstruct(int idx, vector<int>& x, map<int, int>& dist_set,
   }
   if (i == cur_n) {
     x.push_back(cur_far);
-    if (TurnpikeReconstruct(idx - 1, x, dist_set, far)) {
+    if (TurnpikeReconstruct(x, dist_set, position_count -1 , far)) {
       return true;
     }
     x.pop_back();  // Backtrack
@@ -43,9 +43,9 @@ bool TurnpikeReconstruct(int idx, vector<int>& x, map<int, int>& dist_set,
     ++dist_set[abs(cur_far - x[i])];
   }
 
-  /* p_n = 0
-   * p_n-1 = far
-   * p_n-2 = far - d_max
+  /* position_n = 0
+   * position_n-1 = far
+   * position_n-2 = far - cur_far
    */
   cur_n = (int)x.size();
   cur_far = dist_set.rbegin()->first;
@@ -61,7 +61,7 @@ bool TurnpikeReconstruct(int idx, vector<int>& x, map<int, int>& dist_set,
   }
   if (i == cur_n) {
     x.push_back(far - cur_far);
-    if (TurnpikeReconstruct(idx - 1, x, dist_set, far)) {
+    if (TurnpikeReconstruct(x, dist_set, position_count - 1 , far)) {
       return true;
     }
     x.pop_back();
@@ -75,7 +75,7 @@ bool TurnpikeReconstruct(int idx, vector<int>& x, map<int, int>& dist_set,
 }
 
 int main(int argc, char* argv[]) {
-  int i, n, n2, dist, far;
+  int i, n2, dist, far;
   vector<int> x;
   map<int, int> dist_set;
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
   }
 
 
-  n = (int)sqrt(n2 * 2) + 1;
+  int position_count = (int)sqrt(n2 * 2) + 1;
   far = dist_set.rbegin()->first;
   --dist_set[far];
   if (dist_set.rbegin()->second == 0) {
@@ -108,11 +108,11 @@ int main(int argc, char* argv[]) {
 
   x.push_back(0);
   x.push_back(far);
-  if (!TurnpikeReconstruct(n - 2, x, dist_set, far)) {
+  if (!TurnpikeReconstruct(x, dist_set, position_count - 2, far)) {
     cout << "No solution." << endl;
   } else {
     sort(x.begin(), x.end());
-    for (i = 0; i < n; ++i) {
+    for (i = 0; i < position_count; ++i) {
       cout << x[i] << ", ";
     }
     cout << endl;
