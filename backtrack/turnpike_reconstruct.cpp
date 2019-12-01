@@ -8,7 +8,7 @@
 
 using namespace std;
 
-bool TurnpikeReconstruct(vector<int>& x, map<int, int>& dist_set,
+bool TurnpikeReconstruct(vector<int>& calculated_positions, map<int, int>& dist_set,
                          const int position_count, const int far) {
   if (position_count == 0) return true;
 
@@ -19,10 +19,10 @@ bool TurnpikeReconstruct(vector<int>& x, map<int, int>& dist_set,
    * p_n-1 = far
    * p_n-2 = cur_far
    */
-  cur_n = (int)x.size();
+  cur_n = (int)calculated_positions.size();
   cur_far = dist_set.rbegin()->first;
   for (i = 0; i < cur_n; ++i) {
-    it = dist_set.find(abs(cur_far - x[i]));
+    it = dist_set.find(abs(cur_far - calculated_positions[i]));
     if (it == dist_set.end() || it->second == 0) {
       break;
     }
@@ -32,25 +32,25 @@ bool TurnpikeReconstruct(vector<int>& x, map<int, int>& dist_set,
     }
   }
   if (i == cur_n) {
-    x.push_back(cur_far);
-    if (TurnpikeReconstruct(x, dist_set, position_count -1 , far)) {
+    calculated_positions.push_back(cur_far);
+    if (TurnpikeReconstruct(calculated_positions, dist_set, position_count -1 , far)) {
       return true;
     }
-    x.pop_back();  // Backtrack
+    calculated_positions.pop_back();  // Backtrack
   }
   cur_n = i;  // Restore the dist_set elements that have been decreased.
   for (i = 0; i < cur_n; ++i) {
-    ++dist_set[abs(cur_far - x[i])];
+    ++dist_set[abs(cur_far - calculated_positions[i])];
   }
 
   /* position_n = 0
    * position_n-1 = far
    * position_n-2 = far - cur_far
    */
-  cur_n = (int)x.size();
+  cur_n = (int)calculated_positions.size();
   cur_far = dist_set.rbegin()->first;
   for (i = 0; i < cur_n; ++i) {
-    it = dist_set.find(abs(far - cur_far - x[i]));
+    it = dist_set.find(abs(far - cur_far - calculated_positions[i]));
     if (it == dist_set.end() || it->second == 0) {
       break;
     }
@@ -60,15 +60,15 @@ bool TurnpikeReconstruct(vector<int>& x, map<int, int>& dist_set,
     }
   }
   if (i == cur_n) {
-    x.push_back(far - cur_far);
-    if (TurnpikeReconstruct(x, dist_set, position_count - 1 , far)) {
+    calculated_positions.push_back(far - cur_far);
+    if (TurnpikeReconstruct(calculated_positions, dist_set, position_count - 1 , far)) {
       return true;
     }
-    x.pop_back();
+    calculated_positions.pop_back();
   }
   cur_n = i;
   for (i = 0; i < cur_n; ++i) {
-    ++dist_set[abs(far - cur_far - x[i])];
+    ++dist_set[abs(far - cur_far - calculated_positions[i])];
   }
 
   return false;
@@ -76,7 +76,7 @@ bool TurnpikeReconstruct(vector<int>& x, map<int, int>& dist_set,
 
 int main(int argc, char* argv[]) {
   int i, n2, dist, far;
-  vector<int> x;
+  vector<int> calculated_positions;
   map<int, int> dist_set;
 
   cout << "Input n2: ";
@@ -106,19 +106,19 @@ int main(int argc, char* argv[]) {
     dist_set.erase(far);
   }
 
-  x.push_back(0);
-  x.push_back(far);
-  if (!TurnpikeReconstruct(x, dist_set, position_count - 2, far)) {
+  calculated_positions.push_back(0);
+  calculated_positions.push_back(far);
+  if (!TurnpikeReconstruct(calculated_positions, dist_set, position_count - 2, far)) {
     cout << "No solution." << endl;
   } else {
-    sort(x.begin(), x.end());
+    sort(calculated_positions.begin(), calculated_positions.end());
     for (i = 0; i < position_count; ++i) {
-      cout << x[i] << ", ";
+      cout << calculated_positions[i] << ", ";
     }
     cout << endl;
   }
 
-  x.clear();
+  calculated_positions.clear();
   dist_set.clear();
 
   return 0;
