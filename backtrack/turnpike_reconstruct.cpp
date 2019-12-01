@@ -84,12 +84,21 @@ int main(int argc, char* argv[]) {
   if (n2 < 1) {
     cout << "Invalid n2." << endl;
     exit(0);
+  } else if (n2 == 1) {
+    cout << "Use default data: n2=15, dist_set={1,2,2,2,3,3,3,4,5,5,5,6,7,8,10}" << std::endl;
+    n2 = 15;
+    int arr[15] = {1,2,2,2,3,3,3,4,5,5,5,6,7,8,10};
+    for (i = 0; i< n2; ++i) {
+      ++dist_set[arr[i]];
+    }
+  } else {
+      for (i = 0; i < n2; ++i) {
+        cin >> dist;
+        ++dist_set[dist];
+      }
   }
 
-  for (i = 0; i < n2; ++i) {
-    cin >> dist;
-    ++dist_set[dist];
-  }
+
   n = (int)sqrt(n2 * 2) + 1;
   far = dist_set.rbegin()->first;
   --dist_set[far];
