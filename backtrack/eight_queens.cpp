@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cmath>
 
 using std::vector;
 using std::string;
@@ -12,7 +13,7 @@ class Solution {
 private:
     vector<vector<string> > result;
 public:
-    int helper_call_count = 0;
+    int helper_call_count;
     
     vector<vector<string> > solveNQueens(int n) {
         vector<string>cur(n, string(n,'.'));
@@ -66,24 +67,35 @@ public:
     // 只需要判断对角线上半部分，因为后面的行还没有开始放置。
     bool isValid(vector<string> &cur, int row, int col) {
         // 列
-        for(int i = 0; i < row; ++i)
-            if(cur[i][col] == 'Q') return false;
+        for (int i = 0; i < row; ++i)
+            if (cur[i][col] == 'Q') return false;
         // 左上对角线
-        for(int i = row-1, j=col-1; i >= 0 && j >= 0; --i,--j)
-            if(cur[i][j] == 'Q') return false;
+        for (int i = row-1, j=col-1; i >= 0 && j >= 0; --i,--j)
+            if (cur[i][j] == 'Q') return false;
         // 右上对角线
-        for(int i = row-1, j=col+1; i >= 0 && j < cur.size(); --i,++j)
-            if(cur[i][j] == 'Q') return false;
+        for (int i = row-1, j=col+1; i >= 0 && j < cur.size(); --i,++j)
+            if (cur[i][j] == 'Q') return false;
         
         return true;
     }
 
-    bool isValid2(vector<int> &states, int row, int col) {
-        for(int i = 0; i < row; ++i)
-            if(states[i] == col || abs(row - i) == abs(col - states[i]))
+    bool isValid2(const vector<int> &states, int row, int col) {
+        for (int i = 0; i < row; ++i)
+            if (states[i] == col || 
+                abs(static_cast<long>(row - i)) == abs(static_cast<long>(col - states[i])))
                 return false;
 
         return true;
+    }
+
+    void print(const vector<string> &states) {
+        cout << "\n---------------------------------\n";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                cout << "| " << states[i][j] << " ";
+            }
+            cout << "|\n---------------------------------\n";
+        }
     }
 
 };
@@ -93,5 +105,6 @@ int main() {
     vector<vector<string> >  res = sln.solveNQueens(8);
     cout << "helper call count: " << sln.helper_call_count << endl;
     cout << "result count: " << res.size() << endl;
+    sln.print(res[0]);
     return 0;
 }
