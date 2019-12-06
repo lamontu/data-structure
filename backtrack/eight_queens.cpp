@@ -25,6 +25,38 @@ public:
         return result;
     }
 
+    vector<vector<string> > solveNQueens2(int n) {
+        vector<int> state(n, -1);
+        for (int row = 0, col; ; ) {
+            // 从上一次放置的位置后面开始放置
+            for (col = state[row] + 1; col < n; col++) {
+                if (isValid2(state, row, col))
+                {
+                    state[row] = col;
+                    if (row == n-1) {  // 找到了一个解,继续试探下一列
+                    
+                        vector<string> tmpres(n, string(n,'.'));
+                        for (int i = 0; i < n; i++)
+                            tmpres[i][state[i]] = 'Q';
+                        result.push_back(tmpres);
+                        //print(tmpres);
+                    } else {  //当前状态合法，去放置下一行的皇后
+                        row++; break;
+                    }
+                }
+            }
+            if (col == n) {  // 当前行的所有位置都尝试过，回溯到上一行
+                if (row == 0) {
+                    break;  // 所有状态尝试完毕，退出
+                }
+                state[row] = -1;  // 回溯前清除当前行的状态
+                helper_call_count++;  // backtrace count
+                row--;
+            }
+        }
+        return result;
+    }
+
     void helper1(vector<string> &cur, int row) {
         helper_call_count++;
         if (row == cur.size()) {
@@ -61,11 +93,11 @@ public:
             }
         }
     }
-     
+
     // 判断在cur[row][col]位置放一个皇后，是否是合法的状态，
     // 已经保证了每行一个皇后，只需要判断列是否合法以及对角线是否合法，
     // 只需要判断对角线上半部分，因为后面的行还没有开始放置。
-    bool isValid(vector<string> &cur, int row, int col) {
+    bool isValid(const vector<string> &cur, int row, int col) {
         // 列
         for (int i = 0; i < row; ++i)
             if (cur[i][col] == 'Q') return false;
@@ -102,7 +134,7 @@ public:
 
 int main() {
     Solution sln = Solution();
-    vector<vector<string> >  res = sln.solveNQueens(8);
+    vector<vector<string> >  res = sln.solveNQueens2(8);
     cout << "helper call count: " << sln.helper_call_count << endl;
     cout << "result count: " << res.size() << endl;
     sln.print(res[0]);
