@@ -5,8 +5,9 @@ using std::endl;
 
 // weights[i]: the weight of the item i
 // weight: the allowed total weight of the item in the knapsack.
-int knapsack(const int weights[], const int num, const int weight) {
+size_t knapsack(const size_t weights[], const size_t num, const size_t weight) {
     bool states[num][weight+1];
+    memset(states, 0, num*(weight+1)*sizeof(bool));
     states[0][0] = true;
     if (weights[0] < weight) {
         states[0][weights[0]] = true;
@@ -27,17 +28,19 @@ int knapsack(const int weights[], const int num, const int weight) {
         }
     }
 
-    for (int i = weight; i >= 0; --i) {
-        if (states[num-1]) {
-            return i;
+    for (size_t w = weight; w > 0; --w) {
+        if (states[num-1][w]) {
+            return w;
         }
     }
+
+    return 0;
 }
 
 int main() {
-    int weights[5] = {2, 2, 4, 6, 3};
-    int allowed_weight = 9;
-    int total_weight = knapsack(weights, 5, allowed_weight);
+    size_t weights[5] = {2, 2, 4, 6, 3};
+    size_t allowed_weight = 9;
+    size_t total_weight = knapsack(weights, 5, allowed_weight);
     cout << "total weight = " << total_weight << endl;
     return 0;
 }
