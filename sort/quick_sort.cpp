@@ -1,5 +1,6 @@
 /* quick_sort.cpp */
 
+#include <stdlib.h>
 #include <iostream>
 #include <algorithm>
 
@@ -21,7 +22,7 @@ int partition(int* arr, int low, int high) {
 
 // 挖坑法
 int partition2(int* arr, int low, int high) {
-    int pivot = arr[high]; 
+    int pivot = arr[high];
     while (low < high) {
         while (low < high && arr[low] <= pivot) {
             ++low;
