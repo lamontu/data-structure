@@ -13,7 +13,8 @@ public:
 
     // weights[i]: the weight of the item i
     // total_weight: the allowed total weight of the item in the knapsack.
-    size_t knapsack(const vector<size_t> &weights, const size_t total_num, const size_t total_weight) {
+    size_t knapsack(const vector<size_t> &weights, const size_t total_weight) {
+        const size_t total_num = weights.size();
         vector< vector<bool> > states(total_num, vector<bool>(total_weight+1, false));
         states[0][0] = true;
         if (weights[0] < total_weight) {
@@ -48,7 +49,8 @@ public:
 
     // weights[i]: the weight of the item i
     // total_weight: the allowed total weight of the item in the knapsack.
-    size_t knapsack2(const vector<size_t> &weights, const size_t total_num, const size_t total_weight) {
+    size_t knapsack2(const vector<size_t> &weights, const size_t total_weight) {
+        const size_t total_num = weights.size();
         vector<bool> states(total_weight+1, false);
         states[0] = true;
         if (weights[0] < total_weight) {
@@ -88,8 +90,8 @@ int main() {
     const vector<size_t> weights(items, items + sizeof(items)/sizeof(*items));
     size_t allowed_weight = 9;
     Solution sln;
-    //size_t total_weight = sln.knapsack(weights, 5, allowed_weight);
-    size_t total_weight = sln.knapsack2(weights, 5, allowed_weight);
+    size_t total_weight = sln.knapsack(weights, allowed_weight);
+    //size_t total_weight = sln.knapsack2(weights, allowed_weight);
     cout << "total weight = " << total_weight << endl;
     cout << "count no = " << sln.count_no << endl;
     cout << "count yes = " << sln.count_yes << endl;
