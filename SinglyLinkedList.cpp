@@ -2,27 +2,27 @@
 
 #include <iostream>
 
-using namespace std;
-
+using std::cout;
+using std::endl;
 
 struct ListNode {
-  int val;
   ListNode* next;
-  ListNode(int _val=0) : val(_val), next(nullptr) {  }
+  int val;
+  int padding;
+  ListNode(int _val=0) : next(nullptr), val(_val), padding(0) {  }
 };
 
 
 class SinglyLinkedList {
  private:
-  int m_size;
   ListNode* m_head;
   ListNode* m_tail;
+  int m_size;
+  int padding;
 
  public:
-  SinglyLinkedList() {
-    m_size = 0;
-    m_head = nullptr;
-    m_tail = nullptr;
+  SinglyLinkedList() : m_head(nullptr), m_tail(nullptr), m_size(0) {
+    padding = 0;
     cout << "Constructor is called." << endl;
   }
 
@@ -171,7 +171,7 @@ class SinglyLinkedList {
 };
 
 
-int main(int argc, char* argv[]) {
+int main() {
 
   cout << "------------------------\n";
   SinglyLinkedList* lst1 = new SinglyLinkedList();
