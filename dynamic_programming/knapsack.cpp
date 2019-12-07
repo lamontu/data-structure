@@ -88,13 +88,13 @@ public:
 int main() {
     size_t items[5] = {2, 2, 4, 6, 3};
     const vector<size_t> weights(items, items + sizeof(items)/sizeof(*items));
-    size_t allowed_weight = 9;
+    size_t total_weight = 9;
     Solution sln;
-    size_t total_weight = sln.knapsack(weights, allowed_weight);
-    //size_t total_weight = sln.knapsack2(weights, allowed_weight);
-    cout << "total weight = " << total_weight << endl;
-    cout << "count no = " << sln.count_no << endl;
+    size_t sum_weight = sln.knapsack(weights, total_weight);
+    // size_t sum_weight = sln.knapsack2(weights, total_weight);
+    cout << "sum weight = " << sum_weight << endl;
     cout << "count yes = " << sln.count_yes << endl;
-    cout << "count duplicates = " << sln.count_dup << endl;
+    cout << "knapsack count no = " << sln.count_no << endl;
+    cout << "knapsack2 count duplicates = " << sln.count_dup << endl;
     return 0;
 }
