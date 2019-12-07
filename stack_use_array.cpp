@@ -31,6 +31,31 @@ class Stack {
     m_data = new int[m_capacity];
   }
 
+  Stack(const Stack& other) {
+    m_capacity = other.m_capacity;
+    m_size = other.m_size;
+    m_data = new int[m_capacity];
+    for (int i = 0; i < m_size; ++i) {
+      m_data[i] = other.m_data[i];
+    }
+  }
+
+  Stack& operator=(const Stack& rhs) {
+    if (this == &rhs) {
+      return *this;
+    }
+
+    delete [] m_data;
+
+    m_capacity = rhs.m_capacity;
+    m_size = rhs.m_size;
+    m_data = new int[m_capacity];
+    for (int i = 0; i < m_size; ++i) {
+      m_data[i] = rhs.m_data[i];
+    }
+    return *this;
+  }
+
   void push(int val) {
     if (m_size + 1 >= m_capacity) {
       resize(2 * m_capacity);
@@ -57,7 +82,7 @@ class Stack {
   }
 
   ~Stack() {
-    delete m_data;
+    delete[] m_data;
   }
 
   int capacity() {
@@ -73,24 +98,26 @@ class Stack {
 };
 
 
-int main(int argc, char* argv[]) {
+int main() {
   Stack st1 = Stack();
   // Stack st1 = Stack;  // Error
   Stack st2;
+  Stack st3(5);
+
   Stack* pst1 = new Stack();
-  Stack* pst2 = new Stack;
+  delete pst1;
+
   cout << st1.capacity() << endl;
   cout << st2.capacity() << endl;
+  cout << st3.capacity() << endl;
 
   Stack stack = Stack(10);
   for (int i = 1; i <= 10; ++i) {
     stack.push(i);
-  }  
+  }
   cout << stack.size() << endl;
   cout << stack.capacity() << endl;
   stack.output();
 
   return 0;
 }
-
-
