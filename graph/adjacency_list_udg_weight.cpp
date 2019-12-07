@@ -8,7 +8,7 @@
 using namespace std;
 
 const int MAX = 100;
-const int INF = ~(0x1 << 31);
+const int INF = ~(0x1u << 31);
 
 // Store the information of an edge
 class EData {
@@ -303,7 +303,7 @@ void ListUdg::Kruskal() const {
   int length;
   int index = 0;
   int vends[MAX] = {0};
-  EData* edges;  // All edges of the graph 
+  EData* edges;  // All edges of the graph
   EData rets[MAX];  // The edges of the kruskal spanning tree
 
   edges = get_edges();
@@ -460,7 +460,7 @@ void ListUdg::Floyd(int path[][MAX], int distance[][MAX]) {
 
   for (i = 0; i < vertex_num_; ++i) {
     for (j = 0; j < vertex_num_; ++j) {
-      distance[i][j] = get_weight(i, j); 
+      distance[i][j] = get_weight(i, j);
       path[i][j] = j;  // Vertex j is on the path from vertex i to j.
     }
   }

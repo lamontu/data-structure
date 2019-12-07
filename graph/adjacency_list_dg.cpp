@@ -69,7 +69,7 @@ ListDg::ListDg() {
   int v, e;
   int i, p1, p2;
   ENode *node1, *node2;
-  
+
   cout << "Input vertex number:";
   cin >> vertex_num_;
   cout << "Input edge number:";

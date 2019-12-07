@@ -8,7 +8,7 @@
 using namespace std;
 
 const int MAX = 100;
-const int INF = ~(0x1 << 31);
+const int INF = ~(0x1u << 31);
 
 // Store the information of an edge
 class EData {
@@ -207,7 +207,7 @@ void MatrixUdg::BFS() const {
     }
   }
   cout << endl;
-} 
+}
 
 void MatrixUdg::Print() const {
   int i, j;
@@ -270,7 +270,7 @@ void MatrixUdg::Kruskal() const {
   int length;
   int index = 0;
   int vends[MAX] = {0};
-  EData* edges;  // All edges of the graph 
+  EData* edges;  // All edges of the graph
   EData rets[MAX];  // The edges of the kruskal spanning tree
 
   edges = get_edges();
@@ -305,7 +305,7 @@ void MatrixUdg::Prim(int start) const {
   int index = 0;
   char prims[MAX];
   int weights[MAX];
-  
+
   prims[index++] = vertexes_[start];
   /* Initialize the weight of edges that connect each vertex with the spanning
    * tree which only contains vertex start.
@@ -327,7 +327,7 @@ void MatrixUdg::Prim(int start) const {
       j++;
     }
     prims[index++] = vertexes_[k];
-    weights[k] = 0; 
+    weights[k] = 0;
     /* Update the weight of edges that connect each vertex with the spanning
      * tree which adds a new vertex k.
      */

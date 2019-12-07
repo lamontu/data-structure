@@ -168,7 +168,7 @@ void MatrixUdg::BFS() const {
     }
   }
   cout << endl;
-} 
+}
 
 void MatrixUdg::Print() const {
   int i, j;
