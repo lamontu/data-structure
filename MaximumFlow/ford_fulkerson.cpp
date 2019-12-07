@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int INF = ~(0x1 << 31);
+const int INF = ~(0x1u << 31);
 const int VertexNum = 100;
 
 /* Store the information of an arc.
@@ -15,8 +15,8 @@ struct Node {
   int head;  // Denote arc head index.
   int capacity;  // Denote capacity of an arc.
 
-  // Denote the index of this arc's reverse arc in its tail(vertex head). 
-  int reverse;  
+  // Denote the index of this arc's reverse arc in its tail(vertex head).
+  int reverse;
 
   Node(int to, int cap, int rev) : head(to), capacity(cap), reverse(rev) {  }
 };
