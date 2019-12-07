@@ -14,13 +14,13 @@ void visit(const int& a) {
 typedef void(* Funtype)(const int&);
 Funtype pfun = visit;
 
-int main(int argc, char* argv[]) {
+int main() {
   cout << "================================" << endl;
 
   cout << "# Create a BinaryTree object from arrays ------" << endl;
   int LevelOrder[] = {1, 2, 3, 4, 5, 6, 7};
   int PreOrder[] = {1, 2, 4, 5, 3, 6, 7};
-  int InOrder[] = {4, 2, 5, 1, 6, 3, 7};  
+  int InOrder[] = {4, 2, 5, 1, 6, 3, 7};
 /*
   cout << "## Create a tree using a PreOrderTraverse array "
        << "and an InOrderTraverse array:" << endl;
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
   cout << "## Create a tree from a level order traverse result:" << endl;
   BinaryTree<int> bt;
   bt.Create1(LevelOrder, 7, 100);
- 
+
   bt.IsEmpty() ? cout << "Empty \n" : cout << "Not empty \n";
   cout << "Root data: " << bt.Root()->data << endl;
   cout << "Nodes count: " << bt.NodesCount() << endl;
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
   if (father == nullptr) {
     cout << "Parent of root: nullptr" << endl;
   }
- 
+
 
   cout << "LeftChild: " << bt.LeftChild()->data << endl;
   cout << "RightChild: " << bt.RightChild()->data << endl;
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
   BTNode<int>* p3_rsibling = bt.RightSibling(p3);
   cout << "p3 right sibling: " << p3_rsibling->data << endl;
  */
-  
+
   cout << "### Detach left child:" << endl;
   bt.DetachLeft();
   bt.LeftChild() ? cout << "Has LeftChild\n" : cout << "No LeftChild\n";

@@ -1,4 +1,4 @@
-/* test_ctor.cpp 
+/* test_ctor.cpp
  * Test contructor, copy constructor, copy assignment, and destrcutor
  */
 
@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char* argv[]) {
   cout << "================================" << endl;
 
-/* Test creating an object #1: OK 
+/* Test creating an object #1: OK
   BTNode<int>* na;
   BinaryTree<int> tree(na);
   (nullptr == na) ? cout << "nullptr == na\n" : cout << "nullptr != na\n";
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
   cout << "Root data: " << tree.Root()->data << endl;
 */
 
-/* ## No runtime error  
+/* ## No runtime error
   BTNode<int>* na;  // na == nullptr
   BinaryTree<int>* ptree = new BinaryTree<int>(na);
   BinaryTree<int> tree(na);
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
 */
 
 /* Test copy constuctor #1: OK
-  BTNode<int>* na; 
+  BTNode<int>* na;
   BinaryTree<int>* ptree = new BinaryTree<int>(na);
   BinaryTree<int> tree(*ptree);
   delete ptree;
@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
   BinaryTree<int> tree;
   tree = *ptree;
   delete ptree;
-*/  
+*/
 
   cout << "================================" << endl;
   return 0;
