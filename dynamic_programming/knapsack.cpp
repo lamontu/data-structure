@@ -12,24 +12,24 @@ public:
     size_t count_dup;
 
     // weights[i]: the weight of the item i
-    // weight: the allowed total weight of the item in the knapsack.
-    size_t knapsack(const vector<size_t> weights, const size_t num, const size_t weight) {
-        vector< vector<bool> > states(num, vector<bool>(weight+1, false));
+    // total_weight: the allowed total weight of the item in the knapsack.
+    size_t knapsack(const vector<size_t> &weights, const size_t total_num, const size_t total_weight) {
+        vector< vector<bool> > states(total_num, vector<bool>(total_weight+1, false));
         states[0][0] = true;
-        if (weights[0] < weight) {
+        if (weights[0] < total_weight) {
             states[0][weights[0]] = true;
         }
 
-        for (size_t i = 1; i < num; ++i) {
+        for (size_t i = 1; i < total_num; ++i) {
             // Don't put the item i to the knapsack
-            for (size_t j = 0; j <= weight; ++j) {
+            for (size_t j = 0; j <= total_weight; ++j) {
                 if (states[i-1][j]) {
                     states[i][j] = states[i-1][j];
                     count_no++;
                 }
             }
             // Put the item i to the knapsack
-            for (size_t j = 0; j <= weight - weights[i]; ++j) {
+            for (size_t j = 0; j <= total_weight - weights[i]; ++j) {
                 if (states[i-1][j]) {
                     states[i][j+weights[i]] = true;
                     count_yes++;
@@ -37,8 +37,8 @@ public:
             }
         }
 
-        for (size_t w = weight; w > 0; --w) {
-            if (states[num-1][w]) {
+        for (size_t w = total_weight; w > 0; --w) {
+            if (states[total_num-1][w]) {
                 return w;
             }
         }
@@ -47,16 +47,16 @@ public:
     }
 
     // weights[i]: the weight of the item i
-    // weight: the allowed total weight of the item in the knapsack.
-    size_t knapsack2(vector<size_t> weights, const size_t num, const size_t weight) {
-        vector<bool> states(weight+1, false);
+    // total_weight: the allowed total weight of the item in the knapsack.
+    size_t knapsack2(const vector<size_t> &weights, const size_t total_num, const size_t total_weight) {
+        vector<bool> states(total_weight+1, false);
         states[0] = true;
-        if (weights[0] < weight) {
+        if (weights[0] < total_weight) {
             states[weights[0]] = true;
         }
 
-        for (size_t i = 1; i < num; ++i) {
-            for (size_t j = weight - weights[i]; ; --j) {
+        for (size_t i = 1; i < total_num; ++i) {
+            for (size_t j = total_weight - weights[i]; ; --j) {
                 if (states[j]) {
                     // Put the item i to the knapsack
                     if (states[j + weights[i]]) {
@@ -73,7 +73,7 @@ public:
             }
         }
 
-        for (size_t w = weight; w > 0; --w) {
+        for (size_t w = total_weight; w > 0; --w) {
             if (states[w]) {
                 return w;
             }
@@ -85,7 +85,7 @@ public:
 
 int main() {
     size_t items[5] = {2, 2, 4, 6, 3};
-    vector<size_t> weights(items, items + sizeof(items)/sizeof(*items));
+    const vector<size_t> weights(items, items + sizeof(items)/sizeof(*items));
     size_t allowed_weight = 9;
     Solution sln;
     //size_t total_weight = sln.knapsack(weights, 5, allowed_weight);
