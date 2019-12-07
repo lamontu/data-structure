@@ -37,11 +37,11 @@ class DoublyLinkedList {
       m_head->prev = ptr;
       m_head = ptr;
       cout << "Insert a ListNode at front of a non-empyty DoublyLinkedList..."
-           << endl; 
+           << endl;
     }
     ++m_size;
   }
-  
+
   void insertBack(int val) {
     if (m_size == 0) {
       m_head = m_tail = new ListNode(val);
@@ -104,7 +104,7 @@ class DoublyLinkedList {
         ptr1->next = ptr2->next;
         if (ptr2->next == nullptr) {
           m_tail = ptr1;
-          cout << "Delete the last ListNode from a multiple-node DoublyLinkedList...\n"; 
+          cout << "Delete the last ListNode from a multiple-node DoublyLinkedList...\n";
         } else {
           ptr2->next->prev = ptr1;
           cout << "Delete a ListNode at position pos of a DoublyLinkedList..." << endl;
@@ -122,7 +122,7 @@ class DoublyLinkedList {
     ListNode* ptr = m_head;
     for (int i = 0; i < pos; ++i) {
       ptr = ptr->next;
-    } 
+    }
     ptr->val = val;
     cout << "Update a ListNode at position pos of a DoublyLinkedList...\n";
   }
@@ -132,7 +132,7 @@ class DoublyLinkedList {
     while (ptr != nullptr) {
       if (ptr->val == val) {
         cout << "ListNode is found." << endl;
-        return ptr;      
+        return ptr;
       }
       ptr = ptr->next;
     }
@@ -152,7 +152,6 @@ class DoublyLinkedList {
       cout << "ListNode is got." << endl;
       return ptr;
     }
-    ListNode* ptr = m_head;    
   }
 
   ~DoublyLinkedList() {
