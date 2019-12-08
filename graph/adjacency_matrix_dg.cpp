@@ -181,7 +181,7 @@ void MatrixDg::Print() const {
   }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
   char edges[][2] = {
     {'A', 'C'}, {'A', 'D'}, {'A', 'F'}, {'B', 'C'},

@@ -3,12 +3,12 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
+using std::sort;
+using std::min;
+using std::cin;
+using std::cout;
 
-const double eps = 1e-8;
 const int INF = 0x7fffffff;
-
-int n;
 
 struct Point {
   double x, y;
@@ -77,8 +77,9 @@ double ClosestPair(int left, int right) {
   return d;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   cout << "Point number: ";
+  int n;
   cin >> n;
   for (int i = 0; i < n; ++i) {
     double a, b;
