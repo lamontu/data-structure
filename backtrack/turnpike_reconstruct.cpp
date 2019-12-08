@@ -8,21 +8,21 @@
 
 using namespace std;
 
-bool TurnpikeReconstruct(vector<int>& calculated_positions, map<int, int>& dist_set,
-                         const int position_count, const int far) {
+bool TurnpikeReconstruct(vector<size_t>& calculated_positions, map<size_t, size_t>& dist_set,
+                         const size_t position_count, const size_t far) {
   if (position_count == 0) return true;
 
-  int cur_n, cur_far, i;
-  map<int, int>::iterator it;
+  size_t cur_n, cur_far, i;
+  map<size_t, size_t>::iterator it;
 
   /* p_n = 0
    * p_n-1 = far
    * p_n-2 = cur_far
    */
-  cur_n = (int)calculated_positions.size();
+  cur_n = calculated_positions.size();
   cur_far = dist_set.rbegin()->first;
   for (i = 0; i < cur_n; ++i) {
-    it = dist_set.find(abs(cur_far - calculated_positions[i]));
+    it = dist_set.find(abs((long)(cur_far - calculated_positions[i])));
     if (it == dist_set.end() || it->second == 0) {
       break;
     }
@@ -40,17 +40,17 @@ bool TurnpikeReconstruct(vector<int>& calculated_positions, map<int, int>& dist_
   }
   cur_n = i;  // Restore the dist_set elements that have been decreased.
   for (i = 0; i < cur_n; ++i) {
-    ++dist_set[abs(cur_far - calculated_positions[i])];
+    ++dist_set[abs((long)(cur_far - calculated_positions[i]))];
   }
 
   /* position_n = 0
    * position_n-1 = far
    * position_n-2 = far - cur_far
    */
-  cur_n = (int)calculated_positions.size();
+  cur_n = calculated_positions.size();
   cur_far = dist_set.rbegin()->first;
   for (i = 0; i < cur_n; ++i) {
-    it = dist_set.find(abs(far - cur_far - calculated_positions[i]));
+    it = dist_set.find(abs((long)((far - cur_far) - calculated_positions[i])));
     if (it == dist_set.end() || it->second == 0) {
       break;
     }
@@ -68,16 +68,16 @@ bool TurnpikeReconstruct(vector<int>& calculated_positions, map<int, int>& dist_
   }
   cur_n = i;
   for (i = 0; i < cur_n; ++i) {
-    ++dist_set[abs(far - cur_far - calculated_positions[i])];
+    ++dist_set[abs((long)((far - cur_far) - calculated_positions[i]))];
   }
 
   return false;
 }
 
-int main(int argc, char* argv[]) {
-  int i, n2, dist, far;
-  vector<int> calculated_positions;
-  map<int, int> dist_set;
+int main() {
+  size_t i, n2, dist, far;
+  vector<size_t> calculated_positions;
+  map<size_t, size_t> dist_set;
 
   cout << "Input n2: ";
   cin >> n2;
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
   } else if (n2 == 1) {
     cout << "Use default data: n2=15, dist_set={1,2,2,2,3,3,3,4,5,5,5,6,7,8,10}" << std::endl;
     n2 = 15;
-    int arr[15] = {1,2,2,2,3,3,3,4,5,5,5,6,7,8,10};
+    size_t arr[15] = {1,2,2,2,3,3,3,4,5,5,5,6,7,8,10};
     for (i = 0; i< n2; ++i) {
       ++dist_set[arr[i]];
     }
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
   }
 
 
-  int position_count = (int)sqrt(n2 * 2) + 1;
+  size_t position_count = (size_t)sqrt(n2 * 2) + 1;
   far = dist_set.rbegin()->first;
   --dist_set[far];
   if (dist_set.rbegin()->second == 0) {

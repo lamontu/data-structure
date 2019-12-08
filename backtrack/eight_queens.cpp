@@ -14,7 +14,7 @@ private:
     vector<vector<string> > result;
 public:
     int helper_call_count;
-    
+
     vector<vector<string> > solveNQueens(int n) {
         vector<string>cur(n, string(n,'.'));
         helper1(cur, 0);
@@ -34,7 +34,6 @@ public:
                 {
                     state[row] = col;
                     if (row == n-1) {  // 找到了一个解,继续试探下一列
-                    
                         vector<string> tmpres(n, string(n,'.'));
                         for (int i = 0; i < n; i++)
                             tmpres[i][state[i]] = 'Q';
@@ -107,13 +106,13 @@ public:
         // 右上对角线
         for (int i = row-1, j=col+1; i >= 0 && j < cur.size(); --i,++j)
             if (cur[i][j] == 'Q') return false;
-        
+
         return true;
     }
 
     bool isValid2(const vector<int> &states, int row, int col) {
         for (int i = 0; i < row; ++i)
-            if (states[i] == col || 
+            if (states[i] == col ||
                 abs(static_cast<long>(row - i)) == abs(static_cast<long>(col - states[i])))
                 return false;
 
