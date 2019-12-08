@@ -3,7 +3,7 @@
 #include "minheap.h"
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+int main() {
   MinHeap<int> h;
   int x, a[100];
   int rand_num;

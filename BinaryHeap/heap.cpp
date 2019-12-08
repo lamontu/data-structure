@@ -1,93 +1,145 @@
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::swap;
 
 class Heap {
  private:
-  int* data;
-  int size;
+  int* m_data;
+  size_t m_size;
+
  public:
-  Heap(int length_input) {
-    data = new int[length_input];
-    size = 0;
+  explicit Heap(size_t length_input) {
+    m_data = new int[length_input];
+    m_size = 0;
   }
-  Heap(int* arr, int length) {
-    data = new int[length];
-    for (int i = 0; i < length; ++i) {
-      data[i] = arr[i];
-    }
-    size = length;
 
-    buildHeap();
+  Heap(int* arr, size_t length) {
+    m_data = new int[length];
+    for (size_t k = 0; k < length; ++k) {
+      m_data[k] = arr[k];
+    }
+    m_size = length;
+
+    heapify();
   }
+
+  Heap(const Heap& other) {
+    m_size = other.m_size;
+    m_data = new int[m_size];
+    for (size_t k = 0; k < m_size; ++k) {
+      m_data[k] = other.m_data[k];
+    }
+  }
+
+  Heap& operator=(const Heap& rhs) {
+    if (this == &rhs) {
+      return *this;
+    }
+
+    delete [] m_data;
+
+    m_size = rhs.m_size;
+    m_data = new int[m_size];
+    for (size_t k = 0; k < m_size; ++k) {
+      m_data[k] = rhs.m_data[k];
+    }
+
+    return *this;
+  }
+
   ~Heap() {
-    delete [] data;
+    delete [] m_data;
   }
-  
+
   // Build a heap from an existing array
-  void buildHeap() {
+  void heapify() {
     // Heapify from the last non-leaf node to the root
-    for (int i = size / 2 - 1; i >= 0; --i) {
-      heapify(i, size);
+    for (long k = m_size / 2 - 1; k >= 0; --k) {
+      sink(k, m_size);
     }
   }
 
-  void push(int value) {
-    data[size] = value;
-    int current = size;
-    int father = (current - 1) / 2;
-    while (data[current] > data[father]) {
-      swap(data[current], data[father]);
-      current = father;
-      father = (current - 1) / 2;
+  // start: the last index for bottom-up filter
+  void swim(size_t start) {
+    if (start == 0) {
+      return;
     }
-    size++;
+    size_t father = (start - 1) / 2;
+    while (start > 0 && m_data[start] > m_data[father]) {
+      swap(m_data[start], m_data[father]);
+      start = father;
+      father = (start - 1) / 2;
+    }
   }
+
+  // Push value to create a max heap
+  void push(int value) {
+    m_data[m_size++] = value;
+    swim(m_size - 1);
+  }
+
+  void sink(size_t start, size_t size) {
+    if (start == size - 1) {
+      return;
+    }
+
+    size_t child = 2 * start + 1;
+    while (child < size) {
+      if (child < size - 1 && m_data[child] < m_data[child+1]) {
+        child++;
+      }
+      if (m_data[start] > m_data[child]) {
+        break;
+      }
+      swap(m_data[start], m_data[child]);
+      start = child;
+      child = 2 * start + 1;
+    }
+  }
+
+  void pop() {
+    swap(m_data[0], m_data[m_size - 1]);
+    m_size--;
+    sink(0, m_size);
+  }
+
   void output() {
-    for (int i = 0; i < size; ++i) {
-      cout << data[i] << ", ";
+    for (size_t k = 0; k < m_size; ++k) {
+      cout << m_data[k] << ", ";
     }
     cout << endl;
   }
+
   int top() {
-    return data[0];
+    return m_data[0];
   }
-  void heapify(int pos, int n) {
-    int lchild = 2 * pos + 1, rchild = 2 * pos + 2;
-    int max_value = pos;
-    if (lchild < n && data[lchild] > data[max_value]) {
-      max_value = lchild;
-    }
-    if (rchild < n && data[rchild] > data[max_value]) {
-      max_value = rchild;
-    }
-    if (max_value != pos) {
-      swap(data[pos], data[max_value]);
-      heapify(max_value, n);
-    }
-  }
-  void pop() {
-    swap(data[0], data[size - 1]);
-    size--;
-    heapify(0, size);
-  }
+
+  // Sort the value in the max heap
   void heap_sort() {
-    for (int i = size - 1; i >= 1; --i) {
-      swap(data[i], data[0]);
-      heapify(0, i);
+    heapify();
+    for (long n = m_size - 1; n >= 0; --n) {
+      // Move the maximum value m_data[0] the end,
+      // then m_data[n] ~ m_data[m_size-1] is sorted.
+      swap(m_data[n], m_data[0]);
+      // Heapify the heap m_data[0] ~ m_data[n-1]
+      sink(0, n);
     }
   }
 };
 
 int main() {
   int arr[] = {12, 9, 30, 24, 30, 4, 55, 64, 22, 37};
-  int len = sizeof(arr) / sizeof(arr[0]);
   Heap heap(100);
-  for (int i = 0; i < 10; ++i) {
-    heap.push(arr[i]);
+  for (int k = 0; k < 10; ++k) {
+    heap.push(arr[k]);
   }
   heap.output();
-  cout << heap.top() << endl;
+
+  heap.pop();
+  heap.output();
+
   heap.heap_sort();
   heap.output();
 

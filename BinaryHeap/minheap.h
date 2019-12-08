@@ -1,7 +1,7 @@
 /* minheap.h */
 
-#ifndef __MIN_HEAP_H__
-#define __MIN_HEAP_H__
+#ifndef MINHEAP_H_
+#define MINHEAP_H_
 
 #include <iostream>
 
@@ -61,7 +61,7 @@ MinHeap<T>::MinHeap(T* array, int length) {
   for (int i = currentSize / 2; i > 0; --i) {
     filterDown(i);
   }
-} 
+}
 
 template<typename T>
 MinHeap<T>::~MinHeap() {
@@ -180,4 +180,4 @@ inline void MinHeap<T>::handleUnderflow() {
   exit(1);
 }
 
-#endif  // __MIN_HEAP_H__
+#endif  // MINHEAP_H_

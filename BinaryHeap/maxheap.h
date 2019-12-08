@@ -1,7 +1,7 @@
 /* maxheap.h */
 
-#ifndef __MAX_HEAP_H__
-#define __MAX_HEAP_H__
+#ifndef MAXHEAP_H_
+#define MAXHEAP_H_
 
 #include <iostream>
 
@@ -87,7 +87,7 @@ void MaxHeap<T>::print() {
  * usually the index of the first element in array mHeap.
  * Parameter end is the the stop index of the modification,
  * usually the index of the last element in array mHeap.
- */ 
+ */
 template<typename T>
 void MaxHeap<T>::filterdown(int start, int end) {
   int cur = start;
@@ -109,7 +109,7 @@ void MaxHeap<T>::filterdown(int start, int end) {
 }
 
 /* Parameter start is the index of the first element to be modified,
- * usually the index of the last element in array mHeap. 
+ * usually the index of the last element in array mHeap.
  */
 template<typename T>
 void MaxHeap<T>::filterup(int start) {
@@ -127,5 +127,5 @@ void MaxHeap<T>::filterup(int start) {
   }
   mHeap[cur] = tmp;
 }
-  
-#endif  // __MAX_HEAP_H__
+
+#endif  // MAXHEAP_H_

@@ -1,7 +1,7 @@
 /* binarytree.h */
 
-#ifndef __BINARYTREE_H__
-#define __BINARYTREE_H__
+#ifndef BINARYTREE_H_
+#define BINARYTREE_H_
 
 #include <iostream>
 #include <cassert>
@@ -9,7 +9,10 @@
 #include <stack>
 #include <queue>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::stack;
+using std::queue;
 
 enum NodeState {
   Initial,
@@ -674,4 +677,4 @@ void BinaryTree<T>::LevelOrderTraverse(BTNode<T>* pnode,
   }
 }
 
-#endif  // __BINARYTREE_H__
+#endif  // BINARYTREE_H_

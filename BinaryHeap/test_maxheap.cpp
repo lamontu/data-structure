@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int main() {
   int a[] = {10, 40, 30, 60, 90, 70, 20, 50, 80};
   int i, len = sizeof(a) / sizeof(a[0]);
   MaxHeap<int>* tree = new MaxHeap<int>();
