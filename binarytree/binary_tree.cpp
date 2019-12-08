@@ -6,11 +6,12 @@
 using namespace std;
 
 struct TreeNode {
-  int val;
   TreeNode* lchild;
   TreeNode* rchild;
+  int val;
+  int padding;
 
-  TreeNode(int _val) : val(_val), lchild(nullptr), rchild(nullptr) {  }
+  TreeNode(int _val) : lchild(nullptr), rchild(nullptr), val(_val), padding(0) { }
 
   ~TreeNode() {
     if (lchild != nullptr) {
@@ -82,7 +83,7 @@ class BinaryTree {
       deserializeTraversal(data, root->lchild, iter);
       deserializeTraversal(data, root->rchild, iter);
     }
-  } 
+  }
 */
 
  public:
@@ -97,6 +98,9 @@ class BinaryTree {
   }
 
   void build_demo() {
+    if (root != nullptr) {
+      delete root;
+    }
     root = new TreeNode(1);
     root->lchild = new TreeNode(2);
     root->rchild = new TreeNode(3);
@@ -153,7 +157,7 @@ class BinaryTree {
 };
 
 
-int main(int argc, char* argv[]) {
+int main() {
   BinaryTree binarytree;
   binarytree.build_demo();
   binarytree.preorder();
