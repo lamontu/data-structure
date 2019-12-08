@@ -1,11 +1,12 @@
 #include <iostream>
 
-using namespace std;
+// using namespace std;
 
 struct ListNode {
-  int val;
   ListNode* next;
-  ListNode(int _val=0) : val(_val), next(nullptr) {  } 
+  int val;
+  int padding;
+  ListNode(int _val=0) : next(nullptr), val(_val), padding(0) { }
 };
 
 typedef ListNode* pNode;
@@ -20,7 +21,7 @@ pNode reverse_iter_1(pNode head) {
     result = current;
     current = next;
   }
-  return result; 
+  return result;
 }
 
 // iteration
@@ -32,7 +33,7 @@ void reverse_iter_2(pNode& head) {
     current->next = result;
     result = current;
     current = next;
-  } 
+  }
   head = result;
 }
 
@@ -43,9 +44,9 @@ void reverse_recur(pNode& p) {
   reverse_recur(rest);
   p->next->next = p;
   p->next = nullptr;
-  p = rest;    
+  p = rest;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   return 0;
 }

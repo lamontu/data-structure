@@ -1,43 +1,39 @@
-// doubly linked list
+// singly linked list
 
 #include <iostream>
 
-using namespace std;
-
+using std::cout;
+using std::endl;
 
 struct ListNode {
-  int val;
-  ListNode* prev;
   ListNode* next;
-  ListNode(int _val=0) : val(_val), next(nullptr), prev(nullptr) {  }
+  int val;
+  int padding;
+  ListNode(int _val=0) : next(nullptr), val(_val), padding(0) {  }
 };
 
-
-class DoublyLinkedList {
+class SinglyLinkedList {
  private:
-  int m_size;
   ListNode* m_head;
   ListNode* m_tail;
+  int m_size;
+  int padding;
 
  public:
-  DoublyLinkedList() {
-    m_size = 0;
-    m_head = nullptr;
-    m_tail = nullptr;
+  SinglyLinkedList() : m_head(nullptr), m_tail(nullptr), m_size(0) {
+    padding = 0;
     cout << "Constructor is called." << endl;
   }
 
   void insertFront(int val) {
     if (m_size == 0) {
       m_head = m_tail = new ListNode(val);
-      cout << "Insert a ListNode at front of an empty DoublyLinkedList...\n";
+      cout << "Insert a ListNode at front of an empty SinglyLinkedList...\n";
     } else {
       ListNode* ptr = new ListNode(val);
       ptr->next = m_head;
-      m_head->prev = ptr;
       m_head = ptr;
-      cout << "Insert a ListNode at front of a non-empyty DoublyLinkedList..."
-           << endl;
+      cout << "Insert a ListNode at front of a non-empty SinglyLinkedList...\n";
     }
     ++m_size;
   }
@@ -45,12 +41,11 @@ class DoublyLinkedList {
   void insertBack(int val) {
     if (m_size == 0) {
       m_head = m_tail = new ListNode(val);
-      cout << "Insert a ListNode at back of an empty DoublyLinkedList...\n";
+      cout << "Insert a ListNode at back of an empty SinglyLinkedList...\n";
     } else {
       m_tail->next = new ListNode(val);
-      m_tail->next->prev = m_tail;
       m_tail = m_tail->next;
-      cout << "Insert a ListNode at back of a non-empty DoublyLinkedList...\n";
+      cout << "Insert a ListNode at back of a non-empty SinglyLinkedList...\n";
     }
     ++m_size;
   }
@@ -70,11 +65,9 @@ class DoublyLinkedList {
       }
       ptr2 = new ListNode(val);
       ptr2->next = ptr1->next;
-      ptr1->next->prev = ptr2;
       ptr1->next = ptr2;
-      ptr2->prev = ptr1;
       ++m_size;
-      cout << "Insert at position pos of a DoublyLinkedList..." << endl;
+      cout << "Insert at position pos of a SinglyLinkedList..." << endl;
     }
   }
 
@@ -91,8 +84,7 @@ class DoublyLinkedList {
         cout << "Delete the first sole ListNode..." << endl;
       } else {
         m_head = m_head->next;
-        m_head->prev = nullptr;
-        cout << "Delete the first ListNode from a multiple-node DoulyLinkedList...\n";
+        cout << "Delete the first ListNode from a multiple-node SinglyLinkedList...\n";
       }
       delete ptr1;
     } else {
@@ -100,16 +92,14 @@ class DoublyLinkedList {
       for (int i = 0; i < pos - 1; ++i) {
         ptr1 = ptr1->next;
       }
-        ptr2 = ptr1->next;
-        ptr1->next = ptr2->next;
-        if (ptr2->next == nullptr) {
-          m_tail = ptr1;
-          cout << "Delete the last ListNode from a multiple-node DoublyLinkedList...\n";
-        } else {
-          ptr2->next->prev = ptr1;
-          cout << "Delete a ListNode at position pos of a DoublyLinkedList..." << endl;
-        }
-        delete ptr2;
+      ptr2 = ptr1->next;
+      ptr1->next = ptr2->next;
+      if (ptr2->next == nullptr) {
+        m_tail = ptr1;
+        cout << "Delete the last ListNode from a multiple-node SinglyLinkedList...\n";
+      }
+      cout << "Delete a ListNode at postion pos of a SinglyLinkedList...\n";
+      delete ptr2;
     }
     --m_size;
   }
@@ -124,7 +114,7 @@ class DoublyLinkedList {
       ptr = ptr->next;
     }
     ptr->val = val;
-    cout << "Update a ListNode at position pos of a DoublyLinkedList...\n";
+    cout << "Update a ListNode at position pos of a SinglyLinkedList...\n";
   }
 
   ListNode* findNode(int val) {
@@ -141,7 +131,7 @@ class DoublyLinkedList {
   }
 
   ListNode* getNode(int pos) {
-    if (pos < 0 || pos > m_size - 1) {
+    if (pos < 0 || pos > m_size -1) {
       cout << "Invalid position." << endl;
       return nullptr;
     } else {
@@ -154,7 +144,7 @@ class DoublyLinkedList {
     }
   }
 
-  ~DoublyLinkedList() {
+  ~SinglyLinkedList() {
     ListNode* ptr = m_head;
     while (m_head != nullptr) {
       m_head = m_head->next;
@@ -164,7 +154,6 @@ class DoublyLinkedList {
     m_head = m_tail = nullptr;
     cout << "Destructor is called." << endl;
   }
-
 
   void output() {
     ListNode* ptr = m_head;
@@ -180,18 +169,16 @@ class DoublyLinkedList {
   }
 };
 
-
-int main(int argc, char* argv[]) {
-
+int main() {
   cout << "------------------------\n";
-  DoublyLinkedList* lst1 = new DoublyLinkedList();
+  SinglyLinkedList* lst1 = new SinglyLinkedList();
   lst1->insertFront(234);
   lst1->deleteNode(0);
   cout << lst1->getSize() << endl;
   delete lst1;
 
   cout << "------------------------\n";
-  DoublyLinkedList* lst2 = new DoublyLinkedList();
+  SinglyLinkedList* lst2 = new SinglyLinkedList();
   lst2->insertFront(234);
   lst2->insertBack(33);
   lst2->deleteNode(0);
@@ -199,7 +186,7 @@ int main(int argc, char* argv[]) {
   delete lst2;
 
   cout << "------------------------\n";
-  DoublyLinkedList* lst3 = new DoublyLinkedList();
+  SinglyLinkedList* lst3 = new SinglyLinkedList();
   lst3->insertFront(10);
   lst3->insertBack(20);
   lst3->insertNode(2, -30);
@@ -221,5 +208,3 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-
-

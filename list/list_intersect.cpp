@@ -2,12 +2,15 @@
 #include <cassert>
 #include <map>
 
-using namespace std;
+using std::map;
+using std::cout;
+using std::endl;
 
 struct ListNode {
-  int val;
   ListNode* next;
-  ListNode(int _val=0) : val(_val), next(nullptr) {  }
+  int val;
+  int padding;
+  ListNode(int _val=0) : next(nullptr), val(_val), padding(0) {  }
 };
 
 typedef ListNode* pNode;
@@ -17,10 +20,10 @@ bool intersect(pNode head1, pNode head2) {
   assert(head1!= nullptr && head2 != nullptr);
   while (head1->next != nullptr) {
     head1 = head1->next;
-  } 
+  }
   while (head2->next != nullptr) {
     head2 = head2->next;
-  } 
+  }
   if (head1 == head2) {
     return true;
   }
@@ -34,7 +37,7 @@ bool hasLoop_1(pNode head) {
   while (current != nullptr) {
     if (m.find(current) == m.end()) {
       m[current] = 1;
-      current = current->next; 
+      current = current->next;
     } else {
       return true;
     }
@@ -56,14 +59,14 @@ bool hasLoop_2(pNode head, pNode& loopNode) {
   return false;
 }
 
-/* 
+/*
  * list length: L,
  * loop length: r,
  * slow step by 1, fast step by 2, when slow encounter fast,
  * slow go through s steps, fast go through 2s steps,
-       delta = nr = 2s - s = s 
+       delta = nr = 2s - s = s
  * from head to entrance of loop: a,
- * from entrance of loop to encounter pointer: x 
+ * from entrance of loop to encounter pointer: x
        s = a + x = (n - 1)r + r = (n - 1)r + L - a
        a =  (n - 1)r + (L - a -x)
  * from encounter pointer to entrance of loop: (L - a - x)
@@ -98,7 +101,7 @@ bool detect(pNode head1, pNode head2) {
     cout << "one cycle, one not" << endl;
     return false;
   } else if (!hasLoop1 && !hasLoop2) {  //  neither has loop
-    return intersect(head1, head2);     
+    return intersect(head1, head2);
   } else {
     cout << "two cycle" << endl;
     pNode ptr = loopNode1->next;
@@ -106,11 +109,10 @@ bool detect(pNode head1, pNode head2) {
       if (ptr == loopNode2) {
         return true;
       }
-      ptr = ptr->next; 
+      ptr = ptr->next;
     }
     return loopNode1 == loopNode2;
   }
-  return false;
 }
 
 bool printList(pNode head) {
@@ -143,14 +145,14 @@ pNode createList() {
   for (int j = 10; j >8; --j) {
     pNode tmp = new ListNode(j);
     ptr->next = tmp;
-    ptr = ptr->next; 
+    ptr = ptr->next;
   }
   ptr->next = pInter;
 
   return head;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   pNode lst = createList();
   printList(lst);
 
@@ -159,7 +161,7 @@ int main(int argc, char* argv[]) {
   } else {
     cout << "no loop" << endl;
   }
-  
+
   pNode pInter = findLoopPoint(lst);
   cout << pInter->val << endl;
 

@@ -1,11 +1,13 @@
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 struct ListNode {
-  int val;
   ListNode* next;
-  ListNode(int _val=0) : val(_val), next(nullptr) {  }
+  int val;
+  int padding;
+  ListNode(int _val=0) : next(nullptr), val(_val), padding(0) { }
 };
 
 typedef ListNode* pNode;
@@ -74,6 +76,6 @@ int main() {
   cout << knd1->val << endl;
 
   pNode knd2 = getKth_2(head, 3);
-  cout << knd2->val << endl; 
-  return 0;  
+  cout << knd2->val << endl;
+  return 0;
 }
