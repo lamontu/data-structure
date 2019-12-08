@@ -3,8 +3,9 @@
 using namespace std;
 
 struct ListNode {
-  int data;
   ListNode* next;
+  int data;
+  int padding;
 };
 
 typedef ListNode* LinkList;
@@ -25,7 +26,7 @@ void InitList(LinkList* L) {
 
 void ClearList(LinkList* L) {
   LinkList p, q;
-  *L = (*L)->next;  // L is pointing to head node pointer. 
+  *L = (*L)->next;  // L is pointing to head node pointer.
   p = (*L)->next;  // p is pointing to the first data node.
   while (p != *L) {
     q = p->next;
@@ -33,7 +34,7 @@ void ClearList(LinkList* L) {
     p = q;
   }
   (*L)->next = *L;
-  cout << "List is clear." << endl; 
+  cout << "List is clear." << endl;
 }
 
 void DestroyList(LinkList* L) {
@@ -66,20 +67,20 @@ void GetElem(LinkList L, int loc, int* pvalue ) {
   }
   while (j < loc) {
     ++j;
-    p = p->next; 
+    p = p->next;
   }
   *pvalue = p->data;
 }
 
 int LocateElem(LinkList L, int value) {
-  LinkList p = L->next->next;  // p is pointing to the first data node. 
+  LinkList p = L->next->next;  // p is pointing to the first data node.
   int j = 0;
   while (p != L->next) {  // while p is not head node pointer
     ++j;
     if (p->data == value) {
-      return j;   
+      return j;
     }
-    p = p->next; 
+    p = p->next;
   }
   return -1;
 }
@@ -93,7 +94,7 @@ bool PriorElem(LinkList L, int cur_data, int* pri_data) {
       *pri_data = p->data;
       return true;
     }
-    p = q; 
+    p = q;
   }
   return false;
 }
@@ -124,7 +125,7 @@ void ListInsert(LinkList* L, int loc, int value) {
     ++j;
     p = p->next;
   }
-  q = p->next;  // q is pointing to the node at location loc.  
+  q = p->next;  // q is pointing to the node at location loc.
   s = (LinkList)malloc(sizeof(ListNode));
   if (s == nullptr) {
     exit(0);
@@ -147,7 +148,7 @@ void ListDelete(LinkList* L, int loc, int* pvalue) {
   }
   while (j < loc - 1) {
     ++j;
-    p = p->next; 
+    p = p->next;
   }
   q = p->next;
   *pvalue = q->data;
@@ -168,7 +169,7 @@ void TravelList(LinkList L) {
   }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   LinkList lst;
   InitList(&lst);  // This call is necessary, or segmentation fault: 11
 

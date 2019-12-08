@@ -3,9 +3,10 @@
 using namespace std;
 
 struct ListNode {
-  int val;
   ListNode* next;
-  ListNode(int _val=0) : val(_val), next(nullptr) {  }
+  int val;
+  int padding;
+  ListNode(int _val=0) : next(nullptr), val(_val), padding(0) { }
 };
 
 typedef ListNode* pNode;
@@ -43,7 +44,7 @@ pNode copyList_recursive(pNode head) {
   } else {
     pNode newList = new ListNode(head->val);
     newList->next = copyList_recursive(head->next);
-    return newList; 
+    return newList;
   }
 }
 
@@ -60,7 +61,7 @@ bool printList(pNode head) {
 
 pNode createList() {
   /*
-   * pNode head = new ListNode(); 
+   * pNode head = new ListNode();
    * head->val = 0;
    * head->next = nullptr;
    */
@@ -81,22 +82,22 @@ pNode createList() {
   return head;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   pNode head = createList();
 
   if (copyList_traversal(head)) {
-    cout << "copyList_traversal finished" << endl; 
+    cout << "copyList_traversal finished" << endl;
     printList(head);
   } else {
     cout << "copyList_traversal failed" << endl;
   }
 
   if (copyList_recursive(head)) {
-    cout << "copyList_recursive finished" << endl; 
+    cout << "copyList_recursive finished" << endl;
     printList(head);
   } else {
     cout << "copyList_recursive failed" << endl;
   }
-  
+
   return 0;
 }
