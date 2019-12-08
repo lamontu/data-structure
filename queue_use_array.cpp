@@ -70,6 +70,7 @@ class Queue {
   void pop() {
     assert(head <= tail);
     head++;
+    count--;
   }
 
   int front() {
