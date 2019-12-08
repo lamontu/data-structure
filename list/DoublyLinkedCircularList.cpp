@@ -1,11 +1,13 @@
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 struct ListNode {
-  int data;
   ListNode* prior;
   ListNode* next;
+  int data;
+  int padding;
 };
 
 typedef ListNode* LinkList;
@@ -157,7 +159,7 @@ void TravelList(LinkList L) {
   }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   LinkList lst;
   InitList(&lst);
 
