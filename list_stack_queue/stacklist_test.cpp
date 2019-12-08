@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
   stk.Push(2);
   stk.IsEmpty() ? cout << "Empty\n" : cout << "Not empty\n";
   cout << "Count: " << stk.GetCount() << endl;
-  
+
   int topval = 100;
   stk.Top(&topval);
   cout << "Top: " << topval << endl;

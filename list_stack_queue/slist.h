@@ -15,7 +15,7 @@ class Node {
   T data;
   Node<T>* next;
   Node() : data(T()), next(nullptr) {  }
-  Node(const T& init_data) : data(init_data), next(nullptr) {  } 
+  Node(const T& init_data) : data(init_data), next(nullptr) {  }
   Node(const T& init_data, Node<T>* p) : data(init_data), next(p) {  }
 };
 
@@ -69,7 +69,7 @@ inline SList<T>::SList(const SList<T>& other)
     for (int i = 1; i <= other.m_nCount; ++i) {
       AddTail(other.GetAt(i));
     }
-  }  
+  }
 }
 
 template<typename T>
@@ -84,7 +84,7 @@ inline SList<T>& SList<T>::operator=(const SList<T>& other) {
     for (int i = 1; i <= other.m_nCount; ++i) {
       AddTail(other.GetAt(i));
     }
-  } 
+  }
   return *this;
 }
 
@@ -117,14 +117,14 @@ inline bool SList<T>::IsEmpty() const {
 template<typename T>
 inline int SList<T>::GetCount() const {
   return m_nCount;
-} 
+}
 
 /* Return the position of the new node if success.
  * Return 0 if fail.
  */
 template<typename T>
 inline int SList<T>::InsertBefore(const int pos, const T data) {
-  int nRetPos; 
+  int nRetPos;
   Node<T> *pTmpNode1, *pTmpNode2, *pNewNode;
   try {
     pNewNode = new Node<T>;
@@ -162,7 +162,7 @@ inline int SList<T>::InsertBefore(const int pos, const T data) {
 
   nRetPos = pos;
   ++m_nCount;
-  return nRetPos;  
+  return nRetPos;
 }
 
 /* Return the position of the new node if success.
@@ -231,7 +231,7 @@ inline void SList<T>::RemoveAt(const int pos) {
   }
   pTmpNode2->next = pTmpNode1->next;
   delete pTmpNode1;
-  --m_nCount; 
+  --m_nCount;
 }
 
 template<typename T>
@@ -256,10 +256,10 @@ inline void SList<T>::RemoveAll() {
   for (int i = 0; i < nCount; ++i) {
     pTmpNode = m_pNodeHead->next;
     delete m_pNodeHead;
-    m_pNodeHead = pTmpNode; 
+    m_pNodeHead = pTmpNode;
   }
   m_nCount = 0;
-} 
+}
 
 template<typename T>
 inline void SList<T>::SetAt(const int pos, T data) {
@@ -267,7 +267,7 @@ inline void SList<T>::SetAt(const int pos, T data) {
   Node<T>* pTmpNode = m_pNodeHead;
   for (int i = 1; i < pos; ++i) {
     pTmpNode = pTmpNode->next;
-  } 
+  }
   pTmpNode->data = data;
 }
 
@@ -279,7 +279,7 @@ inline T& SList<T>::GetAt(const int pos) {
     pTmpNode = pTmpNode->next;
   }
   std::cout << "GetAt() is called." << std::endl;
-  return pTmpNode->data;   
+  return pTmpNode->data;
 }
 
 template<typename T>
@@ -290,7 +290,7 @@ inline T SList<T>::GetAt(const int pos) const {
     pTmpNode = pTmpNode->next;
   }
   std::cout << "GetAt() const is called." << std::endl;
-  return pTmpNode->data;   
+  return pTmpNode->data;
 }
 
 template<typename T>
@@ -350,7 +350,7 @@ template<typename T>
 inline int SList<T>::FindCircle() const {
   if (0 == m_nCount) return 0;
   Node<T> *p1 = m_pNodeHead, *p2 = m_pNodeHead;
- 
+
   do {
     if (p1 != nullptr && p2 != nullptr && p2->next != nullptr) {
       p1 = p1->next;
@@ -379,7 +379,7 @@ inline int SList<T>::FindCross(SList<T>& test_list) {
   if (0 == m_nCount || 0 == test_list.m_nCount) return 0;
   if (FindCircle() || test_list.FindCircle()) return 0;
 
-  // link the test_list at the tail of this list  
+  // link the test_list at the tail of this list
   Node<T>* pTail = m_pNodeHead;
   for (int i = 1; i < m_nCount; ++i) {
     pTail = pTail->next;
@@ -390,7 +390,7 @@ inline int SList<T>::FindCross(SList<T>& test_list) {
   int cross = FindCircle();
   pTail->next = nullptr;
   m_nCount -= test_list.m_nCount;
-  return cross;  
+  return cross;
 }
 
 #endif  // __SLIST_H__

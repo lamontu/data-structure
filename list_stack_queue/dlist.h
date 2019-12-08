@@ -28,7 +28,7 @@ class DList {
  public:
   DList();
   DList(const T& inti_data);
-  DList(const DList<T>& other);  
+  DList(const DList<T>& other);
   DList<T>& operator=(const DList<T>& other);
   ~DList();
   void Invert();
@@ -73,7 +73,7 @@ inline DList<T>::DList(const DList<T>& other)
     for (int i = 1; i <= other.m_nCount; ++i) {
       AddTail(other.GetAt(i));
     }
-  }  
+  }
 }
 
 template<typename T>
@@ -88,7 +88,7 @@ inline DList<T>& DList<T>::operator=(const DList<T>& other) {
     for (int i = 1; i <= other.m_nCount; ++i) {
       AddTail(other.GetAt(i));
     }
-  } 
+  }
   return *this;
 }
 
@@ -123,7 +123,7 @@ inline bool DList<T>::IsEmpty() const {
 template<typename T>
 inline int DList<T>::GetCount() const {
   return m_nCount;
-} 
+}
 
 /* Return the position of the new node if success.
  * Return 0 if fail.
@@ -146,7 +146,7 @@ inline int DList<T>::InsertBefore(const int pos, const T data) {
     m_pNodeHead = pNewNode;
     m_pNodeTail = pNewNode;
     nRetPos = 1;
-    ++m_nCount;    
+    ++m_nCount;
     return nRetPos;
   }
 
@@ -258,7 +258,7 @@ inline void DList<T>::RemoveAt(const int pos) {
     m_pNodeTail = pTmpNode->prior;
   }
   delete pTmpNode;
-  --m_nCount; 
+  --m_nCount;
   return;
 }
 
@@ -284,7 +284,7 @@ inline void DList<T>::RemoveAll() {
   for (int i = 0; i < nCount; ++i) {
     pTmpNode = m_pNodeHead->next;
     delete m_pNodeHead;
-    m_pNodeHead = pTmpNode; 
+    m_pNodeHead = pTmpNode;
   }
   m_pNodeTail = nullptr;
   m_nCount = 0;
@@ -296,7 +296,7 @@ inline void DList<T>::SetAt(const int pos, T data) {
   Node<T>* pTmpNode = m_pNodeHead;
   for (int i = 1; i < pos; ++i) {
     pTmpNode = pTmpNode->next;
-  } 
+  }
   pTmpNode->data = data;
 }
 
@@ -308,7 +308,7 @@ inline T& DList<T>::GetAt(const int pos) {
     pTmpNode = pTmpNode->next;
   }
   std::cout << "GetAt() is called." << std::endl;
-  return pTmpNode->data;   
+  return pTmpNode->data;
 }
 
 template<typename T>
@@ -319,7 +319,7 @@ inline T DList<T>::GetAt(const int pos) const {
     pTmpNode = pTmpNode->next;
   }
   std::cout << "GetAt() const is called." << std::endl;
-  return pTmpNode->data;   
+  return pTmpNode->data;
 }
 
 template<typename T>

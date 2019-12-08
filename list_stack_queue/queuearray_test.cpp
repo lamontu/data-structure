@@ -4,8 +4,8 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
-  QueueArray<int> q;  
+int main() {
+  QueueArray<int> q;
   q.IsEmpty() ? cout << "Empty \n" : cout << "Not empty \n";
   q.EnQueue(10);
   q.EnQueue(20);
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   cout << "Count: " << q2.GetCount() << endl;
   cout << "Front: " << q2.GetFront() << endl;
   cout << "Rear: " << q2.GetRear() << endl;
-  
+
   cout << "## Test copy assignment:" << endl;
   QueueArray<int> q3(5);
   q3 = q;
@@ -35,6 +35,6 @@ int main(int argc, char* argv[]) {
   cout << "## Test MakeEmpty:" << endl;
   q3.MakeEmpty();
   q3.IsEmpty() ? cout << "Empty \n" : cout << "Not empty \n";
-   
+
   return 0;
 }

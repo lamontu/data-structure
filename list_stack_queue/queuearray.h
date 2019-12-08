@@ -34,7 +34,7 @@ class QueueArray {
   T& GetFront();
   T GetFront() const;
   T& GetRear();
-  T GetRear() const; 
+  T GetRear() const;
 };
 
 template<typename T>
@@ -51,7 +51,7 @@ inline QueueArray<T>::QueueArray(int maxsize)
   assert(capacity >= MinQueueSize);
   try {
     array = new T[capacity];
-  } catch (std::bad_alloc&) {  } 
+  } catch (std::bad_alloc&) {  }
 }
 
 template<typename T>
@@ -138,14 +138,14 @@ inline T QueueArray<T>::DeQueue() {
 
   T data = array[front];
   --size;
-  front = Succession(front); 
+  front = Succession(front);
   return data;
 }
 
 template<typename T>
 inline T& QueueArray<T>::GetFront() {
   assert(0 != size);
-  return array[front]; 
+  return array[front];
 }
 
 template<typename T>

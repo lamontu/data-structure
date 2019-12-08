@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int main() {
   DList<int> lst;
   if (lst.IsEmpty()) {
     cout << "List is empty." << endl;
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
   lst.InsertAfter(2, 300);
   cout << lst.GetAt(3) << endl;
-  
+
   cout << lst.Find(400) << endl;
   cout << lst.Find(300) << endl;
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
   lst.Invert();
   cout << lst.GetTail() << endl;
 
-  cout << "## convert DList<int> to const DList<int>:" << endl; 
+  cout << "## convert DList<int> to const DList<int>:" << endl;
   const DList<int> lst2 = (const DList<int>)lst;
   cout << "## test GetAt():" << endl;
   Node<int> node1 = lst.GetAt(1);

@@ -77,7 +77,7 @@ inline StackArray<T>& StackArray<T>::operator=(const StackArray<T>& other) {
   capacity = other.capacity;
   tos = other.tos;
   delete [] array;
-  array = new T[capacity];  // This is necessary. 
+  array = new T[capacity];  // This is necessary.
   if (0 <= tos && tos < capacity) {
     for (int i = 0; i <= tos; ++i) {
       array[i] = other.array[i];
@@ -128,7 +128,7 @@ inline bool StackArray<T>::Resize(int newmaxsize) {
   int n = tos;
   DisposeStack();
   this->array = newarray;
-  tos = n; 
+  tos = n;
   capacity = newmaxsize;
   return true;
 }

@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
   lst.InsertAfter(2, 300);
   cout << lst.GetAt(3) << endl;
-  
+
   cout << lst.Find(400) << endl;
   cout << lst.Find(300) << endl;
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
   lst.Invert();
   cout << lst.GetTail() << endl;
 
-  cout << "## convert SList<int> to const SList<int>:" << endl; 
+  cout << "## convert SList<int> to const SList<int>:" << endl;
   const SList<int> lst2 = (const SList<int>)lst;
   cout << "## test GetAt():" << endl;
   Node<int> node1 = lst.GetAt(1);
@@ -45,10 +45,10 @@ int main(int argc, char* argv[]) {
   cout << "------------------------" << endl;
 
   cout << lst.FindCircle() << endl;
-  
+
   SList<int> lst3 = lst;
   cout << lst.FindCross(lst3) << endl;
-  // No idea about creating two intersecting SList objects 
+  // No idea about creating two intersecting SList objects
 
   return 0;
 }

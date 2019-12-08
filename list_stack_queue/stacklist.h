@@ -58,7 +58,7 @@ inline bool StackList<T>::Pop(T* pdata) {
   if (IsEmpty()) return false;
   if (pdata) Top(pdata);
   slist.RemoveHead();
-  return true;  
+  return true;
 }
 
 template<typename T>
@@ -66,7 +66,7 @@ inline bool StackList<T>::Top(T* pdata) const {
   assert(pdata);
   if (IsEmpty()) return false;
   *pdata = slist.GetHead();
-  return true; 
+  return true;
 }
 
 #endif  // __STACKLIST_H__
