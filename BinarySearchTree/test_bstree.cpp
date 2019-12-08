@@ -12,7 +12,7 @@ void visit(const int& a) {
 typedef void(*Funtype)(const int&);
 Funtype pfun = visit;
 
-int main(int argc, char* argv[]) {
+int main() {
   cout << "================================" << endl;
 
   BSTree<int> bst(nullptr);
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
   cout << "Depth: " << bst.Depth() << endl;
   cout << "### Level order traverse:" << endl;
   bst.LevelOrderTraverse(pfun);  cout << endl;
-  
+
   cout << "### Pre Order Traverse:" << endl;
   bst.PreOrderTraverse(pfun);  cout << endl;
   cout << "### FSA Pre Order Traverse:" << endl;

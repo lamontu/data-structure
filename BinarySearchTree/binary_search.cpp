@@ -1,7 +1,8 @@
 /* binary_search.cpp */
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 // For sorted array without duplicated elements
 int SimpleBinarySearch(int array[], int length, int value) {
@@ -29,7 +30,7 @@ int firstEqual(int array[], int length, int value) {
     } else {
       left = middle + 1;
     }
-  } 
+  }
   return (left < length && array[left] == value) ? left : -1;  // different from lower bound
 }
 
@@ -43,7 +44,7 @@ int firstGreatOrEqual(int array[], int length, int value) {
     } else {
       left = middle + 1;
     }
-  } 
+  }
   return left < length ? left : -1;
 }
 
@@ -57,7 +58,7 @@ int firstGreat(int array[], int length, int value) {
     } else {
       left = middle + 1;
     }
-  } 
+  }
   return left < length ? left : -1;
 }
 
@@ -137,7 +138,7 @@ int bsearchLastLessEqual(int array[], int length, int value) {
     return -1;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   int arr[] = {1, 1, 2, 4, 7, 9, 9};
 
   int loc = firstEqual(arr, 7, 9);

@@ -91,7 +91,7 @@ BTNode<T>* BSTree<T>::Insert(const T& data) {
       p = p->lchild;
     }
   }
-  
+
   return p;
 }
 
@@ -159,7 +159,7 @@ BTNode<T>* BSTree<T>::_FindRec(const T& data, BTNode<T>* p) const {
   }
 
   if (data < p->data) {
-    return _FindRec(data, p->lchild); 
+    return _FindRec(data, p->lchild);
   } else {
     return _FindRec(data, p->rchild);
   }
@@ -208,7 +208,7 @@ BTNode<T>* BSTree<T>::Predecessor(BTNode<T>* p) const {
   while ((father != nullptr) && (p == father->lchild)) {
     p = father;
     father = this->Parent(father);
-  } 
+  }
   return father;
 }
 

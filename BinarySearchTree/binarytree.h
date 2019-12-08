@@ -344,8 +344,8 @@ BTNode<T>* BinaryTree<T>::_Copy(BTNode<T>* pnode) {
   BTNode<T>* pNewNode;
   pNewNode = new BTNode<T>;
   pNewNode->data = pnode->data;
-  pNewNode->lchild = _Copy(pnode->lchild); 
-  pNewNode->rchild = _Copy(pnode->rchild); 
+  pNewNode->lchild = _Copy(pnode->lchild);
+  pNewNode->rchild = _Copy(pnode->rchild);
   return pNewNode;
 */
 }
@@ -584,7 +584,7 @@ void BinaryTree<T>::InOrderTraverse(BTNode<T>* pnode,
     }
     if (!S.empty()) {
       curr = S.top();
-      Visit(curr->data);  // Position difference from PreOrderTraverse 
+      Visit(curr->data);  // Position difference from PreOrderTraverse
       S.pop();
       curr = curr->rchild;
     }
