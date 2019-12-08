@@ -3,7 +3,8 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 struct TreeNode {
   TreeNode* lchild;
@@ -11,7 +12,7 @@ struct TreeNode {
   int val;
   int padding;
 
-  TreeNode(int _val) : lchild(nullptr), rchild(nullptr), val(_val), padding(0) { }
+  explicit TreeNode(int _val) : lchild(nullptr), rchild(nullptr), val(_val), padding(0) { }
 
   ~TreeNode() {
     if (lchild != nullptr) {
@@ -155,7 +156,6 @@ class BinaryTree {
   }
 */
 };
-
 
 int main() {
   BinaryTree binarytree;
