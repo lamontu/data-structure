@@ -1,10 +1,15 @@
 /* rmq2.cpp */
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <cmath>
 
-using namespace std;
+using std::max;
+using std::min;
+using std::cout;
+using std::endl;
+using std::setw;
 
 const int MAXN = 10000;
 const int LOGMAXN = 20;
@@ -50,7 +55,7 @@ int GetMin(int arr[], int left, int right) {
   int k = (int)((log((double)(right-left+1))) / log(2.0));
   return min(arr[index_min[left][k]], arr[index_min[right-(1<<k)+1][k]]);
 }
- 
+
 void InitIndexMax(int arr[], int len) {
   int i, j;
   for (i = 0; i < len; ++i) {
@@ -98,7 +103,7 @@ int main(int argc, char* argv[]) {
   int i, j;
   srand(0);
   int a = 0;
-  
+
   cout << "Index:" << endl;
   for (i = 0; i < L; ++i) {
     cout << setw(4) << i;
