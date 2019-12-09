@@ -1,10 +1,18 @@
 /* tarjan_adjacency_list.cpp */
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::max;
+using std::min;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+using std::vector;
+using std::pair;
 
 const int MaxVertexNum = 100;
 int VisitOrder[MaxVertexNum];
@@ -124,7 +132,7 @@ void ALGraph::DetectCutPoint() {
     IsCutPoint[0] = true;
     BlockNum[0] = root_son - 1;
   }
-  
+
   for (int i = 0; i < vertex_num_; ++i) {
     if (IsCutPoint[i]) {
       cout << i << ", ";
@@ -132,7 +140,7 @@ void ALGraph::DetectCutPoint() {
     }
   }
   cout << endl;
-}   
+}
 
 void ALGraph::DetectCutEdge() {
   for (int v = 0; v < vertex_num_; ++v) {
