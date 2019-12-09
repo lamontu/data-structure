@@ -9,10 +9,14 @@
  * n = 2 * n0 - 1
  */
 
+#include <algorithm>
 #include <iostream>
 #include <climits>
 
-using namespace std;
+using std::min;
+using std::max;
+using std::cout;
+using std::endl;
 
 const int MAXNUM = 1000;
 
@@ -62,7 +66,7 @@ int query(int root, int nstart, int nend, int qstart, int qend) {
   int mid = (nstart + nend) / 2;
   return min(query(root*2+1, nstart, mid, qstart, qend),
              query(root*2+2, mid+1, nend, qstart, qend));
-} 
+}
 
 void update_one(int root, int nstart, int nend, int index, int increment) {
   if (nstart == nend) {
@@ -107,13 +111,13 @@ int main(int argc, char* argv[]) {
 
   /*
    array = {2, 5, 1, 4, 9, 3}
-   SegTree[0].val = 1, SegTree[1].val = 1, SegTree[2].val = 3   
+   SegTree[0].val = 1, SegTree[1].val = 1, SegTree[2].val = 3
 
                  [0,5]                  index = 0
-                  1          
+                  1
                /     \
            [0,2]      [3,5]      index*2+1    index*2+2
-            1          3 
+            1          3
          /   \        /  \
      [0,1]   [2]   [3,4]  [5]
       2       1     4      3
@@ -124,9 +128,9 @@ int main(int argc, char* argv[]) {
    */
 
   int arr[] = {2, 5, 1, 4, 9, 3};
-  int SegLenth = 9; 
+  int SegLenth = 9;
   int len = sizeof(arr) / sizeof(arr[0]);
-  cout << "arr: "; 
+  cout << "arr: ";
   for (int i = 0; i < len; ++i) {
     cout << arr[i] << ", ";
   }
