@@ -1,12 +1,12 @@
-/* sgtree.cpp */
 
 /* Total nodes number: n
- * Leaf nodes number: n0
+   Leaf nodes number: n0
    Nodes number with degree 2: n2
    n = n0 + n1 + n2 = n0 + n2,
+   total node num = children num + root num = (1 * n1 + 2 * n2) + 1 = n
    n0 = n2 + 1
    The degree of a node shall be 0 or 2, not 1
- * n = 2 * n0 - 1
+   n = 2 * n0 - 1
  */
 
 #include <algorithm>
