@@ -16,8 +16,8 @@ typedef ListNode* LinkList;
  * List name L is a pointer pointing to the first node pointer.
  * The first node is the head node if there is no data node.
  */
-void InitList(LinkList* L) {
-  *L = (LinkList)malloc(sizeof(ListNode));
+static void InitList(LinkList* L) {
+  *L = static_cast<LinkList>(malloc(sizeof(ListNode)));
   if (*L == nullptr) {
     exit(0);
   }
@@ -26,7 +26,7 @@ void InitList(LinkList* L) {
   cout << "List was initialized." << endl;
 }
 
-void ClearList(LinkList *L) {
+static void ClearList(LinkList *L) {
   LinkList p = (*L)->next;
   while (p != *L) {
     p = p->next;
@@ -37,28 +37,28 @@ void ClearList(LinkList *L) {
   cout << "List is clear." << endl;
 }
 
-void DestroyList(LinkList* L) {
+static void DestroyList(LinkList* L) {
   ClearList(L);
   free(*L);
-  *L = nullptr;  
+  *L = nullptr;
   cout << "List is destroyed." << endl;
 }
 
-bool ListEmpty(LinkList L) {
+static bool ListEmpty(LinkList L) {
   return L->next == L && L->prior == L;
 }
 
-int ListLength(LinkList L) {
+static int ListLength(LinkList L) {
   LinkList p = L->next;
   int j = 0;
   while (p != L) {
     ++j;
-    p = p->next; 
+    p = p->next;
   }
   return j;
 }
 
-void GetElem(LinkList L, int loc, int* pvalue) {
+static void GetElem(LinkList L, int loc, int* pvalue) {
   LinkList p = L;
   int j = 0;
   if (loc < 1 || loc > ListLength(L)) {
@@ -72,7 +72,7 @@ void GetElem(LinkList L, int loc, int* pvalue) {
   *pvalue = p->data;
 }
 
-int LocateElem(LinkList L, int value) {
+static int LocateElem(LinkList L, int value) {
   LinkList p = L->next;
   int j = 0;
   while (p != L) {
@@ -85,7 +85,7 @@ int LocateElem(LinkList L, int value) {
   return -1;
 }
 
-bool PriorElem(LinkList L, int cur_data, int* pri_data) {
+static bool PriorElem(LinkList L, int cur_data, int* pri_data) {
   LinkList p = L->next->next; // p is pointing to the second data node.
   while (p != L) {
     if (p->data == cur_data) {
@@ -97,7 +97,7 @@ bool PriorElem(LinkList L, int cur_data, int* pri_data) {
   return false;
 }
 
-int NextElem(LinkList L, int cur_data, int* nex_data) {
+static int NextElem(LinkList L, int cur_data, int* nex_data) {
   LinkList p = L->next->next;
   while (p != L) {
     if (p->prior->data == cur_data) {
@@ -109,7 +109,7 @@ int NextElem(LinkList L, int cur_data, int* nex_data) {
   return false;
 }
 
-void ListInsert(LinkList* L, int loc, int value) {
+static void ListInsert(LinkList* L, int loc, int value) {
   LinkList p = *L;
   LinkList q, s;
   int j = 0;
@@ -122,7 +122,7 @@ void ListInsert(LinkList* L, int loc, int value) {
     p = p->next;
   }
   q = p->next;
-  s = (LinkList)malloc(sizeof(ListNode));
+  s = static_cast<LinkList>(malloc(sizeof(ListNode)));
   s->data = value;
   s->next = q;
   p->next = s;
@@ -130,7 +130,7 @@ void ListInsert(LinkList* L, int loc, int value) {
   q->prior = s;
 }
 
-void ListDelete(LinkList* L, int loc, int* pvalue) {
+static void ListDelete(LinkList* L, int loc, int* pvalue) {
   LinkList p = *L;
   LinkList q;
   int j = 0;
@@ -149,7 +149,7 @@ void ListDelete(LinkList* L, int loc, int* pvalue) {
   free(q);
 }
 
-void TravelList(LinkList L) {
+static void TravelList(LinkList L) {
   LinkList p = L->next;
   int j = 0;
   while (p != L) {
@@ -170,7 +170,7 @@ int main() {
   for (int i = 1; i < 10; ++i) {
     ListInsert(&lst, i, i * 10);
   }
-  
+
   cout << "List length is " << ListLength(lst) << "." << endl;
 
   TravelList(lst);

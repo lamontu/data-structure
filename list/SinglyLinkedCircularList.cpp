@@ -16,8 +16,8 @@ typedef ListNode* LinkList;
  * List name L is a pointer pointing to the last node pointer.
  * The last node is the head node if there is no data node.
  */
-void InitList(LinkList* L) {
-  *L = (LinkList)malloc(sizeof(ListNode));  // malloc for head node
+static void InitList(LinkList* L) {
+  *L = static_cast<LinkList>(malloc(sizeof(ListNode)));  // malloc for head node
   if (*L == nullptr) {
     exit(0);
   }
@@ -25,7 +25,7 @@ void InitList(LinkList* L) {
   cout << "List was initialized." << endl;
 }
 
-void ClearList(LinkList* L) {
+static void ClearList(LinkList* L) {
   LinkList p, q;
   *L = (*L)->next;  // L is pointing to head node pointer.
   p = (*L)->next;  // p is pointing to the first data node.
@@ -38,18 +38,18 @@ void ClearList(LinkList* L) {
   cout << "List is clear." << endl;
 }
 
-void DestroyList(LinkList* L) {
+static void DestroyList(LinkList* L) {
   ClearList(L);
   free(*L);  // *L is a pointer pointing to the head node.
   *L = nullptr;
   cout << "List is destroyed." << endl;
 }
 
-bool ListEmpty(LinkList L) {
+static bool ListEmpty(LinkList L) {
   return L->next == L;
 }
 
-int ListLength(LinkList L) {  // L is the last node pointer
+static int ListLength(LinkList L) {  // L is the last node pointer
   LinkList p = L->next->next;  // p is pointing to the first data node.
   int j = 0;
   while (p != L->next) {  // while p is not head node pointer
@@ -59,7 +59,7 @@ int ListLength(LinkList L) {  // L is the last node pointer
   return j;
 }
 
-void GetElem(LinkList L, int loc, int* pvalue ) {
+static void GetElem(LinkList L, int loc, int* pvalue ) {
   LinkList p = L->next;  // p is pointing to head node.
   int j = 0;
   if ( loc < 1 || loc > ListLength(L)) {  // if loc is invalid
@@ -73,7 +73,7 @@ void GetElem(LinkList L, int loc, int* pvalue ) {
   *pvalue = p->data;
 }
 
-int LocateElem(LinkList L, int value) {
+static int LocateElem(LinkList L, int value) {
   LinkList p = L->next->next;  // p is pointing to the first data node.
   int j = 0;
   while (p != L->next) {  // while p is not head node pointer
@@ -86,7 +86,7 @@ int LocateElem(LinkList L, int value) {
   return -1;
 }
 
-bool PriorElem(LinkList L, int cur_data, int* pri_data) {
+static bool PriorElem(LinkList L, int cur_data, int* pri_data) {
   LinkList p = L->next->next;
   LinkList q;
   while (p != L->next) {
@@ -100,7 +100,7 @@ bool PriorElem(LinkList L, int cur_data, int* pri_data) {
   return false;
 }
 
-bool NextElem(LinkList L, int cur_data, int* nex_data) {
+static bool NextElem(LinkList L, int cur_data, int* nex_data) {
   LinkList p = L->next->next;
   LinkList q;
   while (p != L->next) {
@@ -114,7 +114,7 @@ bool NextElem(LinkList L, int cur_data, int* nex_data) {
   return false;
 }
 
-void ListInsert(LinkList* L, int loc, int value) {
+static void ListInsert(LinkList* L, int loc, int value) {
   LinkList p = (*L)->next;  // p is pointing to the head node.
   LinkList q, s;
   int j = 0;
@@ -127,7 +127,7 @@ void ListInsert(LinkList* L, int loc, int value) {
     p = p->next;
   }
   q = p->next;  // q is pointing to the node at location loc.
-  s = (LinkList)malloc(sizeof(ListNode));
+  s = static_cast<LinkList>(malloc(sizeof(ListNode)));
   if (s == nullptr) {
     exit(0);
   }
@@ -139,7 +139,7 @@ void ListInsert(LinkList* L, int loc, int value) {
   }
 }
 
-void ListDelete(LinkList* L, int loc, int* pvalue) {
+static void ListDelete(LinkList* L, int loc, int* pvalue) {
   LinkList p = (*L)->next;
   LinkList q;
   int j = 0;
@@ -160,7 +160,7 @@ void ListDelete(LinkList* L, int loc, int* pvalue) {
   free(q);
 }
 
-void TravelList(LinkList L) {
+static void TravelList(LinkList L) {
   LinkList p = L->next->next;
   int j = 0;
   while (p != L->next) {
