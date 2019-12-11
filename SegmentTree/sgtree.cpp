@@ -26,7 +26,7 @@ static struct SegTreeNode {
 } SegTree[MAXNUM];
 
 static void pushup(int root) {
-    SegTree[root].val = min(SegTree[root*2+1].val, SegTree[root*2+2].val);
+  SegTree[root].val = min(SegTree[root*2+1].val, SegTree[root*2+2].val);
 }
 
 // Update left subtree and right subtree
