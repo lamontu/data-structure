@@ -20,26 +20,18 @@ using std::endl;
 
 const int MAXNUM = 1000;
 
-struct SegTreeNode {
+static struct SegTreeNode {
   int val;  // minimum value of an interval
   int add_mark;
 } SegTree[MAXNUM];
 
-void build(int root, int arr[], int istart, int iend) {
-  SegTree[root].add_mark = 0;
-  if (istart == iend) {
-    SegTree[root].val = arr[istart];
-  } else {
-    int mid = (istart + iend) / 2;
-    build(root*2+1, arr, istart, mid);  // Build left subtree
-    build(root*2+2, arr, mid+1, iend);  // Build right subtree
-    // Update node value based on its left subtree and right subtree
-    SegTree[root].val = min(SegTree[root*2+1].val, SegTree[root*2+2].val);
-  }
+static void pushup(int root) {
+  SegTree[root].val = min(SegTree[root*2+1].val, SegTree[root*2+2].val);
 }
 
+// NOT actually executed
 // Update left subtree and right subtree
-void pushdown(int root) {
+static void pushdown(int root) {
   if (SegTree[root].add_mark != 0) {
     // Set add_mark of the left and right subtree
     SegTree[root*2+1].add_mark += SegTree[root].add_mark;
@@ -52,8 +44,22 @@ void pushdown(int root) {
   }
 }
 
-int query(int root, int nstart, int nend, int qstart, int qend) {
+static void build(int root, int arr[], int istart, int iend) {
+  SegTree[root].add_mark = 0;
+  if (istart == iend) {
+    SegTree[root].val = arr[istart];
+  } else {
+    int mid = (istart + iend) / 2;
+    build(root*2+1, arr, istart, mid);  // Build left subtree
+    build(root*2+2, arr, mid+1, iend);  // Build right subtree
+    // Update node value based on its left subtree and right subtree
+    pushup(root);
+  }
+}
+
+static int query(int root, int nstart, int nend, int qstart, int qend) {
   // No intersection between quired interval and current node interval
+  cout << "  root=" << root << "," << "[" << nstart << "," << nend << "]" << endl;
   if (qstart > nend || qend < nstart) {
     return INT_MAX;
   }
@@ -68,7 +74,7 @@ int query(int root, int nstart, int nend, int qstart, int qend) {
              query(root*2+2, mid+1, nend, qstart, qend));
 }
 
-void update_one(int root, int nstart, int nend, int index, int increment) {
+static void update_one(int root, int nstart, int nend, int index, int increment) {
   if (nstart == nend) {
     if (index == nstart) {
       SegTree[root].val += increment;
@@ -81,10 +87,10 @@ void update_one(int root, int nstart, int nend, int index, int increment) {
   } else {
     update_one(root*2+2, mid+1, nend, index, increment);
   }
-  SegTree[root].val = min(SegTree[root*2+1].val, SegTree[root*2+2].val);
+  pushup(root);
 }
 
-void update(int root, int nstart, int nend,
+static void update(int root, int nstart, int nend,
             int ustart, int uend, int increment) {
   // No intersection between target interval and current node interval
   if (ustart > nend || uend < nstart) return;
@@ -102,9 +108,8 @@ void update(int root, int nstart, int nend,
   int mid = (nstart + nend) / 2;
   update(root*2+1, nstart, mid, ustart, uend, increment);
   update(root*2+2, mid+1, nend, ustart, uend, increment);
-  SegTree[root].val = min(SegTree[root*2+1].val, SegTree[root*2+2].val);
+  pushup(root);
 }
-
 
 int main(int argc, char* argv[]) {
   cout << "========================================" << endl;
