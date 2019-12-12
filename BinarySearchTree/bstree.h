@@ -1,7 +1,5 @@
-/* BinarySearchTree.h */
-
-#ifndef __BINARY_SEARCH_TREE_H__
-#define __BINARY_SEARCH_TREE_H__
+#ifndef BSTREE_H_
+#define BSTREE_H_
 
 #include "binarytree.h"
 
@@ -286,4 +284,4 @@ BTNode<T>* BSTree<T>::_DeleteRec(const T& data, BTNode<T>* & p) {
   return p;
 }
 
-#endif  // __BINARY_SEARCH_TREE_H__
+#endif  // BSTREE_H_
