@@ -1,15 +1,18 @@
-/* binomial_heap.h 
+/* binomial_heap.h
  * Binomial heap consists of some binomial trees in order of their degree.
  * The roots of all binomial trees form a singly linked list.
  */
 
-#ifndef __BINOMIAL_HEAP_H__
-#define __BINOMIAL_HEAP_H__
+#ifndef BINOMIAL_HEAP_H_
+#define BINOMIAL_HEAP_H_
 
 #include <iomanip>
 #include <iostream>
 
-using namespace std;
+using std::swap;
+using std::cout;
+using std::endl;
+using std::setw;
 
 template<typename T>
 struct BinomialNode {
@@ -19,7 +22,7 @@ struct BinomialNode {
   BinomialNode<T>* parent;
   BinomialNode<T>* next;
 
-  BinomialNode(T value)
+  explicit BinomialNode(T value)
     : key(value), degree(0), child(nullptr), parent(nullptr), next(nullptr) {  }
 };
 
@@ -59,7 +62,7 @@ class BinomialHeap {
   void decrease(BinomialNode<T>* node, T key);
   void update(BinomialNode<T>* node, T key);
 
-  void print(BinomialNode<T>* node, BinomialNode<T>* prev, int direction);
+  void print(BinomialNode<T>* prev, BinomialNode<T>* node, int direction);
 };
 
 template<typename T>
@@ -365,7 +368,7 @@ void BinomialHeap<T>::Update(T oldkey, T newkey) {
   }
 }
 
-/* Print binomial tree 
+/* Print binomial tree
  * node: current node
  * prev: the parent node of cur or the previous sibling node
  * direction: 1 -- child, 2 -- next sibling
@@ -416,4 +419,4 @@ void BinomialHeap<T>::Print() {
   cout << endl;
 }
 
-#endif  // __BINOMIAL_HEAP_H__ 
+#endif  // BINOMIAL_HEAP_H_

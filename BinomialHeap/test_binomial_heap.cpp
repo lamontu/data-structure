@@ -1,16 +1,11 @@
-/* test_binomial_heap.cpp */
-
 #include "binomial_heap.h"
-#include <iostream>
 
-using namespace std;
+static int a[] = {12, 7, 25, 15, 28, 33, 41};
+static int b[] = {18, 35, 20, 42, 9, 31, 23, 6, 48, 11, 24, 52, 13};
+static int alen = sizeof(a) / sizeof(a[0]);
+static int blen = sizeof(b) / sizeof(b[0]);
 
-int a[] = {12, 7, 25, 15, 28, 33, 41};
-int b[] = {18, 35, 20, 42, 9, 31, 23, 6, 48, 11, 24, 52, 13};
-int alen = sizeof(a) / sizeof(a[0]);
-int blen = sizeof(b) / sizeof(b[0]);
-
-void Create(BinomialHeap<int>* & heap, int arr[], int len) {
+static void Create(BinomialHeap<int>* & heap, int arr[], int len) {
   cout << "## Add elements into binomial heap:" << endl;
   for (int i = 0; i < len; ++i) {
     cout << arr[i] << ", ";
@@ -21,13 +16,13 @@ void Create(BinomialHeap<int>* & heap, int arr[], int len) {
   heap->Print();
 }
 
-void TestInsert() {
+static void TestInsert() {
   // BinomialHeap<int>* hb;  // Segmentation fault: 11
   BinomialHeap<int>* hb = new BinomialHeap<int>();
   Create(hb, b, blen);
 }
 
-void TestUnion() {
+static void TestUnion() {
   BinomialHeap<int>* ha = new BinomialHeap<int>();
   Create(ha, a, alen);
   BinomialHeap<int>* hb = new BinomialHeap<int>();
@@ -39,7 +34,7 @@ void TestUnion() {
   ha->Print();
 }
 
-void TestRemove() {
+static void TestRemove() {
   BinomialHeap<int>* hb = new BinomialHeap<int>();
   Create(hb, b, blen);
 
@@ -49,7 +44,7 @@ void TestRemove() {
   hb->Print();
 }
 
-void TestIncrease() {
+static void TestIncrease() {
   BinomialHeap<int>* hb = new BinomialHeap<int>();
   Create(hb, b, blen);
 
@@ -58,7 +53,7 @@ void TestIncrease() {
   hb->Print();
 }
 
-void TestDecrease() {
+static void TestDecrease() {
   BinomialHeap<int>* hb = new BinomialHeap<int>();
   Create(hb, b, blen);
 
@@ -67,9 +62,9 @@ void TestDecrease() {
   hb->Print();
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   // TestInsert();
-  // TestUnion(); 
+  // TestUnion();
   // TestRemove();
   // TestIncrease();
   TestDecrease();
