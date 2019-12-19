@@ -1,7 +1,9 @@
 /* test_fibonacci_heap.cpp */
 
 #include "fibonacci_heap.h"
-#include <iostream>
+#include <algorithm>
+
+using std::swap;
 
 int a[] = {12, 7, 25, 15, 28, 33, 41, -1};
 int b[] = {18, 35, 20, 42, 9, 31, 23, 6, 48, 11, 24, 52, 13, -1};

@@ -3,14 +3,16 @@
  * All children of a tree node form a doubly linked circular list.
  */
 
-#ifndef __FIBONACCI_HEAP_H__
-#define __FIBONACCI_HEAP_H__
+#ifndef FIBONACCI_HEAP_H_
+#define FIBONACCI_HEAP_H_
 
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
 template<typename T>
 struct FibNode {
@@ -22,7 +24,7 @@ struct FibNode {
   FibNode<T>* parent;
   bool marked;
 
-  FibNode(T value) : key(value), degree(0), marked(false),
+  explicit FibNode(T value) : key(value), degree(0), marked(false),
                      child(nullptr), parent(nullptr) {
     left = this;
     right = this;
@@ -42,7 +44,7 @@ class FibHeap {
   ~FibHeap();
 
   void Insert(T key);
-  void Combine(FibHeap<T>* other);
+  void Combine(FibHeap<T>* &other);
   void RemoveMin();
   void Remove(T key);
   bool Contains(T key);
@@ -134,7 +136,7 @@ void FibHeap<T>::link_lists(FibNode<T>* a, FibNode<T>* b) {
 
 // Merge fibonacci heap other into this fibonacci heap
 template<typename T>
-void FibHeap<T>::Combine(FibHeap<T>* other) {
+void FibHeap<T>::Combine(FibHeap<T>* &other) {
   if (nullptr == other) return;
   if (other->max_degree_ > this->max_degree_) {
     swap(*this, *other);
@@ -166,8 +168,14 @@ void FibHeap<T>::allocate() {
   int old = max_degree_;
   max_degree_ = ( log(key_num_) / log(2.0) ) + 1;
   if (old >= max_degree_) return;
-  consolidate_ = (FibNode<T>**)realloc(consolidate_,
-      sizeof(FibHeap<T>*) * (max_degree_ + 1));
+  FibNode<T>* * tmp_consolidate = static_cast<FibNode<T>**>(
+      realloc(consolidate_,
+      sizeof(FibHeap<T>*) * (max_degree_ + 1)));
+  if (tmp_consolidate == nullptr) {
+    cout << "realloc failed" << endl;
+  } else {
+    consolidate_ = tmp_consolidate;
+  }
 }
 
 /* Remove the minimum tree min_ from fibonacci heap.
@@ -202,8 +210,8 @@ void FibHeap<T>::attach_tree(FibNode<T>* node, FibNode<T>* root) {
 
 template<typename T>
 void FibHeap<T>::consolidate() {
-  int i, d, D;
-  FibNode<T> *x, *y, *tmp;
+  int i, D;
+  FibNode<T> *x, *y;
   allocate();
   D = max_degree_ + 1;
   for (i = 0; i < D; ++i) {
@@ -211,7 +219,7 @@ void FibHeap<T>::consolidate() {
   }
   while (min_ != nullptr) {
     x = remove_min_tree();
-    d = x->degree;
+    int d = x->degree;
     // if (consolidate_[d] != nullptr) {
     while (consolidate_[d] != nullptr) {
       y = consolidate_[d];
@@ -269,7 +277,7 @@ void FibHeap<T>::RemoveMin() {
 }
 
 /* Cut non-root node from minimum tree,
- * and link it into the root list of the fibonacci heap. 
+ * and link it into the root list of the fibonacci heap.
  */
 template<typename T>
 void FibHeap<T>::cut(FibNode<T>* node, FibNode<T>* parent) {
@@ -474,4 +482,4 @@ void FibHeap<T>::Print() {
   cout << endl;
 }
 
-#endif  // __FIBONACCI_HEAP_H__
+#endif  // FIBONACCI_HEAP_H_
