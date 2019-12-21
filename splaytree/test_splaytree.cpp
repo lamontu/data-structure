@@ -1,18 +1,13 @@
-/* test_splaytree.cpp */
-
 #include "splaytree.h"
-#include <iostream>
 
-using namespace std;
-
-void visit(const int& a) {
+static void visit(const int& a) {
   cout << a << ", ";
 }
 
 typedef void(*Funtype)(const int&);
-Funtype pfun = visit;
+static Funtype pfun = visit;
 
-int main(int agrc, char* argv[]) {
+int main() {
   cout << "================================" << endl;
 
   int arr[] = {10, 50, 40, 30, 20, 60};
@@ -34,7 +29,7 @@ int main(int agrc, char* argv[]) {
 
   cout << "Minimum: " << tree->minimum() << endl;
   cout << "Maximum: " << tree->maximum() << endl;
-  
+
   tree->print();
 
   int a = 30;

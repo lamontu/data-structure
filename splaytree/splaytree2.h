@@ -1,34 +1,32 @@
-/* splaytree2.h 
+/* splaytree2.h
  * Bottom-up splay
  */
 
-#ifndef __SPLAY_TREE_2_H__
-#define __SPLAY_TREE_2_H__
+#ifndef SPLAY_TREE_2_H_
+#define SPLAY_TREE_2_H_
 
 #include <functional>
 #include <iomanip>
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
-template<typename T, typename Comp=std::less<T>>
+template< typename T, typename Comp=std::less<T> >
 class splay_tree {
  private:
-  Comp comp;
-  unsigned long p_size;
-
+  size_t p_size;
   struct node {
     node *left, *right, *parent;
     T key;
+    char padding[4];
     node(const T& init = T())
-      : left(nullptr), right(nullptr), parent(nullptr), key(init) {
-      cout << "  inside node constructor" << endl;    
-    }
-
-    ~node() {  // Not necessary
-      cout << "  inside node destructor" << endl;
+      : left(nullptr), right(nullptr), parent(nullptr), key(init), padding("") {
+      cout << "  inside node constructor" << endl;
     }
   } *root;
+  Comp comp;
 
   void left_rotate(node* x) {
     node* y = x->right;
@@ -125,7 +123,7 @@ class splay_tree {
   }
 
  public:
-  splay_tree() : root(nullptr), p_size(0) {
+  splay_tree() : p_size(0), root(nullptr){
     cout << "splay_tree() started" << endl;
     cout << "splay_tree() finished" << endl;
   }
@@ -212,7 +210,6 @@ class splay_tree {
       }
       replace(z, y);
       y->left = z->left;
-      y->left = z->left;
       y->left->parent = y;
     }
     delete z;
@@ -229,8 +226,8 @@ class splay_tree {
   }
 
   bool empty() const { return nullptr == root; }
-  unsigned long size() const { return p_size; }
-  
+  size_t size() const { return p_size; }
+
   void print() {
     if (root != nullptr) {
       print(root, root->key, 0);
@@ -238,4 +235,4 @@ class splay_tree {
   }
 };
 
-#endif  // __SPLAY_TREE_2_H__
+#endif  // SPLAY_TREE_2_H_

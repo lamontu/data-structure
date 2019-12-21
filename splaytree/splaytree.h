@@ -1,23 +1,26 @@
 /* splaytree.h */
 
-#ifndef __SPLAY_TREE_H__
-#define __SPLAY_TREE_H__
+#ifndef SPLAY_TREE_H_
+#define SPLAY_TREE_H_
 
-#include <iostream> 
+#include <iostream>
 #include <iomanip>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
 template<typename T>
 class SplayTreeNode {
  public:
-  T key;
   SplayTreeNode<T>* left;
   SplayTreeNode<T>* right;
+  T key;
+  char padding[4];
 
-  SplayTreeNode() : left(nullptr), right(nullptr) {  }
+  SplayTreeNode() : left(nullptr), right(nullptr), padding("") { }
   SplayTreeNode(T value, SplayTreeNode* l, SplayTreeNode* r)
-    : key(value), left(l), right(r) {  }
+    : left(l), right(r), key(value), padding("") {  }
 };
 
 template<typename T>
@@ -61,7 +64,7 @@ class SplayTree {
 };
 
 template<typename T>
-SplayTree<T>::SplayTree() : m_root(nullptr) {  
+SplayTree<T>::SplayTree() : m_root(nullptr) {
   cout << "Inside Constructor" << endl;
 }
 
@@ -358,4 +361,4 @@ void SplayTree<T>::postOrder(funtype Visit) const {
   postOrder(Visit, m_root);
 }
 
-#endif  // __SPLAY_TREE_H__
+#endif  // SPLAY_TREE_H_

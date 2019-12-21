@@ -1,14 +1,9 @@
-/* test_spalytree2.cpp */
-
 #include "splaytree2.h"
-#include <iostream>
 
-using namespace std;
-
-int main(int argc, char* argv[]) {
+int main() {
   cout << "================================" << endl;
 
-  splay_tree<int>* ptree = new splay_tree<int>;
+  splay_tree<int>* ptree = new splay_tree<int>();
   int arr[] = {3, 2, 1, 4, 5, 6, 7, 16, 15, 14, 13, 12, 11, 10, 8, 9};
   int len  = sizeof(arr) / sizeof(arr[0]);
   for (int i = 0; i < len; ++i) {
@@ -34,7 +29,7 @@ int main(int argc, char* argv[]) {
   tree.print();  cout << endl;
   tree.erase(10);
   tree.print();  cout << endl;
-  
+
   cout << "================================" << endl;
   return 0;
 }
