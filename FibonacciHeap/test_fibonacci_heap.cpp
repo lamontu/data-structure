@@ -1,16 +1,11 @@
-/* test_fibonacci_heap.cpp */
-
 #include "fibonacci_heap.h"
-#include <algorithm>
 
-using std::swap;
+static int a[] = {12, 7, 25, 15, 28, 33, 41, -1};
+static int b[] = {18, 35, 20, 42, 9, 31, 23, 6, 48, 11, 24, 52, 13, -1};
+static int alen = sizeof(a) / sizeof(a[0]);
+static int blen = sizeof(b) / sizeof(b[0]);
 
-int a[] = {12, 7, 25, 15, 28, 33, 41, -1};
-int b[] = {18, 35, 20, 42, 9, 31, 23, 6, 48, 11, 24, 52, 13, -1};
-int alen = sizeof(a) / sizeof(a[0]);
-int blen = sizeof(b) / sizeof(b[0]);
-
-void create(FibHeap<int>* & heap, int* arr, int len) {
+static void create(FibHeap<int>* & heap, int* arr, int len) {
   cout << "## Add elements into fibonacci heap:" << endl;
   for (int i = 0; i < len; ++i) {
     cout << arr[i] << ", ";
@@ -24,7 +19,7 @@ void create(FibHeap<int>* & heap, int* arr, int len) {
   heap->Print();
 }
 
-void TestBasic() {
+static void TestBasic() {
   FibHeap<int>* hb = new FibHeap<int>();
   create(hb, b, blen);
 
@@ -32,7 +27,7 @@ void TestBasic() {
   hb->Contains(22) ? cout << "Contains 22\n" : cout << "No 22\n" << endl;
 }
 
-void TestInsert() {
+static void TestInsert() {
   FibHeap<int>* ha = new FibHeap<int>();
   create(ha, a, alen);
 
@@ -41,7 +36,7 @@ void TestInsert() {
   ha->Print();
 }
 
-void TestUnion() {
+static void TestUnion() {
   FibHeap<int>* ha = new FibHeap<int>();
   FibHeap<int>* hb = new FibHeap<int>();
   create(ha, a, alen);
@@ -52,7 +47,7 @@ void TestUnion() {
   ha->Print();
 }
 
-void TestRemoveMin() {
+static void TestRemoveMin() {
   FibHeap<int>* ha = new FibHeap<int>();
   FibHeap<int>* hb = new FibHeap<int>();
   create(ha, a, alen);
@@ -67,7 +62,7 @@ void TestRemoveMin() {
   ha->Print();
 }
 
-void TestDecrease() {
+static void TestDecrease() {
   FibHeap<int>* hb = new FibHeap<int>();
   create(hb, b, blen);
 
@@ -76,7 +71,7 @@ void TestDecrease() {
   hb->Print();
 }
 
-void TestIncrease() {
+static void TestIncrease() {
   FibHeap<int>* hb = new FibHeap<int>();
   create(hb, b, blen);
 
@@ -85,7 +80,7 @@ void TestIncrease() {
   hb->Print();
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   // TestBasic();
   // TestInsert();
   // TestUnion();

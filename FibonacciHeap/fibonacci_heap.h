@@ -9,23 +9,26 @@
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
 using std::setw;
+using std::swap;
 
 template<typename T>
 struct FibNode {
-  T key;
-  int degree;
   FibNode<T>* left;
   FibNode<T>* right;
   FibNode<T>* child;
   FibNode<T>* parent;
+  size_t degree;
+  T key;
   bool marked;
+  char padding[3];
 
-  explicit FibNode(T value) : key(value), degree(0), marked(false),
-                     child(nullptr), parent(nullptr) {
+  explicit FibNode(T value) : child(nullptr), parent(nullptr), degree(0), key(value),
+                              marked(false), padding("") {
     left = this;
     right = this;
   }
@@ -34,14 +37,13 @@ struct FibNode {
 template<typename T>
 class FibHeap {
  private:
-  int key_num_;
-  int max_degree_;
   FibNode<T>* min_;
   FibNode<T>* * consolidate_;
+  size_t key_num_;
+  size_t max_degree_;
 
  public:
   FibHeap();
-  ~FibHeap();
 
   void Insert(T key);
   void Combine(FibHeap<T>* &other);
@@ -84,9 +86,6 @@ FibHeap<T>::FibHeap() {
   min_ = nullptr;
   consolidate_ = nullptr;
 }
-
-template<typename T>
-FibHeap<T>::~FibHeap() {  }
 
 template<typename T>
 void FibHeap<T>::add_list_node(FibNode<T>* node, FibNode<T>* head) {
@@ -165,8 +164,8 @@ void FibHeap<T>::Combine(FibHeap<T>* &other) {
 
 template<typename T>
 void FibHeap<T>::allocate() {
-  int old = max_degree_;
-  max_degree_ = ( log(key_num_) / log(2.0) ) + 1;
+  size_t old = max_degree_;
+  max_degree_ = static_cast<size_t>((log(key_num_) / log(2.0))) + 1;
   if (old >= max_degree_) return;
   FibNode<T>* * tmp_consolidate = static_cast<FibNode<T>**>(
       realloc(consolidate_,
@@ -194,7 +193,7 @@ FibNode<T>* FibHeap<T>::remove_min_tree() {
   return p;
 }
 
-// Attach minimum tree to the the minimum tree root
+// Attach minimum tree node to the the minimum tree root
 template<typename T>
 void FibHeap<T>::attach_tree(FibNode<T>* node, FibNode<T>* root) {
   remove_list_node(node);
@@ -210,7 +209,7 @@ void FibHeap<T>::attach_tree(FibNode<T>* node, FibNode<T>* root) {
 
 template<typename T>
 void FibHeap<T>::consolidate() {
-  int i, D;
+  size_t i, D;
   FibNode<T> *x, *y;
   allocate();
   D = max_degree_ + 1;
@@ -219,8 +218,7 @@ void FibHeap<T>::consolidate() {
   }
   while (min_ != nullptr) {
     x = remove_min_tree();
-    int d = x->degree;
-    // if (consolidate_[d] != nullptr) {
+    size_t d = x->degree;
     while (consolidate_[d] != nullptr) {
       y = consolidate_[d];
       if (x->key > y->key) {
@@ -232,8 +230,8 @@ void FibHeap<T>::consolidate() {
     }
     consolidate_[d] = x;
   }
-  min_ = nullptr;
 
+  min_ = nullptr;
   for (i = 0; i < D; ++i) {
     if (consolidate_[i] != nullptr) {
       if (nullptr == min_) {
