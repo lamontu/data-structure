@@ -8,7 +8,7 @@ const int L = 7;
 
 /*
 Matrix      A1      A2      A3      A4      A5      A5
-Dimension (d0,d1) (d1,d2) (d2,d3) (d3,d4) (d4,d5) (d5,d6) 
+Dimension (d0,d1) (d1,d2) (d2,d3) (d3,d4) (d4,d5) (d5,d6)
 */
 int MatrixChain(int num, int** multiplyTimes, int** seperateIndexes, int* d) {
   for (int i = 1; i <= num; ++i) {
@@ -21,7 +21,7 @@ int MatrixChain(int num, int** multiplyTimes, int** seperateIndexes, int* d) {
       /*(A1 A2) ((A3 A4) (A5 A6))
        * The outmost layer bracket separation position: 2
        */
-      seperateIndexes[i][j] = i;  
+      seperateIndexes[i][j] = i;
       for (int k = i + 1; k < j; ++k) {
         int t = multiplyTimes[i][k] + multiplyTimes[k+1][j] + d[i-1] * d[k] * d[j];
         if (t < multiplyTimes[i][j]) {
@@ -42,7 +42,7 @@ void Traceback(int i, int j, int** seperateIndexes) {
   cout << " and A" << (seperateIndexes[i][j] + 1) << "," << j << endl;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   int dimensions[L] = {30, 35, 15, 5, 10, 20, 25};
   int** mul = new int* [L];
   int** sep = new int* [L];

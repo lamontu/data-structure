@@ -15,11 +15,10 @@ int OrderMultiply(const vector<int>& dimension) {
   /* number of matrices
    * Matrix index: 0, 1, 2, ... , (n-1).
    */
-  int n = (int)dimension.size() - 1;
-  vector<vector<int>> dp;
-  dp.resize(n, vector<int>(n, INF));
+  size_t n = dimension.size() - 1;
+  vector<vector<int> > dp(n, vector<int>(n, INF));
 
-  int d, i, k;
+  size_t d, i, k;
   for (i = 0; i < n; ++i) {
     dp[i][i] = 0;  // d = 0
   }
@@ -38,20 +37,17 @@ int OrderMultiply(const vector<int>& dimension) {
   return res;
 }
 
-int main(int argc, char* argv[]) {
-  int i;
-  int n;
-  vector<int> v;
-
+int main() {
   cout << "Matrix number: ";
+  size_t n;
   cin >> n;
   if (n < 1) {
     cout << "Invalid matrix number!" << endl;
     exit(1);
   }
-  v.resize(n + 1);
+  vector<int> v(n+1);
 
-  for (i = 0; i < n + 1; ++i) {
+  for (size_t i = 0; i < n + 1; ++i) {
     cin >> v[i];
   }
 

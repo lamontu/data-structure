@@ -45,7 +45,7 @@ void Traceback(int i, int j, int** s) {
   cout << " and A" << (s[i][j] + 1) << "," << j << endl;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   int p[L] = {30, 35, 15, 5, 10, 20, 25};
   int** m = new int* [L];
   int** s = new int* [L];
