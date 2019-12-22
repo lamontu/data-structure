@@ -7,16 +7,16 @@ using namespace std;
 matrix a with dimension (m,s)
 matrix b with dimension (s,n)
 */
-int** MatrixMultiply(int** a, int** b, int m, int s, int n) {
+int** MatrixMultiply(int** a, int** b, size_t m, size_t s, size_t n) {
     int** result = new int*[m];
-    for (int i = 0; i < m; ++i) {
+    for (size_t i = 0; i < m; ++i) {
         result[i] = new int[n];
         memset(result[i], 0, sizeof(int) * n);
     }
 
-    for (int i = 0; i < m; ++i) {
-        for (int j = 0; j < n; ++j) {
-            for (int k = 0; k < s; ++k) {
+    for (size_t i = 0; i < m; ++i) {
+        for (size_t j = 0; j < n; ++j) {
+            for (size_t k = 0; k < s; ++k) {
                 result[i][j] += a[i][k] * b[k][j];
             }
         }
@@ -25,9 +25,9 @@ int** MatrixMultiply(int** a, int** b, int m, int s, int n) {
     return result;
 }
 
-void DeleteArray(int** a, int dim_m) {
+void DeleteArray(int** a, size_t dim_m) {
     if (a != nullptr) {
-        for (int i = 0; i < dim_m; ++i) {
+        for (size_t i = 0; i < dim_m; ++i) {
             delete[] a[i];
         }
         delete[] a;
@@ -35,28 +35,27 @@ void DeleteArray(int** a, int dim_m) {
     }
 }
 
-int** CreateMatrix(int dim_m, int dim_n) {
+int** CreateMatrix(size_t dim_m, size_t dim_n) {
     int** a = new int* [dim_m];
-    for (int i = 0; i < dim_m; ++i) {
+    for (size_t i = 0; i < dim_m; ++i) {
         a[i] = new int[dim_n];
     }
     return a;
 }
 
-void PrintMatrix(int** a, int dim_m, int dim_n) {
-    for (int i = 0; i < dim_m; ++i) {
-        for (int j = 0; j < dim_n; ++j) {
+void PrintMatrix(int** a, size_t dim_m, size_t dim_n) {
+    for (size_t i = 0; i < dim_m; ++i) {
+        for (size_t j = 0; j < dim_n; ++j) {
             cout << a[i][j] << " ";
         }
         cout << endl;
     }
 }
 
-
 double NumberPower(double base, int exponent) {
-    if (base && exponent == 0) {
+    if (base != 0.0 && exponent == 0) {
         return 1;
-    } else if (base == 0 && exponent == 0) {
+    } else if (base == 0.0 && exponent == 0) {
         exit(1);
     }
 
@@ -80,10 +79,10 @@ double NumberPower(double base, int exponent) {
 /*
 Matrix base with dimension (dim, dim)
 */
-int** MatrixPower(int** base, int dim, int exponent) {
+int** MatrixPower(int** base, size_t dim, int exponent) {
     int** res = new int* [dim];
     // Initialize res as a identity matrix
-    for (int i = 0; i < dim; ++i) {
+    for (size_t i = 0; i < dim; ++i) {
         res[i] = new int[dim];
         memset(res[i], 0, sizeof(int) * dim);
         res[i][i] = 1;
@@ -117,9 +116,9 @@ int main() {
 
     cout << "========" << endl;
 
-    int dim_m;
-    int dim_s;
-    int dim_n;
+    size_t dim_m;
+    size_t dim_s;
+    size_t dim_n;
     cout << "Row of the first matrix: ";
     cin >> dim_m;
     if (dim_m < 1) {
@@ -166,7 +165,7 @@ int main() {
 
     cout << "========" << endl;
 
-    int dim;
+    size_t dim;
     cout << "Matrix base with row, col = ";
     cin >> dim;
     if (dim < 1) {
@@ -177,7 +176,7 @@ int main() {
     int** base = CreateMatrix(dim, dim);
     for (i = 0; i < dim; ++i) {
         for (j = 0; j < dim; ++j) {
-            cin >> base[i][j]; 
+            cin >> base[i][j];
         }
     }
     int exponent;
@@ -192,4 +191,3 @@ int main() {
 
     return 0;
 }
-

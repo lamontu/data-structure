@@ -63,7 +63,7 @@ void matrix_multiply_recursion(const vector<vector<int>>& a,
 
   int i;
   int n1 = n / 2;
-  
+
   vector<vector<int>> aa[4];
   vector<vector<int>> bb[4];
   for (i = 0; i < 4; ++i) {
@@ -117,7 +117,7 @@ void matrix_multiply_recursion(const vector<vector<int>>& a,
 
   add_matrix(m[5], m[6], x, n1);
   set_submatrix(c, x, 2);
-  
+
   substract_matrix(m[1], m[2], x, n1);
   add_matrix(x, m[4], x, n1);
   substract_matrix(x, m[6], x, n1);
@@ -140,7 +140,7 @@ void MatrixMultiply(const vector<vector<int>>& a, const vector<vector<int>>& b,
   matrix_multiply_recursion(a, b, c, n);
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   int n;
   int i, j;
   vector<vector<int>> a, b, c;
