@@ -1,16 +1,14 @@
-/* test_avltree.cpp */
-
 #include "avltree.h"
 #include <iostream>
 
 using namespace std;
 
-void visit(const int& a) {
+static void visit(const int& a) {
   cout << a << ", ";
 }
 
 typedef void(*Funtype)(const int&);
-Funtype pfun = visit;
+static Funtype pfun = visit;
 
 int main() {
   cout << "================================" << endl;
@@ -23,7 +21,7 @@ int main() {
   tree.insert(8); tree.insert(9);
   tree.print();  cout << endl;
 
-  // tree.insert(4);  // Assertion failed 
+  // tree.insert(4);  // Assertion failed
 
   tree.preOrder(pfun);  cout << endl;
   tree.inOrder(pfun);  cout << endl;
@@ -34,7 +32,7 @@ int main() {
   cout << "Minimum: " << tree.minimum() << endl;
   cout << "Maximum: " << tree.maximum() << endl;
   cout << endl;
-  
+
   tree.remove(8);
   tree.print();  cout << endl;
 
@@ -44,7 +42,7 @@ int main() {
   cout << "Minimum: " << tree.minimum() << endl;
   cout << "Maximum: " << tree.maximum() << endl;
   cout << endl;
- 
+
   tree.remove(7);
   tree.print();  cout << endl;
   cout << "================================" << endl;

@@ -1,13 +1,13 @@
-/* avltree.h */ 
-
-#ifndef __AVL_TREE_H__
-#define __AVL_TREE_H__
+#ifndef AVL_TREE_H_
+#define AVL_TREE_H_
 
 #include <iostream>
 #include <iomanip>
 #include <cassert>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
 template<typename T>
 class AVLTreeNode {
@@ -18,7 +18,7 @@ class AVLTreeNode {
   AVLTreeNode* right;
 
   AVLTreeNode(T value, AVLTreeNode* l, AVLTreeNode* r)
-    : key(value), height(0), left(l), right(r) {  } 
+    : key(value), height(0), left(l), right(r) {  }
 };
 
 template<typename T>
@@ -44,7 +44,7 @@ class AVLTree {
   void preOrder(funtype Visit) const;
   void inOrder(funtype Visit) const;
   void postOrder(funtype Visit) const;
-  
+
  private:
   void destroy(AVLTreeNode<T>* & tree);
   void print(AVLTreeNode<T>* tree, T key, int direction);
@@ -85,7 +85,7 @@ void AVLTree<T>::destroy(AVLTreeNode<T>* & tree) {
 
   if (tree->left != nullptr) {
     destroy(tree->left);
-  } 
+  }
   if (tree->right != nullptr) {
     destroy(tree->right);
   }
@@ -120,7 +120,7 @@ void AVLTree<T>::print() {
   }
 }
 
-// Return the root pointer of the modified AVLTree 
+// Return the root pointer of the modified AVLTree
 template<typename T>
 AVLTreeNode<T>* AVLTree<T>::insert(T key, AVLTreeNode<T>* & tree) {
   if (nullptr == tree) {
@@ -148,7 +148,7 @@ AVLTreeNode<T>* AVLTree<T>::insert(T key, AVLTreeNode<T>* & tree) {
       }
     }
   } else {
-    assert(tree->key != key); 
+    assert(tree->key != key);
   }
   tree->height = max(height(tree->left), height(tree->right)) + 1;
   return tree;
@@ -196,23 +196,23 @@ AVLTreeNode<T>* AVLTree<T>::remove(AVLTreeNode<T>* pnode,
         AVLTreeNode<T>* min = minimum(tree->right);
         tree->key = min->key;
         tree->right = remove(min, tree->right);
-      } 
+      }
     } else {  // One children or none
       AVLTreeNode<T>* tmp = tree;
-      tree = (tree->left != nullptr) ? tree->left : tree->right; 
+      tree = (tree->left != nullptr) ? tree->left : tree->right;
       delete tmp;
       tmp = nullptr;
     }
   }
   return tree;
-} 
+}
 
 template<typename T>
 void AVLTree<T>::remove(T key) {
   AVLTreeNode<T>* pnode = search(key, m_root);
   if (pnode != nullptr) {
     m_root = remove(pnode, m_root);
-  } 
+  }
 }
 
 template<typename T>
@@ -271,10 +271,10 @@ AVLTreeNode<T>* AVLTree<T>::searchRec(T key, AVLTreeNode<T>* tree) const {
   if (nullptr == tree || tree->key == key) return tree;
 
   if (key < tree->key) {
-    return searchRec(tree->left, key); 
+    return searchRec(tree->left, key);
   } else {
     return searchRec(tree->right, key);
-  } 
+  }
 }
 
 template<typename T>
@@ -341,7 +341,6 @@ void AVLTree<T>::postOrder(funtype Visit) const {
   postOrder(Visit, m_root);
 }
 
-
 template<typename T>
 int AVLTree<T>::max(int a, int b) {
   return a > b ? a : b;
@@ -385,4 +384,4 @@ AVLTreeNode<T>* AVLTree<T>::Rotate_RL(AVLTreeNode<T>* k1) {
   return Rotate_RR(k1);
 }
 
-#endif  // __AVL_TREE_H__
+#endif  // AVL_TREE_H_
