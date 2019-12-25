@@ -3,15 +3,18 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
 const int NARRAY = 8;
 const int NBUCKET = 5;
 const int INTERVAL = 10;
 
 struct BucketNode {
-  int data;
   BucketNode* next;
+  int data;
+  char padding[4];
 };
 
 void bucket_sort(int arr[]);
@@ -23,7 +26,7 @@ int getBucketIndex(int value);
 void bucket_sort(int arr[]) {
   int i, j;
   BucketNode** buckets;
-  buckets = (BucketNode**)malloc(sizeof(BucketNode*) * NBUCKET);
+  buckets = static_cast<BucketNode**>(malloc(sizeof(BucketNode*) * NBUCKET));
   // Initialize buckets
   for (i = 0; i < NBUCKET; ++i) {
     buckets[i] = nullptr;
@@ -32,7 +35,7 @@ void bucket_sort(int arr[]) {
   for (i = 0; i < NARRAY; ++i) {
     BucketNode* current;
     int pos = getBucketIndex(arr[i]);
-    current = (BucketNode*)malloc(sizeof(BucketNode));
+    current = static_cast<BucketNode*>(malloc(sizeof(BucketNode)));
     current->data = arr[i];
     current->next = buckets[pos];
     buckets[pos] = current;
@@ -135,7 +138,7 @@ void printBuckets(BucketNode* list) {
   }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   int array[NARRAY] = {29, 25, 3, 49, 9, 37, 21, 43};
   cout << "Initial array:" << endl;
   print(array);

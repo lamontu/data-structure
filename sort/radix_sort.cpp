@@ -1,8 +1,7 @@
-/* radix_sort.cpp */
-
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 /*
  * number: 234
@@ -12,7 +11,7 @@ using namespace std;
  * 3rd digit: 0
  */
 
-int get_digit(int number, int index) {
+static int get_digit(int number, size_t index) {
   for (int i = index; i > 0; --i) {
     number /= 10;
   }
@@ -22,7 +21,7 @@ int get_digit(int number, int index) {
 /* Counting sort using specific digit
  * K is base, K = 10
  */
-void counting_sort_digit(int array[], int length, int digit, int K=10) {
+static void counting_sort_digit(int array[], size_t length, size_t digit, size_t K=10) {
   if (nullptr == array || 0 == length) return;
   int* digit_num = new int[length];
   memset(digit_num, 0, sizeof(int) * length);
@@ -31,14 +30,14 @@ void counting_sort_digit(int array[], int length, int digit, int K=10) {
   int* array_result = new int[length];
   memset(array_result, 0, sizeof(int) * length);
 
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     digit_num[i] = get_digit(array[i], digit);
   }
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     count[digit_num[i]]++;
   }
-  for (int i = 1; i < K; ++i) {
-    count[i] += count[i - 1]; 
+  for (size_t i = 1; i < K; ++i) {
+    count[i] += count[i - 1];
   }
   for (int i = length - 1; i >= 0; --i) {
     array_result[count[digit_num[i]] - 1] = array[i];
@@ -51,20 +50,20 @@ void counting_sort_digit(int array[], int length, int digit, int K=10) {
 }
 
 // The biggest number has wide digits.
-void radix_sort(int array[], int length, int wide) {
-  for (int i = 0; i < wide; ++i) {
+static void radix_sort(int array[], size_t length, size_t wide) {
+  for (size_t i = 0; i < wide; ++i) {
     counting_sort_digit(array, length, i);
   }
 }
 
-void print(int* arr, int length) {
+static void print(int* arr, int length) {
   for (int i = 0; i < length; ++i) {
     cout << arr[i] << ", ";
   }
   cout << endl;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   const int M = 1000;
   const int length = 12;
   int* arr1 = new int[length];
