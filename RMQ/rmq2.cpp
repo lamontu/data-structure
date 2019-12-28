@@ -1,5 +1,3 @@
-/* rmq2.cpp */
-
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -13,10 +11,10 @@ using std::setw;
 
 const int MAXN = 10000;
 const int LOGMAXN = 20;
-int index_min[MAXN][LOGMAXN];
-int index_max[MAXN][LOGMAXN];
+static int index_min[MAXN][LOGMAXN];
+static int index_max[MAXN][LOGMAXN];
 
-void InitIndexMin(int arr[], int len) {
+static void InitIndexMin(int arr[], int len) {
   int i, j;
   for (i = 0; i < len; ++i) {
     index_min[i][0] = i;
@@ -32,13 +30,13 @@ void InitIndexMin(int arr[], int len) {
   }
 }
 
-int GetMinIndex(int arr[], int left, int right) {
+static int GetMinIndex(int arr[], int left, int right) {
   int res;
   if (left > right) {
     cout << "Invalid interval!" << endl;
     exit(1);
   }
-  int k = (int)((log((double)(right-left+1))) / log(2.0));
+  int k = static_cast<int>( log(static_cast<double>(right-left+1)) / log(2.0) );
   if (arr[index_min[left][k]] < arr[index_min[right-(1<<k)+1][k]]) {
     res = index_min[left][k];
   } else {
@@ -47,16 +45,16 @@ int GetMinIndex(int arr[], int left, int right) {
   return res;
 }
 
-int GetMin(int arr[], int left, int right) {
+static int GetMin(int arr[], int left, int right) {
   if (left > right) {
     cout << "Invalid interval!" << endl;
     exit(1);
   }
-  int k = (int)((log((double)(right-left+1))) / log(2.0));
+  int k = static_cast<int>( log(static_cast<double>(right-left+1)) / log(2.0) );
   return min(arr[index_min[left][k]], arr[index_min[right-(1<<k)+1][k]]);
 }
 
-void InitIndexMax(int arr[], int len) {
+static void InitIndexMax(int arr[], int len) {
   int i, j;
   for (i = 0; i < len; ++i) {
     index_max[i][0] = i;
@@ -72,13 +70,13 @@ void InitIndexMax(int arr[], int len) {
   }
 }
 
-int GetMaxIndex(int arr[], int left, int right) {
+static int GetMaxIndex(int arr[], int left, int right) {
   int res;
   if (left > right) {
     cout << "Invalid interval!" << endl;
     exit(1);
   }
-  int k = (int)((log((double)(right-left+1))) / log(2.0));
+  int k = static_cast<int>( log(static_cast<double>(right-left+1)) / log(2.0) );
   if (arr[index_max[left][k]] > arr[index_max[right-(1<<k)+1][k]]) {
     res = index_max[left][k];
   } else {
@@ -87,22 +85,21 @@ int GetMaxIndex(int arr[], int left, int right) {
   return res;
 }
 
-int GetMax(int arr[], int left, int right) {
+static int GetMax(int arr[], int left, int right) {
   if (left > right) {
     cout << "Invalid interval!" << endl;
     exit(1);
   }
-  int k = (int)((log((double)(right-left+1))) / log(2.0));
+  int k = static_cast<int>( log(static_cast<double>((right-left+1))) / log(2.0) );
   return max(arr[index_max[left][k]], arr[index_max[right-(1<<k)+1][k]]);
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   const int M = 1000;
   const int L = 16;
   int* arr = new int[L];
   int i, j;
   srand(0);
-  int a = 0;
 
   cout << "Index:" << endl;
   for (i = 0; i < L; ++i) {
@@ -112,7 +109,7 @@ int main(int argc, char* argv[]) {
 
   cout << "Array arr:" << endl;
   for (i = 0; i < L; ++i) {
-    a = rand() % M;
+    int a = rand() % M;
     cout << setw(4) << a;
     arr[i] = a;
   }

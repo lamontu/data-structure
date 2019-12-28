@@ -7,15 +7,19 @@
 #include <algorithm>
 #include <cmath>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
+using std::min;
+using std::max;
 
 const int MAXN = 10000;
 const int LOGMAXN = 20;
 
-int dmax[MAXN][LOGMAXN];
-int dmin[MAXN][LOGMAXN];
+static int dmax[MAXN][LOGMAXN];
+static int dmin[MAXN][LOGMAXN];
 
-void InitMax(int d[], int n) {
+static void InitMax(int d[], int n) {
   for (int i = 0; i < n; ++i) {
     dmax[i][0] = d[i];
   }
@@ -26,7 +30,7 @@ void InitMax(int d[], int n) {
   }
 }
 
-void InitMin(int d[], int n) {
+static void InitMin(int d[], int n) {
   for (int i = 0; i < n; ++i) {
     dmin[i][0] = d[i];
   }
@@ -37,7 +41,7 @@ void InitMin(int d[], int n) {
   }
 }
 
-int GetMax(int left, int right) {
+static int GetMax(int left, int right) {
   if (left > right) {
     cout << "Invalid interval!" << endl;
     exit(1);
@@ -48,11 +52,11 @@ int GetMax(int left, int right) {
     k++;
   }
   */
-  int k = (int)(log((double)(right-left+1)) / log(2.0));
+  int k = static_cast<int>( log(static_cast<double>(right-left+1)) / log(2.0) );
   return max(dmax[left][k], dmax[right-(1<<k)+1][k]);
 }
 
-int GetMin(int left, int right) {
+static int GetMin(int left, int right) {
   if (left > right) {
     cout << "Invalid interval!" << endl;
     exit(1);
@@ -65,15 +69,13 @@ int GetMin(int left, int right) {
 }
 
 
-int main(int argc, char* argv[]) {
+int main() {
   const int M = 1000;
   const int L = 16;
   int* arr = new int[L];
   srand(0);
-  int a = 0;
   for (int i = 0; i < L; ++i) {
-    a = rand() % M;
-    arr[i] = a;
+    arr[i] = rand() % M;
   }
   cout << endl;
 
