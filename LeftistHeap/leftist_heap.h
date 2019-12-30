@@ -1,4 +1,4 @@
-/* leftist_heap.h 
+/* leftist_heap.h
  * The key of a node is less than or equal its children like minimum heap.
  * Null path length, NPL
  * NPL of leaf = 0
@@ -7,13 +7,15 @@
  * NPL of node = NPL of right child + 1
  */
 
-#ifndef __LEFTIST_HEAP_H__
-#define __LEFTIST_HEAP_H__
+#ifndef LEFTIST_HEAP_H_
+#define LEFTIST_HEAP_H_
 
 #include <iomanip>
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
 template<typename T>
 struct LeftistNode {
@@ -54,7 +56,7 @@ class LeftistHeap {
 
   void swap_node(LeftistNode<T>* & x, LeftistNode<T>* & y);
   LeftistNode<T>* merge(LeftistNode<T>* & x, LeftistNode<T>* & y);
-  LeftistNode<T>* insert(LeftistNode<T>* & heap, T key);
+  LeftistNode<T>* insert(LeftistNode<T>* heap, T key);
   LeftistNode<T>* remove_min(LeftistNode<T>* & heap);
 
   void destroy(LeftistNode<T>* & heap);
@@ -160,7 +162,7 @@ void LeftistHeap<T>::Merge(LeftistHeap<T>* other) {
 }
 
 template<typename T>
-LeftistNode<T>* LeftistHeap<T>::insert(LeftistNode<T>* & heap, T key) {
+LeftistNode<T>* LeftistHeap<T>::insert(LeftistNode<T>* heap, T key) {
   LeftistNode<T>* node;
   node = new LeftistNode<T>(key, nullptr, nullptr);
   if (nullptr == node) {
@@ -234,4 +236,4 @@ void LeftistHeap<T>::Print() {
   }
 }
 
-#endif  // __LEFTIST_HEAP_H__
+#endif  // LEFTIST_HEAP_H_

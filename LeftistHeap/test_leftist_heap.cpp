@@ -1,16 +1,14 @@
-/* test_leftist_heap.cpp */
-
 #include "leftist_heap.h"
 #include <iostream>
 
-void Visit(const int& a) {
+static void Visit(const int& a) {
   cout << a << ", ";
 }
 
 typedef void(* FuncType)(const int&);
-FuncType func = Visit;
+static FuncType func = Visit;
 
-int main(int argc, char* argv[]) {
+int main() {
   cout << "================================" << endl;
   int i;
   int a[] = {10, 40, 24, 30, 36, 20, 12, 16};
@@ -53,7 +51,7 @@ int main(int argc, char* argv[]) {
   ha->Print();
 
   ha->Destroy();
-  //hb->Destroy();  // Error, LeftistHeap hb has been destroyed after merge.
+  // hb->Destroy();  // Error, LeftistHeap hb has been destroyed after merge.
 
   cout << "================================" << endl;
   return 0;
