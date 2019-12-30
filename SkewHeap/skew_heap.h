@@ -1,14 +1,16 @@
-/* skew_heap.h 
+/* skew_heap.h
  * The key of a node is less than or equal its children like minimum heap.
  */
 
-#ifndef __LEFTIST_HEAP_H__
-#define __LEFTIST_HEAP_H__
+#ifndef SKEW_HEAP_H_
+#define SKEW_HEAP_H_
 
 #include <iomanip>
 #include <iostream>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::setw;
 
 template<typename T>
 struct SkewNode {
@@ -48,7 +50,7 @@ class SkewHeap {
 
   void swap_node(SkewNode<T>* & x, SkewNode<T>* & y);
   SkewNode<T>* merge(SkewNode<T>* & x, SkewNode<T>* & y);
-  SkewNode<T>* insert(SkewNode<T>* & heap, T key);
+  SkewNode<T>* insert(SkewNode<T>* heap, T key);
   SkewNode<T>* remove_min(SkewNode<T>* & heap);
 
   void destroy(SkewNode<T>* & heap);
@@ -145,7 +147,7 @@ void SkewHeap<T>::Merge(SkewHeap<T>* other) {
 }
 
 template<typename T>
-SkewNode<T>* SkewHeap<T>::insert(SkewNode<T>* & heap, T key) {
+SkewNode<T>* SkewHeap<T>::insert(SkewNode<T>* heap, T key) {
   SkewNode<T>* node;
   node = new SkewNode<T>(key, nullptr, nullptr);
   if (nullptr == node) {
@@ -218,4 +220,4 @@ void SkewHeap<T>::Print() {
   }
 }
 
-#endif  // __LEFTIST_HEAP_H__
+#endif  // SKEW_HEAP_H_

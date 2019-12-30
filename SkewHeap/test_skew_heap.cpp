@@ -1,16 +1,13 @@
-/* test_skew_heap.cpp */
-
 #include "skew_heap.h"
-#include <iostream>
 
-void Visit(const int& a) {
+static void Visit(const int& a) {
   cout << a << ", ";
 }
 
 typedef void(* FuncType)(const int&);
-FuncType func = Visit;
+static FuncType func = Visit;
 
-int main(int argc, char* argv[]) {
+int main() {
   cout << "================================" << endl;
   int i;
   int a[] = {10, 40, 24, 30, 36, 20, 12, 16};
