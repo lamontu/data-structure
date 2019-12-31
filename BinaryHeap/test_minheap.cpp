@@ -1,7 +1,6 @@
-/* test_minheap.cpp */
-
 #include "minheap.h"
-#include <iostream>
+
+using std::cout;
 
 int main() {
   MinHeap<int> h;

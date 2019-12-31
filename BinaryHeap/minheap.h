@@ -1,11 +1,10 @@
-/* minheap.h */
-
 #ifndef MINHEAP_H_
 #define MINHEAP_H_
 
 #include <iostream>
 
-using namespace std;
+using std::cerr;
+using std::endl;
 
 const int INITSIZE = 20;
 const int EXTFACTOR = 2;
@@ -25,6 +24,8 @@ class MinHeap {
  public:
   explicit MinHeap(int maxSize =  INITSIZE);
   MinHeap(T* array, int length);
+  MinHeap(const MinHeap<T>& other);
+  MinHeap<T>& operator=(const MinHeap<T>& rhs);
   ~MinHeap();
 
   inline bool isEmpty() const;
@@ -61,6 +62,40 @@ MinHeap<T>::MinHeap(T* array, int length) {
   for (int i = currentSize / 2; i > 0; --i) {
     filterDown(i);
   }
+}
+
+template<typename T>
+MinHeap<T>::MinHeap(const MinHeap<T>& other) {
+  capacity = other.capacity;
+  currentSize = other.currentSize;
+  elements = new T[capacity + 1];
+  if (nullptr == elements) {
+    cerr << "Out of memory!" << endl;
+  }
+  for (size_t k = 1; k < currentSize; ++k) {
+    elements[k] = other.elements[k];
+  }
+}
+
+template<typename T>
+MinHeap<T>& MinHeap<T>::operator=(const MinHeap<T>& rhs) {
+  if (this == &rhs) {
+    return *this;
+  }
+
+  delete [] elements;
+
+  capacity = rhs.capacity;
+  currentSize = rhs.currentSize;
+  elements = new T[capacity + 1];
+  if (nullptr == elements) {
+    cerr << "Out of memory!" << endl;
+  }
+  for (size_t k = 1; k < currentSize; ++k) {
+    elements[k] = rhs.elements[k];
+  }
+
+  return *this;
 }
 
 template<typename T>
