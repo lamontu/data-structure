@@ -1,12 +1,9 @@
-/* huffmancode.h */
+#ifndef HUFFMAN_CODE_H_
+#define HUFFMAN_CODE_H_
 
-#ifndef __HUFFMAN_CODE_H__
-#define __HUFFMAN_CODE_H__
-
-#include <iostream>
 #include "minheap.h"
 
-using namespace std;
+using std::cout;
 
 template<typename T, typename W>
 struct CodeObject {
@@ -19,8 +16,8 @@ const int CODESIZE = 2;
 template<typename T>
 struct HCNode {
   T data;
+  size_t length;
   unsigned char bits[CODESIZE];
-  unsigned int length;
 };
 
 template<typename T, typename W>
@@ -31,9 +28,7 @@ struct HTNode {
   HTNode<T, W>* right;
 
   HTNode(const T& x, const W w, HTNode<T, W>* lp=nullptr,
-         HTNode<T, W>* rp=nullptr) {
-    data = x;
-    cost = w;
+         HTNode<T, W>* rp=nullptr) : data(x), cost(w) {
     left = lp;
     right = rp;
   }
@@ -78,49 +73,48 @@ class HuffmanTree {
   HuffmanTree();
   ~HuffmanTree();
 
-  void code(CodeObject<T, W>* codeArray, int length);
-  bool decode(unsigned char bits[CODESIZE], unsigned int length,
-              T& decodedword);
-  void printCode(unsigned char bits[CODESIZE], unsigned int length);
+  void encode(CodeObject<T, W>* codeArray, size_t length);
+  bool decode(unsigned char bits[CODESIZE], size_t length, T& decodedword);
+  void printCode(unsigned char bits[CODESIZE], size_t length);
   void printCodeTable();
  private:
-  HTNSmartPtr<T, W> root;
-  int arraySize;
-  HCNode<T>* codeTable;
+  HTNSmartPtr<T, W> m_root;
+  size_t m_tableSize;
+  HCNode<T>* m_codeTable;
 
   void createHuffmanTree(CodeObject<T, W>* codeArray);
   void createCodeTable();
-  void createCodeTableRecursive(HTNSmartPtr<T, W> ht, unsigned char* code,
-                                int pos, int& index);
-  void setBit(unsigned char* bits, unsigned int pos, unsigned int state);
-  unsigned int getBit(unsigned char* codeword, unsigned int pos);
+  void createCodeTableRecursive(HTNSmartPtr<T, W> ht, unsigned char* table,
+                                size_t pos, size_t& index);
+  void setBit(unsigned char* bits, size_t pos, bool state);
+  size_t getBit(unsigned char* codeword, size_t pos);
 
   void destroy(HTNode<T, W>* & r);
 };
 
 template<typename T, typename W>
-HuffmanTree<T, W>::HuffmanTree() : root(nullptr) {
-  arraySize = 0;
-  codeTable = nullptr;
+HuffmanTree<T, W>::HuffmanTree() : m_root(nullptr) {
+  m_tableSize = 0;
+  m_codeTable = nullptr;
 }
 
 template<typename T, typename W>
 HuffmanTree<T, W>::~HuffmanTree() {
-  HTNode<T, W>* r = root;
+  HTNode<T, W>* r = m_root;
   destroy(r);
-  root = nullptr;
-  delete [] codeTable;
-  codeTable = nullptr;
+  m_root = nullptr;
+  delete [] m_codeTable;
+  m_codeTable = nullptr;
 }
 
 // Huffman coding
 template<typename T, typename W>
-void HuffmanTree<T, W>::code(CodeObject<T, W>* codeArray, int length) {
-  arraySize = length;
-  if (codeTable != nullptr) {
-    delete [] codeTable;
+void HuffmanTree<T, W>::encode(CodeObject<T, W>* codeArray, size_t length) {
+  m_tableSize = length;
+  if (m_codeTable != nullptr) {
+    delete [] m_codeTable;
   }
-  codeTable = new HCNode<T>[arraySize];
+  m_codeTable = new HCNode<T>[m_tableSize];
   createHuffmanTree(codeArray);
   createCodeTable();
 }
@@ -130,9 +124,9 @@ void HuffmanTree<T, W>::code(CodeObject<T, W>* codeArray, int length) {
  */
 template<typename T, typename W>
 bool HuffmanTree<T, W>::decode(unsigned char codeword[CODESIZE],
-                               unsigned int length, T& decodeword) {
+                               size_t length, T& decodeword) {
   unsigned int pos = 0;
-  HTNSmartPtr<T, W> p = root;
+  HTNSmartPtr<T, W> p = m_root;
   for (pos = 0; pos < length; ++pos) {
     if (p != nullptr) {
       if (getBit(codeword, pos) == 0) {
@@ -156,7 +150,7 @@ bool HuffmanTree<T, W>::decode(unsigned char codeword[CODESIZE],
 // Print the coded word
 template<typename T, typename W>
 inline void HuffmanTree<T, W>::printCode(unsigned char codeword[CODESIZE],
-                                         unsigned int length) {
+                                         size_t length) {
   for (unsigned int j = 0; j < length; ++j) {
     cout << getBit(codeword, j);
   }
@@ -166,10 +160,10 @@ inline void HuffmanTree<T, W>::printCode(unsigned char codeword[CODESIZE],
 template<typename T, typename W>
 void HuffmanTree<T, W>::printCodeTable() {
   cout << "Object\tCode\tSize" << endl;
-  for (int i = 0; i < arraySize; ++i) {
-    cout << codeTable[i].data << "\t";
-    printCode(codeTable[i].bits, codeTable[i].length);
-    cout << "\t" << codeTable[i].length << endl;
+  for (size_t i = 0; i < m_tableSize; ++i) {
+    cout << m_codeTable[i].data << "\t";
+    printCode(m_codeTable[i].bits, m_codeTable[i].length);
+    cout << "\t" << m_codeTable[i].length << endl;
   }
   cout << endl;
 }
@@ -177,11 +171,11 @@ void HuffmanTree<T, W>::printCodeTable() {
 // Create the Huffman tree
 template<typename T, typename W>
 void HuffmanTree<T, W>::createHuffmanTree(CodeObject<T, W>* codeArray) {
-  MinHeap<HTNSmartPtr<T, W>> heap(arraySize);
+  MinHeap<HTNSmartPtr<T, W> > heap(m_tableSize);
   HTNSmartPtr<T, W> tree = nullptr,
                     subtreeL = nullptr,
                     subtreeR = nullptr;
-  for (int i = 0; i < arraySize; ++i) {
+  for (size_t i = 0; i < m_tableSize; ++i) {
     tree = new HTNode<T, W>(codeArray[i].data, codeArray[i].cost,
                             nullptr, nullptr);
     heap.insert(tree);
@@ -193,39 +187,39 @@ void HuffmanTree<T, W>::createHuffmanTree(CodeObject<T, W>* codeArray) {
                             subtreeL, subtreeR);
     heap.insert(tree);
   }
-  heap.deleteMin(root);
+  heap.deleteMin(m_root);
 }
 
 // Create the coded character table
 template<typename T, typename W>
 void HuffmanTree<T, W>::createCodeTable() {
-  for (int i = 0; i < arraySize; ++i) {
-    codeTable[i].data = T();
-    codeTable[i].length = 0;
+  for (size_t i = 0; i < m_tableSize; ++i) {
+    m_codeTable[i].data = T();
+    m_codeTable[i].length = 0;
   }
-  unsigned char code[CODESIZE];
-  int index = 0;
-  createCodeTableRecursive(root, code, 0, index);
+  unsigned char table[CODESIZE];
+  size_t index = 0;
+  createCodeTableRecursive(m_root, table, 0, index);
 }
 
 // Create the code character table
 template<typename T, typename W>
 void HuffmanTree<T, W>::createCodeTableRecursive(HTNSmartPtr<T, W> ht,
-                          unsigned char* code, int pos, int& index) {
+                          unsigned char* table, size_t pos, size_t& index) {
   if (ht->left) {
-    setBit(code, pos, 0);
-    createCodeTableRecursive(ht->left, code, pos + 1, index);
+    setBit(table, pos, 0);
+    createCodeTableRecursive(ht->left, table, pos + 1, index);
   }
   if (ht->right) {
-    setBit(code, pos, 1);
-    createCodeTableRecursive(ht->right, code, pos + 1, index);
+    setBit(table, pos, 1);
+    createCodeTableRecursive(ht->right, table, pos + 1, index);
   }
   if (nullptr == ht->left && nullptr == ht->right) {
-    codeTable[index].data = ht->data;
+    m_codeTable[index].data = ht->data;
     for (int i = 0; i < CODESIZE; ++i) {
-      codeTable[index].bits[i] = code[i];
+      m_codeTable[index].bits[i] = table[i];
     }
-    codeTable[index].length = pos;
+    m_codeTable[index].length = pos;
     index++;
   }
 }
@@ -235,8 +229,7 @@ void HuffmanTree<T, W>::createCodeTableRecursive(HTNSmartPtr<T, W> ht,
  * Each char element contains 8 bits.
  */
 template<typename T, typename W>
-void HuffmanTree<T, W>::setBit(unsigned char* bits, unsigned int pos,
-                               unsigned int state) {
+void HuffmanTree<T, W>::setBit(unsigned char* bits, size_t pos, bool state) {
   unsigned char mask = 0x80;
   for (unsigned int i = 0; i < (pos % 8); ++i) {
     mask = mask >> 1;
@@ -253,12 +246,12 @@ void HuffmanTree<T, W>::setBit(unsigned char* bits, unsigned int pos,
 
 // Get the state of the bit at position pos int the array bits
 template<typename T, typename W>
-unsigned int HuffmanTree<T, W>::getBit(unsigned char* bits, unsigned int pos) {
+size_t HuffmanTree<T, W>::getBit(unsigned char* bits, size_t pos) {
   unsigned char mask = 0x80;
   for (unsigned int i = 0; i < (pos % 8); ++i) {
     mask = mask >> 1;
   }
-  return ( ((mask & bits[(int)(pos / 8)]) == mask) ? 1 : 0 );
+  return ((mask & bits[pos / 8]) == mask) ? 1 : 0;
 }
 
 template<typename T, typename W>
@@ -271,4 +264,4 @@ void HuffmanTree<T, W>::destroy(HTNode<T, W>* & r) {
   }
 }
 
-#endif  // __HUFFMAN_CODE_H__
+#endif  // HUFFMAN_CODE_H_

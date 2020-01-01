@@ -1,27 +1,24 @@
-/* test_huffmancode.cpp */
-
 #include "huffmancode.h"
-#include <iostream>
 
-using namespace std;
+using std::string;
 
-const int CHARNUM = 128;
-
-template<typename T, typename W>
-void createCodeInfo(string& str, CodeObject<T, W>* & codeArr, int& length);
+const size_t CHARNUM = 128;
 
 template<typename T, typename W>
-void printCodeInfo(CodeObject<T, W>* & codeArr, int length);
+void createCodeInfo(string& str, CodeObject<T, W>* & codeArr, size_t& length);
 
-int main(int argc, char* argv[]) {
-  int length = 0;
+template<typename T, typename W>
+void printCodeInfo(CodeObject<T, W>* & codeArr, size_t length);
+
+int main() {
+  size_t length = 0;
   CodeObject<char, int>* codeArr = nullptr;
   string str = "AAAABBCD";
   createCodeInfo(str, codeArr, length);
   printCodeInfo(codeArr, length);
 
   HuffmanTree<char, int> ht;
-  ht.code(codeArr, length);
+  ht.encode(codeArr, length);
   ht.printCodeTable();
 
   char decodeResult;
@@ -56,24 +53,24 @@ int main(int argc, char* argv[]) {
 
 // Generate the array for counting character frequency
 template<typename T, typename W>
-void createCodeInfo(string& str, CodeObject<T, W>* & codeArr, int& length) {
+void createCodeInfo(string& str, CodeObject<T, W>* & codeArr, size_t& length) {
   char charFreq[CHARNUM];
   int index[CHARNUM];
-  for (int i = 0; i < CHARNUM; ++i) {
+  for (size_t i = 0; i < CHARNUM; ++i) {
     charFreq[i] = 0;
     index[i] = -1;
   }
   length = 0;
-  for (unsigned int i = 0; i < str.size(); ++i) {
+  for (size_t i = 0; i < str.size(); ++i) {
     charFreq[int(str[i])] += 1;
   }
-  for (int i = 0; i < CHARNUM; ++i) {
+  for (size_t i = 0; i < CHARNUM; ++i) {
     if (charFreq[i]) {
       index[length++] = i;
     }
   }
   codeArr = new CodeObject<T, W>[length];
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     codeArr[i].data = index[i];
     codeArr[i].cost = charFreq[index[i]];
   }
@@ -81,9 +78,9 @@ void createCodeInfo(string& str, CodeObject<T, W>* & codeArr, int& length) {
 
 // Print the characters and there frequency
 template<typename T, typename W>
-void printCodeInfo(CodeObject<T, W>* & codeArr, int length) {
+void printCodeInfo(CodeObject<T, W>* & codeArr, size_t length) {
   cout << "Object\tCode" << endl;
-  for (int i = 0; i < length; ++i) {
+  for (size_t i = 0; i < length; ++i) {
     cout << codeArr[i].data << "\t" << codeArr[i].cost << endl;
   }
   cout << endl;
