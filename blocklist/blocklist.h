@@ -1,11 +1,11 @@
-/* blocklist.h */
-
-#ifndef __BLOCK_LIST_H__
-#define __BLOCK_LIST_H__
+#ifndef BLOCK_LIST_H_
+#define BLOCK_LIST_H_
 
 #include <iostream>
 
-using namespace std;
+using std::reverse;
+using std::cout;
+using std::endl;
 
 const int MAXN = 300;
 
@@ -68,8 +68,8 @@ class Block {
     return true;
   }
 
-  T select(int k) {
-    if (k < len && k >= 0) {
+  T select(size_t k) {
+    if (k < len) {
       return data[k];
     }
     return 0;  // Not sure
@@ -85,10 +85,10 @@ class Block {
     nextBlock = nullptr;
   }
 
-  void setData(T array[], int len) {
-    this->len = len;
+  void setData(T array[], size_t length) {
+    this->len = length;
     int i;
-    for (i = 0; i < len; ++i) {
+    for (i = 0; i < length; ++i) {
       this->data[i] = array[i];
     }
   }
@@ -110,17 +110,17 @@ class BlockList {
     offset = -1;  // Equivalent to index
   }
 
-  void moveKth(int pos);
+  void moveKth(size_t pos);
   void Next();
   void Prev();
-  void get(int n);
-  void insert(T array[], int n);
-  void erase(int n);
+  void get(size_t n);
+  void insert(T array[], size_t n);
+  void erase(size_t n);
 };
 
 // Move offset forward for pos steps
 template<typename T>
-void BlockList<T>::moveKth(int pos) {
+void BlockList<T>::moveKth(size_t pos) {
   Block<T> *father = head, *temp = head->next;
   int accumulation = 0;
   while (temp != nullptr) {
@@ -183,13 +183,13 @@ void BlockList<T>::Next() {
 }
 
 template<typename T>
-void BlockList<T>::get(int n) {
+void BlockList<T>::get(size_t n) {
   if (this->offset == -1) {
     if (nullptr == head->next) return;
     cur = head->next;
   }
   Block<T>* temp = cur;
-  int i, pos;
+  size_t i, pos;
   for (i = 0, pos = this->offset + 1; i < n; ++i, ++pos) {
     if (pos == temp->len) {
       temp = temp->next;
@@ -204,8 +204,8 @@ void BlockList<T>::get(int n) {
 }
 
 template<typename T>
-void BlockList<T>::insert(T array[], int n) {
-  if (n <= 0) return;
+void BlockList<T>::insert(T array[], size_t n) {
+  if (n == 0) return;
   Block<T> *father, *next;
   if (this->offset == -1) {
     next = head->next;
@@ -215,7 +215,7 @@ void BlockList<T>::insert(T array[], int n) {
     next = cur->next;
     father = cur;
   }
-  int len, accumulation = 0;
+  size_t len, accumulation = 0;
   do {
     Block<T>* newBlock = new Block<T>(nullptr, father);
     if (n > Block<T>::maxn) {
@@ -238,14 +238,14 @@ void BlockList<T>::insert(T array[], int n) {
 }
 
 template<typename T>
-void BlockList<T>::erase(int n) {
+void BlockList<T>::erase(size_t n) {
   if (this->offset == -1) {
     if (nullptr == head->next) return;
     cur = head;
   } else {
     cur->split(this->offset + 1);
   }
-  int accumulation = 0;
+  size_t accumulation = 0;
   Block<T>* temp = cur->next;
   while (temp != nullptr) {
     if (temp->len + accumulation <= n) {
@@ -266,4 +266,4 @@ void BlockList<T>::erase(int n) {
   }
 }
 
-#endif // __BLOCK_LSIT_H__
+#endif  // BLOCK_LIST_H_
