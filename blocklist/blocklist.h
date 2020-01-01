@@ -20,8 +20,8 @@ class Block {
   Block(Block<T>* to, Block<T>* from) : next(to), prev(from), m_length(0), rev(false) { }
 
   /* Split a block at pos
-   * [0, len) -> [0, pos), [pos, len)
-   * 1 <= pos < len
+   * [0, m_length) -> [0, pos), [pos, m_length)
+   * 1 <= pos < m_length
    */
   void split(int pos) {
     if (pos >= m_length || pos <= 0) return;
@@ -57,8 +57,7 @@ class Block {
     this->next = nextBlock->next;
     if(nextBlock->next != nullptr) nextBlock->next->prev = this;
     // strcpy((char*)&this->data[len], (char*)nextBlock->data)
-    int i;
-    for (i = 0; i < nextBlock->m_length; ++i) {
+    for (size_t i = 0; i < nextBlock->m_length; ++i) {
       m_data[this->m_length++] = nextBlock->m_data[i];
     }
     delete nextBlock;
@@ -107,6 +106,20 @@ class BlockList {
     current = head;
     offset = -1;  // Equivalent to index
   }
+
+  ~BlockList() {
+    Block<T>* ptr = head;
+    while (head != nullptr) {
+      head = head->next;
+      delete ptr;
+      ptr = head;
+    }
+    head = current = nullptr;
+    offset = -1;
+  }
+
+  BlockList(const BlockList& other) = delete;
+  BlockList& operator=(const BlockList& rhs) = delete;
 
   void moveKth(size_t pos);
   void Next();
