@@ -1,13 +1,15 @@
-/* treap.h */
+#ifndef TREAP_H_
+#define TREAP_H_
 
-#ifndef __TREAP_H__
-#define __TREAP_H__
-
+#include <algorithm>
 #include <iostream>
 
-using namespace std;
+using std::max;
+using std::sort;
+using std::cout;
+using std::endl;
 
-int COUNT;  // Count different key
+static int COUNT;  // Count different key
 
 template<typename T>
 struct TreapNode {
@@ -18,9 +20,9 @@ struct TreapNode {
   int size;
   int count;
 
-  TreapNode(T value=T())
-    : key(value), left(nullptr), right(nullptr),
-      size(1), count(1), priority(rand()) {  }
+  TreapNode(T value=T()) : left(nullptr), right(nullptr), key(value),
+    priority(rand()), size(1), count(1) {  }
+
   void Update() {
     size = count;
     if (left != nullptr) {
@@ -30,9 +32,11 @@ struct TreapNode {
       size += right->size;
     }
   }
+
   int LeftSize() {
     return nullptr == left ? 0 : left->size;
   }
+
   int RightSize() {
     return nullptr == right ? 0 : right->size;
   }
@@ -312,4 +316,4 @@ void Treap<T>::Remove(T key) {
   root_ = remove(root_, node);
 }
 
-#endif  // __TREAP_H__
+#endif  // TREAP_H_

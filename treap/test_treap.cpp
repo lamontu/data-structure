@@ -1,29 +1,24 @@
-/* test_treap.cpp */
-
 #include "treap.h"
-#include <iostream>
-#include <algorithm>
 #include <vector>
 
-void Visit(const int& a) {
+using std::vector;
+
+static void Visit(const int& a) {
   cout << a << ", ";
 }
 
 typedef void(*FuncType)(const int&);
-FuncType pfun = Visit;
+static FuncType pfun = Visit;
 
-using namespace std;
-
-int main(int argc, char* argv[]) {
+int main() {
   const int M = 100;
   const int K = 15;
   Treap<int> tree;
   srand(0);
-  int a = 0;
   vector<int> vec;
   cout << "## Add elements int treap:" << endl;
   for (int i = 0; i < K; ++i) {
-    a = rand() % M;
+    int a = rand() % M;
     vec.push_back(a);
     cout << a << ", ";
     tree.Insert(a);

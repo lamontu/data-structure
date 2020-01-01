@@ -1,27 +1,21 @@
-/* test_treap_big.cpp */
-
 #include "treap.h"
-#include <iostream>
 
-void Visit(const int& a) {
+static void Visit(const int& a) {
   cout << a << ", ";
 }
 
 typedef void(*FuncType)(const int&);
-FuncType pfun = Visit;
+static FuncType pfun = Visit;
 
-using namespace std;
-
-int main(int argc, char* argv[]) {
-  freopen("out.txt", "w", stdout);
+int main() {
+  FILE* fp = freopen("out.txt", "w", stdout);
   int const M = 10000;
-  int const L = 500; 
+  int const L = 500;
   Treap<int> tree;
   srand(0);
-  int a;
   cout << "## Add elements into treap:" << endl;
   for (int i = 0; i < L; ++i) {
-    a = rand() % M;
+    int a = rand() % M;
     cout << a << ", ";
     tree.Insert(a);
   }
@@ -38,6 +32,8 @@ int main(int argc, char* argv[]) {
 
   cout << "## InOrder Traverse:" << endl;
   tree.InOrderTraverse(pfun);  cout << endl;
+
+  fclose(fp);
 
   return 0;
 }
