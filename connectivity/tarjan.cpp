@@ -38,9 +38,9 @@ static void add(size_t start,size_t y) {
     return ;
 }
 
-static void CreateGraph(size_t* start_vertexes, size_t* end_vertexes, size_t edge_num) {
+static void CreateGraph(size_t* starts, size_t* ends, size_t edge_num) {
     for (size_t i = 0; i < edge_num; ++i) {
-        add(start_vertexes[i], end_vertexes[i]);
+        add(starts[i], ends[i]);
     }
 }
 
