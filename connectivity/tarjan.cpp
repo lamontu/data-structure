@@ -14,6 +14,9 @@ static struct edge {
  } edges[MAX_SIZE];
 
 static size_t edge_index;
+// heads[key] = value
+// key is the start vertex index, value is the edge index.
+// If value == -1, no edge starts from vertex key.
 static int heads[MAX_SIZE];
 
 static bool visited[MAX_SIZE];
@@ -44,7 +47,23 @@ static void CreateGraph(size_t* starts, size_t* ends, size_t edge_num) {
     }
 }
 
+void dump_array(size_t arr[], size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        cout <<  " " << arr[i] << ", ";
+    }
+    cout << endl;
+}
+
 static void Tarjan(size_t start) {
+    cout << "DFN: ";
+    dump_array(DFN, 8);
+    cout << "LOW: ";
+    dump_array(LOW, 8);
+    cout << "stack: ";
+    dump_array(stack, st_idx + 1);
+
+    cout << "Visit vertex " << start << endl;
+
     DFN[start] = LOW[start] = ++visit_order;  // 新进点的初始化。
     stack[++st_idx]=start;  // 入栈
     visited[start]=1;  // 表示在栈里
@@ -57,34 +76,25 @@ static void Tarjan(size_t start) {
         }
     }
     if (LOW[start] == DFN[start]) {  // 发现是整个强连通分量子树里的最小根。
+        cout << "Connectivity vertex: ";
         do {
-            cout << stack[st_idx] << " ";
+            cout << stack[st_idx] << ", ";
             visited[stack[st_idx]]=0;
             st_idx--;
-        } while (start!=stack[st_idx+1]);  // 出栈，并且输出。
+        } while (start != stack[st_idx+1]);  // 出栈，并且输出。
         cout << endl;
     }
     return;
 }
 
 int main() {
-    memset(heads,-1,sizeof(heads));
-    size_t n, m;
-    cout << "Input verter number and edges number:" << endl;
-    // scanf("%d%d",&n,&m);
-    cin >> n >> m;
+    memset(heads, -1, sizeof(heads));
 
-    // size_t start,end;
-    // cout << "Input edges start vertex and end vertex:" << endl;
-    // for (size_t i = 1; i <= m; ++i) {
-    //     // scanf("%d%d",&start,&y);
-    //     cin >> start >> end;
-    //     add(start, end);
-    // }
+    size_t n = 6, m = 8;
 
     CreateGraph(start_vertexes, end_vertexes, m);
 
-    cout << "Found connectivity by tarjan:" << endl;
+    cout << "Run Tarjan:" << endl;
     for (size_t i = 1; i <= n; ++i) {
         if (!DFN[i]) {
             Tarjan(i);  // 当这个点没有访问过，就从此点开始。防止图没走完
