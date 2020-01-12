@@ -26,7 +26,7 @@ class ListUdg {
   struct ENode {
     ENode* next_edge;
     size_t vertex_index;  // The vertex this edge points to
-    int weight;
+    int weight;  // This is different from Graph without weight
   };
 
   struct VNode {
@@ -44,6 +44,7 @@ class ListUdg {
   // ~ListUdg() {  }
   void DFS() const;
   void BFS() const;
+
   void Print() const;
   void Kruskal() const;
   void Prim(size_t start) const;
@@ -54,13 +55,10 @@ class ListUdg {
   char read_char();
   size_t get_position(char ch) const;
   void link_last(ENode* list, ENode* node) const;
-
-  void dfs(int i, int* visited) const;
-
+  void dfs(size_t i, bool* visited) const;
   EData* get_edges() const;
   void sort_edges(EData* edges, size_t elen) const;
   size_t get_end(size_t vends[], size_t i) const;
-
   int get_weight(size_t start, size_t end) const;
 };
 
@@ -88,8 +86,8 @@ void ListUdg::link_last(ENode* list, ENode* node) const {
 }
 
 ListUdg::ListUdg() {
-  int weight;
   ENode *node1, *node2;
+  int weight;
 
   cout << "Input vertex number:";
   cin >> vertex_num_;
@@ -99,6 +97,7 @@ ListUdg::ListUdg() {
     cout << "Input error: invalid parameters!" << endl;
     return;
   }
+
   size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     cout << "vertex(" << i <<"): ";
@@ -131,6 +130,7 @@ ListUdg::ListUdg() {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
+
   }
 }
 
@@ -169,12 +169,13 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, EData* edges[], size_t elen) {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
+
   }
 }
 
-void ListUdg::dfs(int i, int* visited) const {
+void ListUdg::dfs(size_t i, bool* visited) const {
   ENode* node;
-  visited[i] = 1;
+  visited[i] = true;
   cout << vertexes_[i].data <<", ";
   node = vertexes_[i].first_edge;
   while (node != nullptr) {
@@ -187,9 +188,9 @@ void ListUdg::dfs(int i, int* visited) const {
 
 void ListUdg::DFS() const {
   size_t i;
-  int visited[MAX];
+  bool visited[MAX];
   for (i = 0; i < vertex_num_; ++i) {
-    visited[i] = 0;
+    visited[i] = false;
   }
   cout << "DFS: ";
   for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
@@ -204,16 +205,16 @@ void ListUdg::BFS() const {
   int head = 0;
   int rear = 0;
   size_t queue[MAX];
-  int visited[MAX];
+  bool visited[MAX];
   size_t i, j, k;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
-    visited[i] = 0;
+    visited[i] = false;
   }
   cout << "BFS: ";
   for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
     if (!visited[i]) {
-      visited[i] = 1;
+      visited[i] = true;
       cout << vertexes_[i].data << ", ";
       queue[rear++] = i;
     }
@@ -223,7 +224,7 @@ void ListUdg::BFS() const {
       while (node != nullptr) {
         k = node->vertex_index;
         if (!visited[k]) {
-          visited[k] = 1;
+          visited[k] = true;
           cout << vertexes_[k].data << ", ";
           queue[rear++] = k;
         }
@@ -563,5 +564,6 @@ int main() {
 
   delete pUdg;
   pUdg = nullptr;
+
   return 0;
 }

@@ -37,7 +37,7 @@ class ListDg {
   char read_char();
   size_t get_position(char ch) const;
   void link_last(ENode* list, ENode* node) const;
-  void dfs(size_t i, int* visited) const;
+  void dfs(size_t i, bool* visited) const;
 };
 
 char ListDg::read_char() {
@@ -122,12 +122,14 @@ ListDg::ListDg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
   for (i = 0; i < edge_num_; ++i) {
     char c1 = edges[i][0];
     char c2 = edges[i][1];
+
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
     if (p1 == MAX || p2 == MAX) continue;
 
     node1 = new ENode();
     node1->vertex_index = p2;
+
     if (nullptr == vertexes_[p1].first_edge) {
       vertexes_[p1].first_edge = node1;
     } else {
@@ -146,9 +148,9 @@ ListDg::ListDg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
   }
 }
 
-void ListDg::dfs(size_t i, int* visited) const {
+void ListDg::dfs(size_t i, bool* visited) const {
   ENode* node;
-  visited[i] = 1;
+  visited[i] = true;
   cout << vertexes_[i].data <<", ";
   node = vertexes_[i].first_edge;
   while (node != nullptr) {
@@ -161,9 +163,9 @@ void ListDg::dfs(size_t i, int* visited) const {
 
 void ListDg::DFS() const {
   size_t i;
-  int visited[MAX];
+  bool visited[MAX];
   for (i = 0; i < vertex_num_; ++i) {
-    visited[i] = 0;
+    visited[i] = false;
   }
   cout << "DFS: ";
   for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
@@ -178,16 +180,16 @@ void ListDg::BFS() const {
   int head = 0;
   int rear = 0;
   size_t queue[MAX];
-  int visited[MAX];
+  bool visited[MAX];
   size_t i, j, k;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
-    visited[i] = 0;
+    visited[i] = false;
   }
   cout << "BFS: ";
   for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
     if (!visited[i]) {
-      visited[i] = 1;
+      visited[i] = true;
       cout << vertexes_[i].data << ", ";
       queue[rear++] = i;
     }
@@ -197,7 +199,7 @@ void ListDg::BFS() const {
       while (node != nullptr) {
         k = node->vertex_index;
         if (!visited[k]) {
-          visited[k] = 1;
+          visited[k] = true;
           cout << vertexes_[k].data << ", ";
           queue[rear++] = k;
         }
@@ -280,10 +282,9 @@ int ListDg::TopologicalSort() const {
 }
 
 void ListDg::Print() const {
-  int i;
   ENode* node;
   cout << "List Graph:" << endl;
-  for (i = 0; i < vertex_num_; ++i) {
+  for (size_t i = 0; i < vertex_num_; ++i) {
     cout << i << "(" << vertexes_[i].data << "): ";
     node = vertexes_[i].first_edge;
     while (node != nullptr) {
@@ -296,14 +297,13 @@ void ListDg::Print() const {
 }
 
 int main() {
-  //char vertexes[] = {'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
   char edges[][2] = {
     {'H', 'E'}, {'H', 'F'}, {'G', 'E'}, {'G', 'F'},
     {'G', 'B'}, {'F', 'C'}, {'F', 'D'}, {'C', 'A'}
   };
-  int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
-  int elen = sizeof(edges) / sizeof(edges[0]);
+  size_t vlen = sizeof(vertexes) / sizeof(vertexes[0]);
+  size_t elen = sizeof(edges) / sizeof(edges[0]);
   ListDg* pDg;
   // pDg = new ListDg();  // Manually input
   pDg = new ListDg(vertexes, vlen, edges, elen);

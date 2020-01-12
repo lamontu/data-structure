@@ -13,6 +13,7 @@ class ListUdg {
   struct ENode {
     ENode* next_edge;
     size_t vertex_index;  // The vertex this edge points to
+    // int weight  // This is different from Graph with weight
   };
 
   struct VNode {
@@ -30,6 +31,7 @@ class ListUdg {
   // ~ListUdg() {  }
   void DFS() const;
   void BFS() const;
+
   void Print() const;
 
  private:
@@ -63,7 +65,6 @@ void ListUdg::link_last(ENode* list, ENode* node) const {
 }
 
 ListUdg::ListUdg() {
-
   ENode *node1, *node2;
 
   cout << "Input vertex number:";
@@ -75,13 +76,12 @@ ListUdg::ListUdg() {
     return;
   }
 
-  size_t i = 0;
+  size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     cout << "vertex(" << i <<"): ";
     vertexes_[i].data = read_char();
     vertexes_[i].first_edge = nullptr;
   }
-
   for (i = 0; i < edge_num_; ++i) {
     cout << "edge(" << i << "): ";
     char c1 = read_char();
@@ -106,6 +106,7 @@ ListUdg::ListUdg() {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
+
   }
 }
 
@@ -113,21 +114,23 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
   ENode *node1, *node2;
   vertex_num_ = vlen;
   edge_num_ = elen;
+
   size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     vertexes_[i].data = vertexes[i];
     vertexes_[i].first_edge = nullptr;
   }
-
   for (i = 0; i < edge_num_; ++i) {
     char c1 = edges[i][0];
     char c2 = edges[i][1];
+
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
     if (p1 == MAX || p2 == MAX) continue;
 
     node1 = new ENode();
     node1->vertex_index = p2;
+
     if (nullptr == vertexes_[p1].first_edge) {
       vertexes_[p1].first_edge = node1;
     } else {
@@ -142,12 +145,13 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
+
   }
 }
 
 void ListUdg::dfs(size_t i, bool* visited) const {
   ENode* node;
-  visited[i] = 1;
+  visited[i] = true;
   cout << vertexes_[i].data <<", ";
   node = vertexes_[i].first_edge;
   while (node != nullptr) {
@@ -177,7 +181,7 @@ void ListUdg::BFS() const {
   int head = 0;
   int rear = 0;
   size_t queue[MAX];
-  int visited[MAX];
+  bool visited[MAX];
   size_t i, j, k;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
@@ -210,7 +214,7 @@ void ListUdg::BFS() const {
 void ListUdg::Print() const {
   ENode* node;
   cout << "List Graph:" << endl;
-  for (size_t i= 0; i < vertex_num_; ++i) {
+  for (size_t i = 0; i < vertex_num_; ++i) {
     cout << i << "(" << vertexes_[i].data << "): ";
     node = vertexes_[i].first_edge;
     while (node != nullptr) {
@@ -236,6 +240,7 @@ int main() {
   pUdg->DFS();
   pUdg->BFS();
   pUdg->Print();
+
 
   delete pUdg;
   pUdg = nullptr;
