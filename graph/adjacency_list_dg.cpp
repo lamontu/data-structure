@@ -11,22 +11,22 @@ const int MAX = 100;
 class ListDg {
  private:
   struct ENode {
-    int vertex_index;  // The vertex this edge points to
     ENode* next_edge;
+    size_t vertex_index;  // The vertex this edge points to
   };
 
   struct VNode {
-    char data;
     ENode* first_edge;  // Store all jointed edges in a singly linked list
+    char data;
   };
 
-  int vertex_num_;
-  int edge_num_;
+  size_t vertex_num_;
+  size_t edge_num_;
   VNode vertexes_[MAX];
 
  public:
   ListDg();
-  ListDg(char vertexes[], int vlen, char edges[][2], int elen);
+  ListDg(char vertexes[], size_t vlen, char edges[][2], size_t elen);
   // ~ListDg() {  }
   void DFS() const;
   void BFS() const;
@@ -35,9 +35,9 @@ class ListDg {
 
  private:
   char read_char();
-  int get_position(char ch) const;
+  size_t get_position(char ch) const;
   void link_last(ENode* list, ENode* node) const;
-  void dfs(int i, int* visited) const;
+  void dfs(size_t i, int* visited) const;
 };
 
 char ListDg::read_char() {
@@ -48,12 +48,11 @@ char ListDg::read_char() {
   return ch;
 }
 
-int ListDg::get_position(char ch) const {
-  int i;
-  for (i = 0; i < vertex_num_; ++i) {
+size_t ListDg::get_position(char ch) const {
+  for (size_t i = 0; i < vertex_num_; ++i) {
     if(vertexes_[i].data == ch) return i;
   }
-  return -1;
+  return MAX;
 }
 
 void ListDg::link_last(ENode* list, ENode* node) const {
@@ -65,20 +64,18 @@ void ListDg::link_last(ENode* list, ENode* node) const {
 }
 
 ListDg::ListDg() {
-  char c1, c2;
-  int v, e;
-  int i, p1, p2;
-  ENode *node1, *node2;
+  ENode *node1;
 
   cout << "Input vertex number:";
   cin >> vertex_num_;
   cout << "Input edge number:";
   cin >> edge_num_;
-  if (vertex_num_ < 1 || edge_num_ < 0
-      || (edge_num_ > (vertex_num_ * (vertex_num_ - 1)))) {
+  if (vertex_num_ < 1 || edge_num_ > vertex_num_ * (vertex_num_ - 1)) {
     cout << "Input error: invalid parameters!" << endl;
     return;
   }
+
+  size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     cout << "vertex(" << i <<"): ";
     vertexes_[i].data = read_char();
@@ -86,10 +83,12 @@ ListDg::ListDg() {
   }
   for (i = 0; i < edge_num_; ++i) {
     cout << "edge(" << i << "): ";
-    c1 = read_char();
-    c2 = read_char();
-    p1 = get_position(c1);
-    p2 = get_position(c2);
+    char c1 = read_char();
+    char c2 = read_char();
+    size_t p1 = get_position(c1);
+    size_t p2 = get_position(c2);
+    if (p1 == MAX || p2 == MAX) continue;
+
     node1 = new ENode();
     node1->vertex_index = p2;
     if (nullptr == vertexes_[p1].first_edge) {
@@ -110,21 +109,23 @@ ListDg::ListDg() {
   }
 }
 
-ListDg::ListDg(char vertexes[], int vlen, char edges[][2], int elen) {
-  char c1, c2;
-  int i, p1, p2;
-  ENode *node1, *node2;
+ListDg::ListDg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
+  ENode *node1;
   vertex_num_ = vlen;
   edge_num_ = elen;
+
+  size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     vertexes_[i].data = vertexes[i];
     vertexes_[i].first_edge = nullptr;
   }
   for (i = 0; i < edge_num_; ++i) {
-    c1 = edges[i][0];
-    c2 = edges[i][1];
-    p1 = get_position(c1);
-    p2 = get_position(c2);
+    char c1 = edges[i][0];
+    char c2 = edges[i][1];
+    size_t p1 = get_position(c1);
+    size_t p2 = get_position(c2);
+    if (p1 == MAX || p2 == MAX) continue;
+
     node1 = new ENode();
     node1->vertex_index = p2;
     if (nullptr == vertexes_[p1].first_edge) {
@@ -145,7 +146,7 @@ ListDg::ListDg(char vertexes[], int vlen, char edges[][2], int elen) {
   }
 }
 
-void ListDg::dfs(int i, int* visited) const {
+void ListDg::dfs(size_t i, int* visited) const {
   ENode* node;
   visited[i] = 1;
   cout << vertexes_[i].data <<", ";
@@ -159,7 +160,7 @@ void ListDg::dfs(int i, int* visited) const {
 }
 
 void ListDg::DFS() const {
-  int i;
+  size_t i;
   int visited[MAX];
   for (i = 0; i < vertex_num_; ++i) {
     visited[i] = 0;
@@ -176,9 +177,9 @@ void ListDg::DFS() const {
 void ListDg::BFS() const {
   int head = 0;
   int rear = 0;
-  int queue[MAX];
+  size_t queue[MAX];
   int visited[MAX];
-  int i, j, k;
+  size_t i, j, k;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
     visited[i] = 0;
@@ -208,23 +209,23 @@ void ListDg::BFS() const {
 }
 
 int ListDg::TopologicalSort() const {
-  int i, j;
   int index = 0;
   int head = 0;
   int rear = 0;
-  int* queue;  // There's also implementation using stack.
+  size_t* queue;  // There's also implementation using stack.
   int* ins;  // Array store the in-degree of vertexes
   char* tops;
   ENode* node;
 
   ins = new int[vertex_num_];
-  queue = new int[vertex_num_];
+  queue = new size_t[vertex_num_];
   tops = new char[vertex_num_];
   memset(ins, 0, vertex_num_ * sizeof(int));
   memset(queue, 0, vertex_num_ * sizeof(int));
   memset(tops, 0, vertex_num_ * sizeof(char));
 
   // Count the in-degree of each vertex
+  size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     node = vertexes_[i].first_edge;
     while (node != nullptr) {
@@ -239,7 +240,7 @@ int ListDg::TopologicalSort() const {
     }
   }
   while (head != rear) {
-    j = queue[head++];  // dequeue
+    size_t j = queue[head++];  // dequeue
     tops[index++] = vertexes_[j].data;
     node = vertexes_[j].first_edge;
     while (node != nullptr) {
@@ -279,7 +280,7 @@ int ListDg::TopologicalSort() const {
 }
 
 void ListDg::Print() const {
-  int i, j;
+  int i;
   ENode* node;
   cout << "List Graph:" << endl;
   for (i = 0; i < vertex_num_; ++i) {
@@ -294,7 +295,7 @@ void ListDg::Print() const {
   }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   //char vertexes[] = {'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
   char edges[][2] = {

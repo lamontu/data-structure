@@ -11,22 +11,22 @@ const int MAX = 100;
 class ListUdg {
  private:
   struct ENode {
-    int vertex_index;  // The vertex this edge points to
     ENode* next_edge;
+    size_t vertex_index;  // The vertex this edge points to
   };
 
   struct VNode {
-    char data;
     ENode* first_edge;  // Store all jointed edges in a singly linked list
+    char data;
   };
 
-  int vertex_num_;
-  int edge_num_;
+  size_t vertex_num_;
+  size_t edge_num_;
   VNode vertexes_[MAX];
 
  public:
   ListUdg();
-  ListUdg(char vertexes[], int vlen, char edges[][2], int elen);
+  ListUdg(char vertexes[], size_t vlen, char edges[][2], size_t elen);
   // ~ListUdg() {  }
   void DFS() const;
   void BFS() const;
@@ -34,9 +34,9 @@ class ListUdg {
 
  private:
   char read_char();
-  int get_position(char ch) const;
+  size_t get_position(char ch) const;
   void link_last(ENode* list, ENode* node) const;
-  void dfs(int i, int* visited) const;
+  void dfs(size_t i, bool* visited) const;
 };
 
 char ListUdg::read_char() {
@@ -47,12 +47,11 @@ char ListUdg::read_char() {
   return ch;
 }
 
-int ListUdg::get_position(char ch) const {
-  int i;
-  for (i = 0; i < vertex_num_; ++i) {
+size_t ListUdg::get_position(char ch) const {
+  for (size_t i = 0; i < vertex_num_; ++i) {
     if(vertexes_[i].data == ch) return i;
   }
-  return -1;
+  return MAX;
 }
 
 void ListUdg::link_last(ENode* list, ENode* node) const {
@@ -64,31 +63,33 @@ void ListUdg::link_last(ENode* list, ENode* node) const {
 }
 
 ListUdg::ListUdg() {
-  char c1, c2;
-  int v, e;
-  int i, p1, p2;
+
   ENode *node1, *node2;
 
   cout << "Input vertex number:";
   cin >> vertex_num_;
   cout << "Input edge number:";
   cin >> edge_num_;
-  if (vertex_num_ < 1 || edge_num_ < 0
-      || (edge_num_ > (vertex_num_ * (vertex_num_ - 1)))) {
+  if (vertex_num_ < 1 || edge_num_ > vertex_num_ * (vertex_num_ - 1)) {
     cout << "Input error: invalid parameters!" << endl;
     return;
   }
+
+  size_t i = 0;
   for (i = 0; i < vertex_num_; ++i) {
     cout << "vertex(" << i <<"): ";
     vertexes_[i].data = read_char();
     vertexes_[i].first_edge = nullptr;
   }
+
   for (i = 0; i < edge_num_; ++i) {
     cout << "edge(" << i << "): ";
-    c1 = read_char();
-    c2 = read_char();
-    p1 = get_position(c1);
-    p2 = get_position(c2);
+    char c1 = read_char();
+    char c2 = read_char();
+    size_t p1 = get_position(c1);
+    size_t p2 = get_position(c2);
+    if (p1 == MAX || p2 == MAX) continue;
+
     node1 = new ENode();
     node1->vertex_index = p2;
     if (nullptr == vertexes_[p1].first_edge) {
@@ -105,25 +106,26 @@ ListUdg::ListUdg() {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
-
   }
 }
 
-ListUdg::ListUdg(char vertexes[], int vlen, char edges[][2], int elen) {
-  char c1, c2;
-  int i, p1, p2;
+ListUdg::ListUdg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
   ENode *node1, *node2;
   vertex_num_ = vlen;
   edge_num_ = elen;
+  size_t i;
   for (i = 0; i < vertex_num_; ++i) {
     vertexes_[i].data = vertexes[i];
     vertexes_[i].first_edge = nullptr;
   }
+
   for (i = 0; i < edge_num_; ++i) {
-    c1 = edges[i][0];
-    c2 = edges[i][1];
-    p1 = get_position(c1);
-    p2 = get_position(c2);
+    char c1 = edges[i][0];
+    char c2 = edges[i][1];
+    size_t p1 = get_position(c1);
+    size_t p2 = get_position(c2);
+    if (p1 == MAX || p2 == MAX) continue;
+
     node1 = new ENode();
     node1->vertex_index = p2;
     if (nullptr == vertexes_[p1].first_edge) {
@@ -140,11 +142,10 @@ ListUdg::ListUdg(char vertexes[], int vlen, char edges[][2], int elen) {
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
-
   }
 }
 
-void ListUdg::dfs(int i, int* visited) const {
+void ListUdg::dfs(size_t i, bool* visited) const {
   ENode* node;
   visited[i] = 1;
   cout << vertexes_[i].data <<", ";
@@ -158,10 +159,10 @@ void ListUdg::dfs(int i, int* visited) const {
 }
 
 void ListUdg::DFS() const {
-  int i;
-  int visited[MAX];
+  size_t i;
+  bool visited[MAX];
   for (i = 0; i < vertex_num_; ++i) {
-    visited[i] = 0;
+    visited[i] = false;
   }
   cout << "DFS: ";
   for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
@@ -175,17 +176,17 @@ void ListUdg::DFS() const {
 void ListUdg::BFS() const {
   int head = 0;
   int rear = 0;
-  int queue[MAX];
+  size_t queue[MAX];
   int visited[MAX];
-  int i, j, k;
+  size_t i, j, k;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
-    visited[i] = 0;
+    visited[i] = false;
   }
   cout << "BFS: ";
   for (i = 0; i < vertex_num_; ++i) { // For loop is necessary for a disconnected graph.
     if (!visited[i]) {
-      visited[i] = 1;
+      visited[i] = true;
       cout << vertexes_[i].data << ", ";
       queue[rear++] = i;
     }
@@ -195,7 +196,7 @@ void ListUdg::BFS() const {
       while (node != nullptr) {
         k = node->vertex_index;
         if (!visited[k]) {
-          visited[k] = 1;
+          visited[k] = true;
           cout << vertexes_[k].data << ", ";
           queue[rear++] = k;
         }
@@ -207,10 +208,9 @@ void ListUdg::BFS() const {
 }
 
 void ListUdg::Print() const {
-  int i, j;
   ENode* node;
   cout << "List Graph:" << endl;
-  for (i = 0; i < vertex_num_; ++i) {
+  for (size_t i= 0; i < vertex_num_; ++i) {
     cout << i << "(" << vertexes_[i].data << "): ";
     node = vertexes_[i].first_edge;
     while (node != nullptr) {
@@ -222,14 +222,14 @@ void ListUdg::Print() const {
   }
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   char vertexes[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
   char edges[][2] = {
     {'A', 'C'}, {'A', 'D'}, {'A', 'F'}, {'B', 'C'},
     {'C', 'D'}, {'E', 'G'}, {'F', 'G'}
   };
-  int vlen = sizeof(vertexes) / sizeof(vertexes[0]);
-  int elen = sizeof(edges) / sizeof(edges[0]);
+  size_t vlen = sizeof(vertexes) / sizeof(vertexes[0]);
+  size_t elen = sizeof(edges) / sizeof(edges[0]);
   ListUdg* pUdg;
   // pUdg = new ListUdg();  // Manually input
   pUdg = new ListUdg(vertexes, vlen, edges, elen);
