@@ -43,6 +43,7 @@ class ListUdg {
 
 char ListUdg::read_char() {
   char ch;
+  // Input one character one time
   do {
     cin >> ch;
   } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
@@ -78,7 +79,7 @@ ListUdg::ListUdg() {
 
   size_t i;
   for (i = 0; i < vertex_num_; ++i) {
-    cout << "vertex(" << i <<"): ";
+    cout << "vertex(" << i << "): ";
     vertexes_[i].data = read_char();
     vertexes_[i].first_edge = nullptr;
   }
@@ -86,9 +87,13 @@ ListUdg::ListUdg() {
     cout << "edge(" << i << "): ";
     char c1 = read_char();
     char c2 = read_char();
+
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
-    if (p1 == MAX || p2 == MAX) continue;
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
 
     node1 = new ENode();
     node1->vertex_index = p2;
@@ -101,6 +106,7 @@ ListUdg::ListUdg() {
     /* This is different from directed graph. */
     node2 = new ENode();
     node2->vertex_index = p1;
+
     if (nullptr == vertexes_[p2].first_edge) {
       vertexes_[p2].first_edge = node2;
     } else {
@@ -126,7 +132,10 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
 
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
-    if (p1 == MAX || p2 == MAX) continue;
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
 
     node1 = new ENode();
     node1->vertex_index = p2;
@@ -140,6 +149,7 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
     /* This is different from directed graph. */
     node2 = new ENode();
     node2->vertex_index = p1;
+
     if (nullptr == vertexes_[p2].first_edge) {
       vertexes_[p2].first_edge = node2;
     } else {
@@ -182,7 +192,7 @@ void ListUdg::BFS() const {
   int rear = 0;
   size_t queue[MAX];
   bool visited[MAX];
-  size_t i, j, k;
+  size_t i, j;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
     visited[i] = false;
@@ -198,7 +208,7 @@ void ListUdg::BFS() const {
       j = queue[head++];
       node = vertexes_[j].first_edge;
       while (node != nullptr) {
-        k = node->vertex_index;
+        size_t k = node->vertex_index;
         if (!visited[k]) {
           visited[k] = true;
           cout << vertexes_[k].data << ", ";
@@ -240,7 +250,6 @@ int main() {
   pUdg->DFS();
   pUdg->BFS();
   pUdg->Print();
-
 
   delete pUdg;
   pUdg = nullptr;

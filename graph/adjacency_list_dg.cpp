@@ -77,7 +77,7 @@ ListDg::ListDg() {
 
   size_t i;
   for (i = 0; i < vertex_num_; ++i) {
-    cout << "vertex(" << i <<"): ";
+    cout << "vertex(" << i << "): ";
     vertexes_[i].data = read_char();
     vertexes_[i].first_edge = nullptr;
   }
@@ -85,9 +85,13 @@ ListDg::ListDg() {
     cout << "edge(" << i << "): ";
     char c1 = read_char();
     char c2 = read_char();
+
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
-    if (p1 == MAX || p2 == MAX) continue;
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
 
     node1 = new ENode();
     node1->vertex_index = p2;
@@ -97,15 +101,16 @@ ListDg::ListDg() {
       link_last(vertexes_[p1].first_edge, node1);
     }
 
-/* This is different from directed graph.
+  /* This is different from undirected graph.
     node2 = new ENode();
     node2->vertex_index = p1;
+
     if (nullptr == vertexes_[p2].first_edge) {
       vertexes_[p2].first_edge = node2;
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
- */
+  */
   }
 }
 
@@ -125,7 +130,10 @@ ListDg::ListDg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
 
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
-    if (p1 == MAX || p2 == MAX) continue;
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
 
     node1 = new ENode();
     node1->vertex_index = p2;
@@ -136,15 +144,16 @@ ListDg::ListDg(char vertexes[], size_t vlen, char edges[][2], size_t elen) {
       link_last(vertexes_[p1].first_edge, node1);
     }
 
-/* This is different from directed graph.
+  /* This is different from undirected graph.
     node2 = new ENode();
     node2->vertex_index = p1;
+
     if (nullptr == vertexes_[p2].first_edge) {
       vertexes_[p2].first_edge = node2;
     } else {
       link_last(vertexes_[p2].first_edge, node2);
     }
- */
+  */
   }
 }
 
@@ -181,7 +190,7 @@ void ListDg::BFS() const {
   int rear = 0;
   size_t queue[MAX];
   bool visited[MAX];
-  size_t i, j, k;
+  size_t i, j;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
     visited[i] = false;
@@ -197,7 +206,7 @@ void ListDg::BFS() const {
       j = queue[head++];
       node = vertexes_[j].first_edge;
       while (node != nullptr) {
-        k = node->vertex_index;
+        size_t k = node->vertex_index;
         if (!visited[k]) {
           visited[k] = true;
           cout << vertexes_[k].data << ", ";

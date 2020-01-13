@@ -64,6 +64,7 @@ class ListUdg {
 
 char ListUdg::read_char() {
   char ch;
+  // Input one character one time
   do {
     cin >> ch;
   } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
@@ -111,7 +112,10 @@ ListUdg::ListUdg() {
     cin >> weight;
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
-    if (p1 == MAX || p2 == MAX) continue;
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
 
     node1 = new ENode();
     node1->vertex_index = p2;
@@ -122,6 +126,7 @@ ListUdg::ListUdg() {
       link_last(vertexes_[p1].first_edge, node1);
     }
 
+    /* This is different from directed graph. */
     node2 = new ENode();
     node2->vertex_index = p1;
     node2->weight = weight;
@@ -150,7 +155,10 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, EData* edges[], size_t elen) {
     int weight = edges[i]->weight;
     size_t p1 = get_position(c1);
     size_t p2 = get_position(c2);
-    if (p1 == MAX || p2 == MAX) continue;
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
 
     node1 = new ENode();
     node1->vertex_index = p2;
@@ -161,6 +169,7 @@ ListUdg::ListUdg(char vertexes[], size_t vlen, EData* edges[], size_t elen) {
       link_last(vertexes_[p1].first_edge, node1);
     }
 
+    /* This is different from directed graph. */
     node2 = new ENode();
     node2->vertex_index = p1;
     node2->weight = weight;
@@ -206,7 +215,7 @@ void ListUdg::BFS() const {
   int rear = 0;
   size_t queue[MAX];
   bool visited[MAX];
-  size_t i, j, k;
+  size_t i, j;
   ENode* node;
   for (i = 0; i < vertex_num_; ++i) {
     visited[i] = false;
@@ -222,7 +231,7 @@ void ListUdg::BFS() const {
       j = queue[head++];
       node = vertexes_[j].first_edge;
       while (node != nullptr) {
-        k = node->vertex_index;
+        size_t k = node->vertex_index;
         if (!visited[k]) {
           visited[k] = true;
           cout << vertexes_[k].data << ", ";
