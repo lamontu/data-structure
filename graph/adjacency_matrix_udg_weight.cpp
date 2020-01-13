@@ -246,10 +246,9 @@ EData* MatrixUdg::get_edges() const {
 
 // Selection sort
 void MatrixUdg::sort_edges(EData* edges, size_t elen) const {
-  int i, j;
-  int minimum;
+  size_t i, j;
   for (i = 0; i < elen - 1; ++i) {
-    minimum = i;
+    size_t minimum = i;
     for (j = i + 1; j < elen; ++j) {
       if (edges[minimum].weight > edges[j].weight) {
         minimum = j;

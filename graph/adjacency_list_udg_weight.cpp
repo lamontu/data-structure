@@ -284,14 +284,14 @@ EData* ListUdg::get_edges() const {
 void ListUdg::sort_edges(EData* edges, size_t elen) const {
   size_t i, j;
   for (i = 0; i < elen - 1; ++i) {
-    size_t min = i;
+    size_t minimum = i;
     for (j = i + 1; j < elen; ++j) {
-      if (edges[min].weight > edges[j].weight) {
-        min = j;
+      if (edges[minimum].weight > edges[j].weight) {
+        minimum = j;
       }
     }
-    if (min == i) continue;
-    swap(edges[min], edges[i]);
+    if (minimum == i) continue;
+    swap(edges[minimum], edges[i]);
   }
 }
 
@@ -363,7 +363,7 @@ void ListUdg::Prim(size_t start) const {
    * tree which only contains vertex start.
    */
   size_t i, j, k;
-  int min, tmp;
+  int minimum, tmp;
   for (i = 0; i < vertex_num_; ++i) {
     weights[i] = get_weight(start, i);
   }
@@ -372,10 +372,10 @@ void ListUdg::Prim(size_t start) const {
     if (start == i) continue;
     j = 0;
     k = 0;
-    min = INF;
+    minimum = INF;
     while (j < vertex_num_) {
-      if (weights[j] != 0 && weights[j] < min) {
-        min = weights[j];
+      if (weights[j] != 0 && weights[j] < minimum) {
+        minimum = weights[j];
         k = j;
       }
       j++;
@@ -396,16 +396,16 @@ void ListUdg::Prim(size_t start) const {
 
   int sum = 0;
   for (i = 1; i < index; ++i) {
-    min = INF;
+    minimum = INF;
     size_t n = get_position(prims[i]);
     for (j = 0; j < i; ++j) {
       size_t m = get_position(prims[j]);
       tmp = get_weight(m, n);
-      if (tmp < min) {
-        min = tmp;
+      if (tmp < minimum) {
+        minimum = tmp;
       }
     }
-    sum += min;
+    sum += minimum;
   }
 
   cout << "Prim(" << vertexes_[start].data << ") = " << sum << ": ";
@@ -435,10 +435,10 @@ void ListUdg::Dijkstra(size_t source, int previous[], int distance[]) {
   size_t k = 0;
   // Add vertex k and mark it as finished.
   for (i = 1; i < vertex_num_; ++i) {
-    int min = INF;
+    int minimum = INF;
     for (j = 0; j < vertex_num_; ++j) {
-      if (flag[j] == 0 && distance[j] < min) {
-        min = distance[j];
+      if (flag[j] == 0 && distance[j] < minimum) {
+        minimum = distance[j];
         k = j;
       }
     }
@@ -447,7 +447,7 @@ void ListUdg::Dijkstra(size_t source, int previous[], int distance[]) {
     // Update the distance between vertex source and remaining vertexes.
     for (j = 0; j < vertex_num_; ++j) {
       tmp = get_weight(k, j);
-      tmp = (tmp == INF ? INF : (min + tmp));
+      tmp = (tmp == INF ? INF : (minimum + tmp));
       if (flag[j] == 0 && tmp < distance[j]) {
         distance[j] = tmp;
         previous[j] = k;
