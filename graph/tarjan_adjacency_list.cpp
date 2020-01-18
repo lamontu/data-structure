@@ -1,5 +1,3 @@
-/* tarjan_adjacency_list.cpp */
-
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -14,7 +12,7 @@ using std::string;
 using std::vector;
 using std::pair;
 
-const int MaxVertexNum = 100;
+const int MaxVertexNum = 64;
 int VisitOrder[MaxVertexNum];
 int LowPoint[MaxVertexNum];
 
@@ -30,7 +28,7 @@ int timer = 0;
 class ALGraph {
  private:
   struct ArcNode {
-    int vertex_index;
+    size_t vertex_index;  // the end vertex index of this arc
     ArcNode* next_arc;
   };
 
@@ -39,8 +37,8 @@ class ALGraph {
     ArcNode* first_arc;
   };
 
-  int vertex_num_;
-  int arc_num_;
+  size_t vertex_num_;
+  size_t arc_num_;
   VNode vertexes_[MaxVertexNum];
 
  public:
@@ -50,38 +48,31 @@ class ALGraph {
   void DetectCutEdge();
 
  private:
-  int locate_vertex(string u);
-  void tarjan_dfs(int v0, int fa);
+  void tarjan_dfs(size_t v0, int fa);
 };
 
-int ALGraph::locate_vertex(string u) {
-  for (int i = 0; i < vertex_num_; ++i) {
-    if (vertexes_[i].data == u) {
-      return i;
-    }
-  }
-  return -1;
-}
-
+/*  Sample undirected graph
+ *    0  -------  1  -------  3
+ *    |             ╲         |
+ *    |                ╲      |
+ *    |                   ╲   |
+ *    2           5  -------  4
+ */
 ALGraph::ALGraph() {
   string v1, v2;
-  int i, j, k;
-  cout << "Vertex number: ";
-  cin >> vertex_num_;
-  cout << "Arc number: ";
-  cin >> arc_num_;
-
-  for (i = 0; i < vertex_num_; ++i) {
-    cin >> vertexes_[i].data;
+  vector<string> vertex_data{"0", "1", "2", "3", "4", "5"};
+  vertex_num_ = vertex_data.size();
+  for (size_t i = 0; i < vertex_num_; ++i) {
+    vertexes_[i].data = vertex_data[i];
     vertexes_[i].first_arc = nullptr;
   }
 
-  for (k = 0; k < arc_num_; ++k) {
-    cout << "arc(" << k << "): ";
-    cin >> v1 >> v2;
-    i = locate_vertex(v1);
-    j = locate_vertex(v2);
-
+  vector<size_t> starts{0, 0, 1, 1, 3, 4};
+  vector<size_t>   ends{1, 2, 3, 4, 4, 5};
+  arc_num_ = starts.size();
+  for (size_t k = 0; k < arc_num_; ++k) {
+    size_t i = starts[k];
+    size_t j = ends[k];
     ArcNode* arc = new ArcNode();
     arc->vertex_index = j;
     arc->next_arc = vertexes_[i].first_arc;
@@ -94,13 +85,12 @@ ALGraph::ALGraph() {
   }
 }
 
-void ALGraph::tarjan_dfs(int v0, int father) {
+void ALGraph::tarjan_dfs(size_t v0, int father) {
   ArcNode* p;
-  int w;
   Parent[v0] = father;
   VisitOrder[v0] = LowPoint[v0] = ++timer;
   for (p = vertexes_[v0].first_arc; p != nullptr; p = p->next_arc) {
-    w = p->vertex_index;
+    size_t w = p->vertex_index;
     if (VisitOrder[w] == 0) {
       tarjan_dfs(w, v0);
       LowPoint[v0] = min(LowPoint[v0], LowPoint[w]);
@@ -114,8 +104,10 @@ void ALGraph::DetectCutPoint() {
   memset(BlockNum, 0, sizeof(BlockNum));
   memset(IsCutPoint, false, sizeof(IsCutPoint));
   int root_son = 0;
+
   tarjan_dfs(0, -1);
-  for (int v = 1; v < vertex_num_; ++v) {
+
+  for (size_t v = 1; v < vertex_num_; ++v) {
     int u = Parent[v];
     if (u == 0) {
       root_son++;
@@ -133,7 +125,8 @@ void ALGraph::DetectCutPoint() {
     BlockNum[0] = root_son - 1;
   }
 
-  for (int i = 0; i < vertex_num_; ++i) {
+  cout << "DetectCutPoint:";
+  for (size_t i = 0; i < vertex_num_; ++i) {
     if (IsCutPoint[i]) {
       cout << i << ", ";
       CutPoints[i] = vertexes_[i].data;
@@ -143,7 +136,8 @@ void ALGraph::DetectCutPoint() {
 }
 
 void ALGraph::DetectCutEdge() {
-  for (int v = 0; v < vertex_num_; ++v) {
+  cout << "DetectCutEdge: ";
+  for (size_t v = 0; v < vertex_num_; ++v) {
     int u = Parent[v];
     if (u != -1 && LowPoint[v] > VisitOrder[u]) {
       cout << "(" << u << ", " << v << ")" << ", ";
@@ -154,11 +148,12 @@ void ALGraph::DetectCutEdge() {
   cout << endl;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   ALGraph* pALG = new ALGraph();
   pALG->DetectCutPoint();
   pALG->DetectCutEdge();
 
+  cout << "Cut points: ";
   for (int i = 0; i < 20; ++i) {
     if (IsCutPoint[i]) {
       cout << CutPoints[i] << "(" << BlockNum[i] << ")" << ", ";
@@ -166,6 +161,7 @@ int main(int argc, char* argv[]) {
   }
   cout << endl;
 
+  cout << "Cut edges: ";
   for (auto it = CutEdges.begin(); it != CutEdges.end(); ++it) {
     cout << "(" << (*it).first << ", " << (*it).second << "), ";
   }
