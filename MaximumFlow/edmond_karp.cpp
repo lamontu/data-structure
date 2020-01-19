@@ -1,31 +1,39 @@
-/* edmond_karp.cpp */
-
 #include <iostream>
 #include <queue>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::queue;
+using std::min;
 
-const int ArraySize = 100;
-const int INF = ~(0x1 << 31);
+const int VertexNum = 6;
+const int INF = ~(0x1u << 31);
 
-int edge_num, vertex_num;
-int flow[ArraySize];  // Current input flow of each vertex
-int pre[ArraySize];  // The previous vertex in the path
+static int flow[VertexNum];  // Current input flow of each vertex
+static int pre[VertexNum];  // The previous vertex in the path
 
 /* The capacity of forward arc is the maximum flow that current flow can
  * increase. The capacity of reverse arc is the maximum flow that current
- * flow can decrease. 
+ * flow can decrease.
  */
-int capacity[ArraySize][ArraySize];
-queue<int> myqueue;
+static int capacity[VertexNum][VertexNum] =
+  { {0, 16, 13, 0,  0,  0 },
+    {0, 0,  10, 12, 0,  0 },
+    {0, 4,  0,  0,  14, 0 },
+    {0, 0,  9,  0,  0,  20},
+    {0, 0,  0,  7,  0,  4 },
+    {0, 0,  0,  0,  0,  0 }
+  };
 
-int bfs(int src, int des) {
-  int i, j;
+static queue<int> myqueue;
+
+static int bfs(int src, int des) {
+  int i;
   while (!myqueue.empty()) {  // Clear queue
     myqueue.pop();
   }
-  // vertex index: from 1 to vertex_num
-  for (i = 1; i <= vertex_num; ++i) {
+
+  for (i = 0; i < VertexNum; ++i) {
     pre[i] = -1;
   }
   pre[src] = 0;
@@ -37,7 +45,7 @@ int bfs(int src, int des) {
     if (index == des) {
       break;
     }
-    for (i = 1; i <= vertex_num; ++i) {
+    for (i = 0; i < VertexNum; ++i) {
       if (i != src && capacity[index][i] > 0 && pre[i] == -1) {
         pre[i] = index;
         flow[i] = min(capacity[index][i], flow[index]);
@@ -52,7 +60,7 @@ int bfs(int src, int des) {
   }
 }
 
-int MaxFlow(int src, int des) {
+static int MaxFlow(int src, int des) {
   int increasement = 0;
   int sumflow = 0;
   while ((increasement = bfs(src, des)) != -1) {
@@ -68,18 +76,11 @@ int MaxFlow(int src, int des) {
   return sumflow;
 }
 
-int main(int argc, char* argv[]) {
-  int i, j;
-  int start, end, ci;
-  if (cin >> edge_num >> vertex_num) {
-    memset(capacity, 0, sizeof(capacity));
-    memset(flow, 0, sizeof(flow));
-    for (i = 0; i < edge_num; ++i) {
-      cin >> start >> end >> ci;
-      if (start == end) continue;
-      capacity[start][end] += ci;
-    }
-    cout << MaxFlow(1, vertex_num) << endl;
-  }
+int main() {
+  memset(flow, 0, sizeof(flow));
+
+  int maxflow = MaxFlow(0, VertexNum - 1);
+  cout << "maximum flow: " << maxflow << endl;
+
   return 0;
 }
