@@ -36,7 +36,7 @@ static int bfs(int src, int des) {
   for (i = 0; i < VertexNum; ++i) {
     pre[i] = -1;
   }
-  pre[src] = 0;
+  pre[src] = VertexNum;
   flow[src] = INF;
   myqueue.push(src);
   while (!myqueue.empty()) {
