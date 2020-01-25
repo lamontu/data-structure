@@ -1,3 +1,9 @@
+/*
+ * Edmonds-Karp algorithm: a specific implementation of the Ford-Fulkerson algorithm.
+ * It specifies that breadth-first search should be used to find the shortest paths
+ * during the intermediate stages of the program.
+ */
+
 #include <iostream>
 #include <queue>
 
