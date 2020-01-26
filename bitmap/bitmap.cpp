@@ -1,36 +1,36 @@
-/* bitmap.cpp */
-
 #include <cstdio>
 #include <cstdlib>
 
-using namespace std;
+using std::fopen;
+using std::fclose;
+using std::fscanf;
 
-const int WORD = 32;
-const int SHIFT = 5;
+const int WORD = 32;  // The type of bitmap is 32 bits int.
+const int SHIFT = 5;  // 2^SHIFT = WORD
 const int MASK = 0x1F;
-const int N = 10000000;
+const int N = 1024*16;
 
-int bitmap[1 + N / WORD];
+static int bitmap[1 + N / WORD];
 
 /*
  * m mod 2^k ==> m & (2^k - 1)
  */
-void set(int i) {
-  bitmap[i >> SHIFT] |= (1 << (i & MASK));
+static void set(int i) {
+  bitmap[i >> SHIFT] |= (0x1u << (i & MASK));
 }
 
-void clear(int i) {
-  bitmap[i >> SHIFT] &= ~(1 << (i & MASK));
+static void clear(int i) {
+  bitmap[i >> SHIFT] &= ~(0x1u << (i & MASK));
 }
 
-int test(int i) {
+static int test(int i) {
   return bitmap[i >> SHIFT] & (1 << (i & MASK));
 }
 
 // Sort without duplicated number
-int main(int argc, char* argv[]) {
-  FILE* in = fopen("in.txt", "r");
-  FILE* out = fopen("out.txt", "w");
+int main() {
+  FILE* in = fopen("./bitmap/in.txt", "r");
+  FILE* out = fopen("./bitmap/out.txt", "w");
   if (nullptr == in || nullptr == out) {
     exit(-1);
   }
