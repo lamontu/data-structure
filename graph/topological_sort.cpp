@@ -27,10 +27,10 @@ public:
   // Kahn algorithm: an g
   bool topoSortByKahn() {
     vector<size_t> inDegree(vertex_num);
-    for (size_t i = 0; i < vertex_num; ++i) {
-      for (size_t j = 0; j < adjacency[i].size(); ++j) {
-        size_t vertex = adjacency[i][j];
-        inDegree[vertex]++;
+    for (size_t src = 0; src < vertex_num; ++src) {
+      for (size_t j = 0; j < adjacency[src].size(); ++j) {
+        size_t dest = adjacency[src][j];
+        inDegree[dest]++;
       }
     }
 
@@ -63,6 +63,38 @@ public:
     }
     return true;
   }
+
+  void topoSortByDFS() {
+    vector<vector<size_t> > inverseAdjacency(vertex_num);
+    for (size_t src = 0; src < vertex_num; ++src) {
+      for (size_t j = 0; j < adjacency[src].size(); ++j) {
+        int dest = adjacency[src][j];
+        inverseAdjacency[dest].push_back(src);
+      }
+    }
+
+    vector<bool> visited(vertex_num);
+    for (size_t i = 0; i < vertex_num; ++i) {
+      if (!visited[i]) {
+        visited[i] = true;
+        dfs(i, inverseAdjacency, visited);
+      }
+    }
+  }
+
+private:
+  void dfs(size_t vertex, vector<vector<size_t> > &inverseAdj, vector<bool> & vertexVisited) {
+    for (size_t i = 0; i < inverseAdj[vertex].size(); ++i) {
+      size_t src = inverseAdj[vertex][i];
+      if (vertexVisited[src]) {
+        continue;
+      }
+      vertexVisited[src] = true;
+      dfs(src, inverseAdj, vertexVisited);
+    }
+    cout << "->" << vertex;
+  }
+
 };
 
 int main() {
@@ -74,7 +106,12 @@ int main() {
   for (auto &edge: edges) {
     g.addEdge(edge);
   }
-  bool ret = g.topoSortByKahn();
-  cout << (ret ? "Succeeded" : "Failed") << endl;
+  cout << "topoSortByKahn: " << endl;
+  bool ret1 = g.topoSortByKahn();
+  cout << (ret1 ? "Succeeded" : "Failed") << endl;
+  cout << "topoSortByDFS: " << endl;
+  g.topoSortByDFS();
+  cout << endl;
+
   return 0;
 }
