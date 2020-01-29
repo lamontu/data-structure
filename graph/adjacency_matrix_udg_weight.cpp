@@ -365,18 +365,18 @@ void MatrixUdg::Prim(size_t start) const {
 
 void MatrixUdg::Dijkstra(size_t source, size_t previous[], int distance[]) {
   size_t i, j;
-  int flag[MAX];
+  bool flag[MAX];
 
   // Initialize the distance between vertex source and each vertex.
   for (i = 0; i < vertex_num_; ++i) {
-    flag[i] = 0;  // Distance between vertex i and source has not been found.
+    flag[i] = false;  // Distance between vertex i and source has not been found.
     distance[i] = matrix_[source][i];
     if (distance[i] != INF) {
       previous[i] = source;  // Denote the previous vertex of vertex i.
     }
   }
   // Add vertex source and mark it as finished.
-  flag[source] = 1;
+  flag[source] = true;
   previous[source] = MAX;
   size_t count = 1;
   size_t k = 0;
@@ -384,17 +384,17 @@ void MatrixUdg::Dijkstra(size_t source, size_t previous[], int distance[]) {
   while (count < vertex_num_) {
     int minimum = INF;
     for (j = 0; j < vertex_num_; ++j) {
-      if (flag[j] == 0 && distance[j] < minimum) {
+      if (!flag[j] && distance[j] < minimum) {
         minimum = distance[j];
         k = j;
       }
     }
-    flag[k] = 1;
+    flag[k] = true;
     count++;
     // Update the distance between vertex source and remaining vertexes.
     for (j = 0; j < vertex_num_; ++j) {
       int tmp = (matrix_[k][j] == INF ? INF : (minimum + matrix_[k][j]));
-      if (flag[j] == 0 && tmp < distance[j]) {
+      if (!flag[j] && tmp < distance[j]) {
         distance[j] = tmp;
         previous[j] = k;
       }
