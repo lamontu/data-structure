@@ -23,10 +23,10 @@ class EData {
 
 class MatrixUdg {
  private:
-  char vertexes_[MAX];
   size_t vertex_num_;
   size_t edge_num_;
   int matrix_[MAX][MAX];
+  char vertexes_[MAX];
 
  public:
   MatrixUdg();
@@ -38,15 +38,15 @@ class MatrixUdg {
   void Print() const;
   void Kruskal() const;
   void Prim(size_t start) const;
-  void Dijkstra(size_t source, int previous[], int distance[]);
+  void Dijkstra(size_t source, size_t previous[], int distance[]);
   void Floyd(size_t path[][MAX], int distance[][MAX]);
 
  private:
   char read_char();
   size_t get_position(char ch) const;
-  int first_vertex(int v) const;
-  int next_vertex(int v, int w) const;
-  void dfs(int i, bool* visited) const;
+  size_t first_vertex(size_t v) const;
+  size_t next_vertex(size_t v, size_t w) const;
+  void dfs(size_t i, bool* visited) const;
 
   EData* get_edges() const;
   void sort_edges(EData* edges, size_t elen) const;
@@ -136,31 +136,28 @@ MatrixUdg::MatrixUdg(char vertexes[], size_t vlen, int matrix[][MAX]) {
   edge_num_ /= 2;
 }
 
-int MatrixUdg::first_vertex(int v) const {
-  int i;
-  if (v < 0 || v > (vertex_num_ - 1)) return -1;
-  for (i = 0; i < vertex_num_; ++i) {
+size_t MatrixUdg::first_vertex(size_t v) const {
+  if (v > vertex_num_ - 1) return MAX;
+  for (size_t i = 0; i < vertex_num_; ++i) {
     if (matrix_[v][i] != 0 && matrix_[v][i] != INF) return i;
   }
-  return -1;
+  return MAX;
 }
 
-int MatrixUdg::next_vertex(int v, int w) const {
-  int i;
-  if (v < 0 || v > (vertex_num_ - 1) || w < 0 || w > (vertex_num_ - 1)) {
-    return -1;
+size_t MatrixUdg::next_vertex(size_t v, size_t w) const {
+  if (v > vertex_num_ - 1 || w > vertex_num_ - 1) {
+    return MAX;
   }
-  for (i = w + 1; i < vertex_num_; ++i) {
+  for (size_t i = w + 1; i < vertex_num_; ++i) {
     if (matrix_[v][i] != 0 && matrix_[v][i] != INF) return i;
   }
-  return -1;
+  return MAX;
 }
 
-void MatrixUdg::dfs(int i, bool* visited) const {
-  int w;
+void MatrixUdg::dfs(size_t i, bool* visited) const {
   visited[i] = true;
   cout << vertexes_[i] << ", ";
-  for (w = first_vertex(i); w >= 0; w = next_vertex(i, w)) {
+  for (size_t w = first_vertex(i); w != MAX; w = next_vertex(i, w)) {
     if (!visited[w]) {
       dfs(w, visited);
     }
@@ -200,8 +197,7 @@ void MatrixUdg::BFS() const {
     }
     while (head != rear) {
       j = queue[head++];
-      int k;
-      for (k = first_vertex(j); k >= 0; k = next_vertex(j, k)) {
+      for (size_t k = first_vertex(j); k != MAX; k = next_vertex(j, k)) {
         if (!visited[k]) {
           visited[k] = true;
           cout << vertexes_[k] << ", ";
@@ -267,21 +263,24 @@ size_t MatrixUdg::get_end(size_t vends[], size_t i) const {
 }
 
 void MatrixUdg::Kruskal() const {
-  int i, m, n;
   int length;
-  int index = 0;
+  size_t index = 0;
   size_t vends[MAX] = {0};
   EData* edges;  // All edges of the graph
   EData rets[MAX];  // The edges of the kruskal spanning tree
 
   edges = get_edges();
   sort_edges(edges, edge_num_);
-
+  size_t i;
   for (i = 0; i < edge_num_; ++i) {
     size_t p1 = get_position(edges[i].start);
     size_t p2 = get_position(edges[i].end);
-    m = get_end(vends, p1);
-    n = get_end(vends, p2);
+    if (p1 == MAX || p2 == MAX) {
+      cout << "Input error: invalid edge!" << endl;
+      return;
+    }
+    size_t m = get_end(vends, p1);
+    size_t n = get_end(vends, p2);
     if (m != n) {
       vends[m] = n;
       rets[index++] = edges[i];
@@ -302,7 +301,7 @@ void MatrixUdg::Kruskal() const {
 }
 
 void MatrixUdg::Prim(size_t start) const {
-  int index = 0;
+  size_t index = 0;
   char prims[MAX];
   int weights[MAX];
 
@@ -346,6 +345,10 @@ void MatrixUdg::Prim(size_t start) const {
     size_t n = get_position(prims[i]);
     for (j = 0; j < i; ++j) {
       size_t m = get_position(prims[j]);
+      if (m == MAX || n == MAX) {
+        cout << "Input error: invalid edge!" << endl;
+        return;
+      }
       if (matrix_[m][n] < minimum) {
         minimum = matrix_[m][n];
       }
@@ -360,7 +363,7 @@ void MatrixUdg::Prim(size_t start) const {
   cout << endl;
 }
 
-void MatrixUdg::Dijkstra(size_t source, int previous[], int distance[]) {
+void MatrixUdg::Dijkstra(size_t source, size_t previous[], int distance[]) {
   size_t i, j;
   int flag[MAX];
 
@@ -374,11 +377,11 @@ void MatrixUdg::Dijkstra(size_t source, int previous[], int distance[]) {
   }
   // Add vertex source and mark it as finished.
   flag[source] = 1;
-  previous[source] = -1;
-
+  previous[source] = MAX;
+  size_t count = 1;
   size_t k = 0;
   // Add vertex k and mark it as finished.
-  for (i = 1; i < vertex_num_; ++i) {
+  while (count < vertex_num_) {
     int minimum = INF;
     for (j = 0; j < vertex_num_; ++j) {
       if (flag[j] == 0 && distance[j] < minimum) {
@@ -387,7 +390,7 @@ void MatrixUdg::Dijkstra(size_t source, int previous[], int distance[]) {
       }
     }
     flag[k] = 1;
-
+    count++;
     // Update the distance between vertex source and remaining vertexes.
     for (j = 0; j < vertex_num_; ++j) {
       int tmp = (matrix_[k][j] == INF ? INF : (minimum + matrix_[k][j]));
@@ -406,7 +409,7 @@ void MatrixUdg::Dijkstra(size_t source, int previous[], int distance[]) {
 }
 
 void MatrixUdg::Floyd(size_t path[][MAX], int distance[][MAX]) {
-  int i, j, k;
+  size_t i, j, k;
 
   for (i = 0; i < vertex_num_; ++i) {
     for (j = 0; j < vertex_num_; ++j) {
@@ -469,10 +472,10 @@ int main() {
   pUdg->Prim(0);
 
   cout << "## Test Dijkstra algorithm:" << endl;
-  int prev[MAX] = {0};
+  size_t prev[MAX] = {0};
   int dist[MAX] = {0};
-  int vs = 3;
-  int vt = 5;
+  size_t vs = 3;
+  size_t vt = 5;
   pUdg->Dijkstra(vs, prev, dist);
   cout << "Previous vertex:" << endl;
   for (int i = 0; i < 20; ++i) {
@@ -493,20 +496,20 @@ int main() {
   pUdg->Floyd(path, floyd_distance);
 
   cout << "Floyd path:" << endl;
-  for (int i = 0; i < vlen; ++i) {
+  for (size_t i = 0; i < vlen; ++i) {
     cout << setw(4) << vertexes[i];
   }
   cout <<  endl;
   cout << "   -------------------------" << endl;
-  for (int i = 0; i < vlen; ++i) {
-    for (int j = 0; j < vlen; ++j) {
+  for (size_t i = 0; i < vlen; ++i) {
+    for (size_t j = 0; j < vlen; ++j) {
       cout << setw(4) << vertexes[path[i][j]];
     }
     cout << endl;
   }
   vs = 0;
   vt = 3;
-  int k = path[vs][vt];
+  size_t k = path[vs][vt];
   cout << vertexes[vs] << "->";
   while (k != vt) {
     cout << vertexes[k] << "->";

@@ -68,7 +68,7 @@ public:
     vector<vector<size_t> > inverseAdjacency(vertex_num);
     for (size_t src = 0; src < vertex_num; ++src) {
       for (size_t j = 0; j < adjacency[src].size(); ++j) {
-        int dest = adjacency[src][j];
+        size_t dest = adjacency[src][j];
         inverseAdjacency[dest].push_back(src);
       }
     }

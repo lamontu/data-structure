@@ -48,7 +48,7 @@ class ListUdg {
   void Print() const;
   void Kruskal() const;
   void Prim(size_t start) const;
-  void Dijkstra(size_t source, int previous[], int distance[]);
+  void Dijkstra(size_t source, size_t previous[], int distance[]);
   void Floyd(size_t path[MAX][MAX], int distance[MAX][MAX]);
 
  private:
@@ -415,7 +415,7 @@ void ListUdg::Prim(size_t start) const {
   cout << endl;
 }
 
-void ListUdg::Dijkstra(size_t source, int previous[], int distance[]) {
+void ListUdg::Dijkstra(size_t source, size_t previous[], int distance[]) {
   size_t i, j;
   int tmp;
   int flag[MAX];
@@ -430,11 +430,11 @@ void ListUdg::Dijkstra(size_t source, int previous[], int distance[]) {
   }
   // Add vertex source and mark it as finished.
   flag[source] = 1;
-  previous[source] = -1;
-
+  previous[source] = MAX;
+  size_t count = 1;
   size_t k = 0;
   // Add vertex k and mark it as finished.
-  for (i = 1; i < vertex_num_; ++i) {
+  while (count < vertex_num_) {
     int minimum = INF;
     for (j = 0; j < vertex_num_; ++j) {
       if (flag[j] == 0 && distance[j] < minimum) {
@@ -443,7 +443,7 @@ void ListUdg::Dijkstra(size_t source, int previous[], int distance[]) {
       }
     }
     flag[k] = 1;
-
+    count++;
     // Update the distance between vertex source and remaining vertexes.
     for (j = 0; j < vertex_num_; ++j) {
       tmp = get_weight(k, j);
@@ -524,10 +524,10 @@ int main() {
   pUdg->Prim(0);
 
   cout << "## Test Dijkstra algorithm:" << endl;
-  int prev[MAX] = {0};
+  size_t prev[MAX] = {0};
   int dist[MAX] = {0};
-  int vs = 3;
-  int vt = 5;
+  size_t vs = 3;
+  size_t vt = 5;
   pUdg->Dijkstra(vs, prev, dist);
   cout << "Previous vertex:" << endl;
   for (int i = 0; i < 20; ++i) {
@@ -561,7 +561,7 @@ int main() {
   }
   vs = 0;
   vt = 3;
-  int k = path[vs][vt];
+  size_t k = path[vs][vt];
   cout << vertexes[vs] << "->";
   while (k != vt) {
     cout << vertexes[k] << "->";
