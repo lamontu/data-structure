@@ -102,7 +102,7 @@ int main() {
   vector<Edge> edges = {
 		{0, 6}, {1, 2}, {1, 4}, {1, 6}, {3, 0}, {3, 4}, {5, 1}, {7, 0}, {7, 1}
 	};
-  Graph g = Graph(VertexNum);
+  Graph g(VertexNum);
   for (auto &edge: edges) {
     g.addEdge(edge);
   }
