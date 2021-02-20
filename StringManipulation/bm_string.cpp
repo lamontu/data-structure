@@ -42,7 +42,7 @@ void good_suffix_shift(const char pattern[], int size, int suffixes[],
             suffixes[overlap_size++] = begin_index--;
         }
         if (begin_index == -1) {
-            prefix[overlap_size] = true;
+            prefix[overlap_size - 1] = true;
         }
     }
 }
@@ -89,7 +89,7 @@ vector<int> boyer_moore(const char target[], int target_size,
         }
         int x = j - bad_chars[static_cast<int>(target[i + j])];
         int y = 0;
-        if (j < target_size - 1) {  // there are good suffix
+        if (j < pattern_size - 1) {  // there are good suffix
             y = shift_by_good_suffix(j, pattern_size, suffix, prefix);
         }
         i = i + (x > y ? x : y);
