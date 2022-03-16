@@ -13,6 +13,13 @@ struct Point {
     Point(const Point& p) : r(p.r), c(p.c) {}
 };
 
+struct Box {
+    int min_x;
+    int min_y;
+    int max_x;
+    int max_y;
+};
+
 class Solution {
 public:
     int m;
@@ -29,9 +36,13 @@ public:
     }
 
     vector<vector<Point>> bwlabel(vector<vector<int>>& matrix) {
-        m = matrix.size();
-        n = matrix[0].size();
         vector<vector<Point>> res;
+        m = matrix.size();
+        if (m == 0)
+            return res;
+        n = matrix[0].size();
+        if (n == 0)
+            return res;
         vector<Point> tmp;
         vector<vector<bool>> mask(m, vector<bool>(n, false));
         for (int i = 0; i < m; ++i) {
@@ -57,7 +68,7 @@ public:
         return res;
     }
 
-    std::pair<Point, Point> boundingbox(vector<Point> points) {
+    Box boundingbox(vector<Point> points) {
         auto rExtremes = std::minmax_element(points.begin(), points.end(),
         [](const Point& lhs, const Point& rhs) {
             return lhs.r < rhs.r;
@@ -66,34 +77,32 @@ public:
         [](const Point& lhs, const Point& rhs) {
             return lhs.c < rhs.c;
         });
-        return make_pair(Point(rExtremes.first->r, cExtremes.first->c),
-         Point(rExtremes.second->r, cExtremes.second->c));
+        return Box{rExtremes.first->r, cExtremes.first->c, rExtremes.second->r, cExtremes.second->c};
+    }
+
+    vector<Box> GetBoundingBox(vector<vector<int>> mat) {
+        vector<Box> res;
+
+        vector<vector<Point>> contours = bwlabel(mat);
+        for (auto& contour : contours) {
+            res.push_back(boundingbox(contour));
+        }
+        return res;
     }
     
 };
 
 int main() {
     vector<vector<int>> m = {
-        {1,1,0,0,0},
-        {1,0,1,0,0},
-        {0,1,1,0,0},
-        {0,0,0,1,0},
-        {0,0,0,0,1},
-        {0,0,0,0,0}
+        {0,0,0,1,1,1,0,1,1},
+        {0,0,1,1,1,0,0,0,1},
+        {0,0,1,0,0,1,0,0,1},
+        {0,0,1,0,0,0,1,1,1}
     };
-    
-    Solution sln;
-    auto res = sln.bwlabel(m);
-    std::cout << "count = " << res.size() << std::endl;
-    for (auto& conn : res) {
-        auto box = sln.boundingbox(conn);
-        std::cout << "bounding box = (" << box.first.r << "," << box.first.c << "), ("
-         << box.second.r << "," << box.second.c <<")" << std:: endl;
-        std::cout << "black points: ";
-        for (auto& p : conn) {
-            std::cout << "(" << p.r << "," << p.c << "), ";
-        }
-        std::cout << std::endl << std::endl;
-    }
 
+    Solution sln;
+    auto res = sln.GetBoundingBox(m);
+    for (auto& box : res ) {
+        std::cout << box.min_x << "," << box.min_y << ";" << box.max_x << "," << box.max_y << std::endl;
+    }
 }
