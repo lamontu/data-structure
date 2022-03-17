@@ -4,14 +4,14 @@
 
 using namespace std;
 
-// (a + b) % p = (a % p + b % p) % p
-// (a - b) % p = (a % p - b % p + p) % p
-// (a * b) % p = (a % p * b % p) % p
-// (pow(a, b)) % p = (pow(a % p, b)) % p
+// rule 1: (a + b) % p = (a % p + b % p) % p
+// rule 2: (a - b) % p = (a % p - b % p + p) % p
+// rule 3: (a * b) % p = ((a % p) * (b % p)) % p
+// rule 4: (pow(a, b)) % p = (pow(a % p, b)) % p
 
 int modexp(int a, int n, int p) {
   int ret = 1;
-  int tmp = a % p;
+  int tmp = a % p;  // rule 4
   if (tmp == 0)
     return 0;
 
