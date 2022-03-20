@@ -15,13 +15,13 @@ class Graph
 	// list<int>* adj; // A dynamic array of adjacency lists
 	vector<list<int>> adj;
 
-	// A Recursive DFS based function used by SCC()
+	// A Recursive DFS based function used by SCC_tarjan()
 	void SCCUtil(int u, int disc[], int low[],
 		stack<int>* st, bool stackMember[]);
 public:
 	explicit Graph(int V); // Constructor
 	void addEdge(int v, int w); // function to add an edge to graph
-	void SCC(); // prints strongly connected components
+	void SCC_tarjan(); // prints strongly connected components
 };
 
 Graph::Graph(int V) : V(V), adj(vector(V, list<int>()))
@@ -101,7 +101,7 @@ void Graph::SCCUtil(int u, int disc[], int low[], stack<int>* st,
 }
 
 // The function to do DFS traversal. It uses SCCUtil()
-void Graph::SCC()
+void Graph::SCC_tarjan()
 {
 	int* disc = new int[V];
 	int* low = new int[V];
@@ -133,14 +133,14 @@ int main()
 	g1.addEdge(2, 1);
 	g1.addEdge(0, 3);
 	g1.addEdge(3, 4);
-	g1.SCC();
+	g1.SCC_tarjan();
 
 	cout << "\nSCCs in second graph \n";
 	Graph g2(4);
 	g2.addEdge(0, 1);
 	g2.addEdge(1, 2);
 	g2.addEdge(2, 3);
-	g2.SCC();
+	g2.SCC_tarjan();
 
 	cout << "\nSCCs in third graph \n";
 	Graph g3(7);
@@ -152,7 +152,7 @@ int main()
 	g3.addEdge(1, 6);
 	g3.addEdge(3, 5);
 	g3.addEdge(4, 5);
-	g3.SCC();
+	g3.SCC_tarjan();
 
 	cout << "\nSCCs in fourth graph \n";
 	Graph g4(11);
@@ -166,7 +166,7 @@ int main()
 	g4.addEdge(7, 9);
 	g4.addEdge(8, 9);
 	g4.addEdge(9, 8);
-	g4.SCC();
+	g4.SCC_tarjan();
 
 	cout << "\nSCCs in fifth graph \n";
 	Graph g5(5);
@@ -176,7 +176,7 @@ int main()
 	g5.addEdge(2, 4);
 	g5.addEdge(3, 0);
 	g5.addEdge(4, 2);
-	g5.SCC();
+	g5.SCC_tarjan();
 
 	cout << "\nSCCs in sixth graph \n";
 	Graph g6(6);
@@ -188,7 +188,7 @@ int main()
 	g6.addEdge(3, 4);
 	g6.addEdge(4, 0);
 	g6.addEdge(4, 5);
-	g6.SCC();
+	g6.SCC_tarjan();
 
 	cout << "\nSCCs in seventh graph \n";
 	Graph g7(10);
@@ -207,7 +207,7 @@ int main()
 	g7.addEdge(8, 9);  //IJ
 	g7.addEdge(9, 5);  //JF
 	g7.addEdge(8, 5);  //IF
-	g7.SCC();
+	g7.SCC_tarjan();
 
 	cout << "\nSCCs in eighth graph \n";
 	Graph g8(8);
@@ -221,7 +221,7 @@ int main()
 	g8.addEdge(6, 5);  // G F
 	g8.addEdge(2, 3);  // C D
 	g8.addEdge(3, 4);  // D E
-	g8.SCC();
+	g8.SCC_tarjan();
 
 	return 0;
 }

@@ -59,7 +59,6 @@ class ALGraph {
  *    2           5  -------  4
  */
 ALGraph::ALGraph() {
-  string v1, v2;
   vector<string> vertex_data{"0", "1", "2", "3", "4", "5"};
   vertex_num_ = vertex_data.size();
   for (size_t i = 0; i < vertex_num_; ++i) {
