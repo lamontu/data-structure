@@ -1,5 +1,5 @@
-// https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/
 // https://www.geeksforgeeks.org/strongly-connected-components/
+// https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/
 
 #include <iostream>
 #include <vector>
@@ -12,24 +12,34 @@ using namespace std;
 class Graph
 {
 	int V; // No. of vertices
-	// list<int>* adj; // A dynamic array of adjacency lists
 	vector<list<int>> adj;
-
-	// A Recursive DFS based function used by SCC_tarjan()
-	void SCCUtil(int u, int disc[], int low[],
-		stack<int>* st, bool stackMember[]);
 public:
 	explicit Graph(int V); // Constructor
 	void addEdge(int v, int w); // function to add an edge to graph
 
+private:
+	// A Recursive DFS based function used by SCC_tarjan()
+	void SCCUtil(int u, int disc[], int low[],
+		stack<int>* st, bool stackMember[]);
+public:
 	// find strongly connected components in a given directed graph using Tarjan's algorithm (single DFS)
 	void SCC_Tarjan();
+
+private:
+	// Fills Stack with vertices (in increasing order of finishing
+    // times). The top element of stack has the maximum finishing time
+    void fillOrder(int v, bool visited[], stack<int> &Stack);
+    // A recursive function to print DFS starting from v
+    void DFSUtil(int v, bool visited[]);
+	// Function that returns reverse (or transpose) of this graph
+    Graph getTranspose();
+public:	
+	// find strongly connected components in a given directed graph using Kosaraju's algorithm
+	void SCC_Kosaraju();
 };
 
 Graph::Graph(int V) : V(V), adj(vector(V, list<int>()))
 {
-	// this->V = V;
-	// adj = new list<int>[V];
 }
 
 void Graph::addEdge(int v, int w)
@@ -125,6 +135,89 @@ void Graph::SCC_Tarjan()
 			SCCUtil(i, disc, low, st, stackMember);
 }
 
+// A recursive function to print DFS starting from v
+void Graph::DFSUtil(int v, bool visited[])
+{
+    // Mark the current node as visited and print it
+    visited[v] = true;
+    cout << v << " ";
+  
+    // Recur for all the vertices adjacent to this vertex
+    list<int>::iterator i;
+    for (i = adj[v].begin(); i != adj[v].end(); ++i)
+        if (!visited[*i])
+            DFSUtil(*i, visited);
+}
+  
+Graph Graph::getTranspose()
+{
+    Graph g(V);
+    for (int v = 0; v < V; v++)
+    {
+        // Recur for all the vertices adjacent to this vertex
+        list<int>::iterator i;
+        for(i = adj[v].begin(); i != adj[v].end(); ++i)
+        {
+            g.adj[*i].push_back(v);
+        }
+    }
+    return g;
+}
+
+void Graph::fillOrder(int v, bool visited[], stack<int>& Stack)
+{
+    // Mark the current node as visited and print it
+    visited[v] = true;
+  
+    // Recur for all the vertices adjacent to this vertex
+    list<int>::iterator i;
+    for(i = adj[v].begin(); i != adj[v].end(); ++i)
+        if(!visited[*i])
+            fillOrder(*i, visited, Stack);
+  
+    // All vertices reachable from v are processed by now, push v 
+    Stack.push(v);
+}
+
+// The main function that finds and prints all strongly connected 
+// components
+void Graph::SCC_Kosaraju()
+{
+    stack<int> Stack;
+  
+    // Mark all the vertices as not visited (For first DFS)
+    bool *visited = new bool[V];
+    for(int i = 0; i < V; i++)
+        visited[i] = false;
+  
+    // Fill vertices in stack according to their finishing times
+    for(int i = 0; i < V; i++)
+        if(visited[i] == false)
+            fillOrder(i, visited, Stack);
+  
+    // Create a reversed graph
+    Graph gr = getTranspose();
+  
+    // Mark all the vertices as not visited (For second DFS)
+    for(int i = 0; i < V; i++)
+        visited[i] = false;
+  
+    // Now process all vertices in order defined by Stack
+    while (!Stack.empty())
+    {
+        // Pop a vertex from stack
+        int v = Stack.top();
+        Stack.pop();
+  
+        // Print Strongly connected component of the popped vertex
+        if (visited[v] == false)
+        {
+            gr.DFSUtil(v, visited);
+            cout << endl;
+        }
+    }
+}
+
 // Driver program to test above function
 int main()
 {
@@ -136,6 +229,8 @@ int main()
 	g1.addEdge(0, 3);
 	g1.addEdge(3, 4);
 	g1.SCC_Tarjan();
+	cout << "--------\n";
+	g1.SCC_Kosaraju();
 
 	cout << "\nSCCs in second graph \n";
 	Graph g2(4);
@@ -143,6 +238,8 @@ int main()
 	g2.addEdge(1, 2);
 	g2.addEdge(2, 3);
 	g2.SCC_Tarjan();
+	cout << "--------\n";
+	g2.SCC_Kosaraju();
 
 	cout << "\nSCCs in third graph \n";
 	Graph g3(7);
@@ -155,6 +252,8 @@ int main()
 	g3.addEdge(3, 5);
 	g3.addEdge(4, 5);
 	g3.SCC_Tarjan();
+	cout << "--------\n";
+	g3.SCC_Kosaraju();
 
 	cout << "\nSCCs in fourth graph \n";
 	Graph g4(11);
@@ -169,6 +268,8 @@ int main()
 	g4.addEdge(8, 9);
 	g4.addEdge(9, 8);
 	g4.SCC_Tarjan();
+	cout << "--------\n";
+	g4.SCC_Kosaraju();
 
 	cout << "\nSCCs in fifth graph \n";
 	Graph g5(5);
@@ -179,6 +280,8 @@ int main()
 	g5.addEdge(3, 0);
 	g5.addEdge(4, 2);
 	g5.SCC_Tarjan();
+	cout << "--------\n";
+	g5.SCC_Kosaraju();
 
 	cout << "\nSCCs in sixth graph \n";
 	Graph g6(6);
@@ -191,6 +294,8 @@ int main()
 	g6.addEdge(4, 0);
 	g6.addEdge(4, 5);
 	g6.SCC_Tarjan();
+	cout << "--------\n";
+	g6.SCC_Kosaraju();
 
 	cout << "\nSCCs in seventh graph \n";
 	Graph g7(10);
@@ -210,6 +315,8 @@ int main()
 	g7.addEdge(9, 5);  //JF
 	g7.addEdge(8, 5);  //IF
 	g7.SCC_Tarjan();
+	cout << "--------\n";
+	g7.SCC_Kosaraju();
 
 	cout << "\nSCCs in eighth graph \n";
 	Graph g8(8);
@@ -224,6 +331,8 @@ int main()
 	g8.addEdge(2, 3);  // C D
 	g8.addEdge(3, 4);  // D E
 	g8.SCC_Tarjan();
+	cout << "--------\n";
+	g8.SCC_Kosaraju();
 
 	return 0;
 }
