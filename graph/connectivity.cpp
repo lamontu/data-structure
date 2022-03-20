@@ -1,6 +1,6 @@
 // https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/
-// A C++ program to find strongly connected components in a given
-// directed graph using Tarjan's algorithm (single DFS)
+// https://www.geeksforgeeks.org/strongly-connected-components/
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -21,7 +21,9 @@ class Graph
 public:
 	explicit Graph(int V); // Constructor
 	void addEdge(int v, int w); // function to add an edge to graph
-	void SCC_tarjan(); // prints strongly connected components
+
+	// find strongly connected components in a given directed graph using Tarjan's algorithm (single DFS)
+	void SCC_Tarjan();
 };
 
 Graph::Graph(int V) : V(V), adj(vector(V, list<int>()))
@@ -101,7 +103,7 @@ void Graph::SCCUtil(int u, int disc[], int low[], stack<int>* st,
 }
 
 // The function to do DFS traversal. It uses SCCUtil()
-void Graph::SCC_tarjan()
+void Graph::SCC_Tarjan()
 {
 	int* disc = new int[V];
 	int* low = new int[V];
@@ -133,14 +135,14 @@ int main()
 	g1.addEdge(2, 1);
 	g1.addEdge(0, 3);
 	g1.addEdge(3, 4);
-	g1.SCC_tarjan();
+	g1.SCC_Tarjan();
 
 	cout << "\nSCCs in second graph \n";
 	Graph g2(4);
 	g2.addEdge(0, 1);
 	g2.addEdge(1, 2);
 	g2.addEdge(2, 3);
-	g2.SCC_tarjan();
+	g2.SCC_Tarjan();
 
 	cout << "\nSCCs in third graph \n";
 	Graph g3(7);
@@ -152,7 +154,7 @@ int main()
 	g3.addEdge(1, 6);
 	g3.addEdge(3, 5);
 	g3.addEdge(4, 5);
-	g3.SCC_tarjan();
+	g3.SCC_Tarjan();
 
 	cout << "\nSCCs in fourth graph \n";
 	Graph g4(11);
@@ -166,7 +168,7 @@ int main()
 	g4.addEdge(7, 9);
 	g4.addEdge(8, 9);
 	g4.addEdge(9, 8);
-	g4.SCC_tarjan();
+	g4.SCC_Tarjan();
 
 	cout << "\nSCCs in fifth graph \n";
 	Graph g5(5);
@@ -176,7 +178,7 @@ int main()
 	g5.addEdge(2, 4);
 	g5.addEdge(3, 0);
 	g5.addEdge(4, 2);
-	g5.SCC_tarjan();
+	g5.SCC_Tarjan();
 
 	cout << "\nSCCs in sixth graph \n";
 	Graph g6(6);
@@ -188,7 +190,7 @@ int main()
 	g6.addEdge(3, 4);
 	g6.addEdge(4, 0);
 	g6.addEdge(4, 5);
-	g6.SCC_tarjan();
+	g6.SCC_Tarjan();
 
 	cout << "\nSCCs in seventh graph \n";
 	Graph g7(10);
@@ -207,7 +209,7 @@ int main()
 	g7.addEdge(8, 9);  //IJ
 	g7.addEdge(9, 5);  //JF
 	g7.addEdge(8, 5);  //IF
-	g7.SCC_tarjan();
+	g7.SCC_Tarjan();
 
 	cout << "\nSCCs in eighth graph \n";
 	Graph g8(8);
@@ -221,7 +223,7 @@ int main()
 	g8.addEdge(6, 5);  // G F
 	g8.addEdge(2, 3);  // C D
 	g8.addEdge(3, 4);  // D E
-	g8.SCC_tarjan();
+	g8.SCC_Tarjan();
 
 	return 0;
 }
