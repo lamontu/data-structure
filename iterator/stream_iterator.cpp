@@ -24,6 +24,8 @@ std::string trim(const std::string& s) {
     return rtrim(ltrim(s));
 }
 
+const int MaxInteger = 1000000000;
+
 class Solution {
 
 public:
@@ -77,9 +79,8 @@ public:
             size_t size = trimLine.size();
             if (size == 0)
                 return false;
-            int count = 0;
             bool negative = false;
-            int i = 0;
+            size_t i = 0;
             if (trimLine[0] == '+') {
                 ++i;
             }
@@ -97,7 +98,7 @@ public:
                     break;
                 }
             }
-            if (i < size || res > 1000000000) {
+            if (i < size || res > MaxInteger) {
                 return false;
             }
             value = static_cast<int>(negative ? (res * -1) : res);
