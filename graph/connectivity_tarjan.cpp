@@ -1,104 +1,227 @@
-#include <algorithm>
+// https://www.geeksforgeeks.org/tarjan-algorithm-find-strongly-connected-components/
+// A C++ program to find strongly connected components in a given
+// directed graph using Tarjan's algorithm (single DFS)
 #include <iostream>
+#include <vector>
+#include <list>
+#include <stack>
+#define NIL -1
+using namespace std;
 
-using std::min;
-using std::cout;
-using std::cin;
-using std::endl;
+// A class that represents an directed graph
+class Graph
+{
+	int V; // No. of vertices
+	// list<int>* adj; // A dynamic array of adjacency lists
+	vector<list<int>> adj;
 
-const size_t MAX_SIZE = 64;
+	// A Recursive DFS based function used by SCC()
+	void SCCUtil(int u, int disc[], int low[],
+		stack<int>* st, bool stackMember[]);
+public:
+	explicit Graph(int V); // Constructor
+	void addEdge(int v, int w); // function to add an edge to graph
+	void SCC(); // prints strongly connected components
+};
 
-static struct edge {
-    size_t v;  // index of the end vertex of this edges
-    int next;  // index of the next edges that has the same start vertex with this edges
- } edges[MAX_SIZE];
-
-static size_t edge_index;
-// heads[key] = value
-// key is the start vertex index, value is the edge index.
-// If value == -1, no edge starts from vertex key.
-static int heads[MAX_SIZE];
-
-static bool visited[MAX_SIZE];
-
-static size_t visit_order, st_idx;
-static size_t DFN[MAX_SIZE], LOW[MAX_SIZE], stack[MAX_SIZE];
-
-static size_t start_vertexes[MAX_SIZE] = {1, 1, 2, 2, 3, 4, 5, 5};
-static size_t end_vertexes[MAX_SIZE] =   {2, 4, 3, 5, 6, 5, 1, 6};
-/*  Sample graph
- *    1  ------>  2  ------>  3
- *    |  ↖︎        |           |
- *    |    ╲      |           |
- *    ↓       ╲   ↓           ↓
- *    4  ------>  5  ------>  6
- */
-
-static void add(size_t start,size_t y) {
-    edges[++edge_index].next = heads[start];
-    edges[edge_index].v = y;
-    heads[start] = edge_index;
-    return ;
+Graph::Graph(int V) : V(V), adj(vector(V, list<int>()))
+{
+	// this->V = V;
+	// adj = new list<int>[V];
 }
 
-static void CreateGraph(size_t* starts, size_t* ends, size_t edge_num) {
-    for (size_t i = 0; i < edge_num; ++i) {
-        add(starts[i], ends[i]);
-    }
+void Graph::addEdge(int v, int w)
+{
+	adj[v].push_back(w);
 }
 
-void dump_array(size_t arr[], size_t size) {
-    for (size_t i = 0; i < size; ++i) {
-        cout <<  " " << arr[i] << ", ";
-    }
-    cout << endl;
+// A recursive function that finds and prints strongly connected
+// components using DFS traversal
+// u --> The vertex to be visited next
+// disc[] --> Stores discovery times of visited vertices
+// low[] -- >> earliest visited vertex (the vertex with minimum
+//			 discovery time) that can be reached from subtree
+//			 rooted with current vertex
+// *st -- >> To store all the connected ancestors (could be part
+//		 of SCC)
+// stackMember[] --> bit/index array for faster check whether
+//				 a node is in stack
+void Graph::SCCUtil(int u, int disc[], int low[], stack<int>* st,
+	bool stackMember[])
+{
+	// A static variable is used for simplicity, we can avoid use
+	// of static variable by passing a pointer.
+	static int time = 0;
+
+	// Initialize discovery time and low value
+	disc[u] = low[u] = ++time;
+	st->push(u);
+	stackMember[u] = true;
+
+	// Go through all vertices adjacent to this
+	list<int>::iterator i;
+	for (i = adj[u].begin(); i != adj[u].end(); ++i)
+	{
+		int v = *i; // v is current adjacent of 'u'
+
+		// If v is not visited yet, then recur for it
+		if (disc[v] == NIL)
+		{
+			SCCUtil(v, disc, low, st, stackMember);
+
+			// Check if the subtree rooted with 'v' has a
+			// connection to one of the ancestors of 'u'
+			// Case 1 (per above discussion on Disc and Low value)
+			low[u] = min(low[u], low[v]);
+		}
+
+		// Update low value of 'u' only of 'v' is still in stack
+		// (i.e. it's a back edge, not cross edge).
+		// Case 2 (per above discussion on Disc and Low value)
+		else if (stackMember[v] == true)
+			low[u] = min(low[u], disc[v]);
+	}
+
+	// head node found, pop the stack and print an SCC
+	if (low[u] == disc[u])
+	{
+	    int w = 0; // To store stack extracted vertices
+		while (st->top() != u)
+		{
+			w = (int)st->top();
+			cout << w << " ";
+			stackMember[w] = false;
+			st->pop();
+		}
+		w = (int)st->top();
+		cout << w << "\n";
+		stackMember[w] = false;
+		st->pop();
+	}
 }
 
-static void Tarjan(size_t start) {
-    cout << "DFN: ";
-    dump_array(DFN, 8);
-    cout << "LOW: ";
-    dump_array(LOW, 8);
-    cout << "stack: ";
-    dump_array(stack, st_idx + 1);
+// The function to do DFS traversal. It uses SCCUtil()
+void Graph::SCC()
+{
+	int* disc = new int[V];
+	int* low = new int[V];
+	bool* stackMember = new bool[V];
+	stack<int>* st = new stack<int>();
 
-    cout << "Visit vertex " << start << endl;
+	// Initialize disc and low, and stackMember arrays
+	for (int i = 0; i < V; i++)
+	{
+		disc[i] = NIL;
+		low[i] = NIL;
+		stackMember[i] = false;
+	}
 
-    DFN[start] = LOW[start] = ++visit_order;  // 新进点的初始化。
-    stack[++st_idx]=start;  // 入栈
-    visited[start]=1;  // 表示在栈里
-    for (int i = heads[start]; i != -1; i=edges[i].next) {
-        if (!DFN[edges[i].v]) {  // 如果没访问过
-            Tarjan(edges[i].v);  // 按照边的方向延伸访问边的终点，开始递归
-            LOW[start] = min(LOW[start], LOW[edges[i].v]);  // 递归出来，比较谁是谁的儿子／父亲，就是树的对应关系，涉及到强连通分量子树最小根的事情。
-        } else if (visited[edges[i].v]) {  // 如果访问过，并且还在栈里。
-            LOW[start] = min(LOW[start], DFN[edges[i].v]);  // 比较谁是谁的儿子／父亲。就是链接对应关系
-        }
-    }
-    if (LOW[start] == DFN[start]) {  // 发现是整个强连通分量子树里的最小根。
-        cout << "Connectivity vertex: ";
-        do {
-            cout << stack[st_idx] << ", ";
-            visited[stack[st_idx]]=0;
-            st_idx--;
-        } while (start != stack[st_idx+1]);  // 出栈，并且输出。
-        cout << endl;
-    }
-    return;
+	// Call the recursive helper function to find strongly
+	// connected components in DFS tree with vertex 'i'
+	for (int i = 0; i < V; i++)
+		if (disc[i] == NIL)
+			SCCUtil(i, disc, low, st, stackMember);
 }
 
-int main() {
-    memset(heads, -1, sizeof(heads));
+// Driver program to test above function
+int main()
+{
+	cout << "\nSCCs in first graph \n";
+	Graph g1(5);
+	g1.addEdge(1, 0);
+	g1.addEdge(0, 2);
+	g1.addEdge(2, 1);
+	g1.addEdge(0, 3);
+	g1.addEdge(3, 4);
+	g1.SCC();
 
-    size_t n = 6, m = 8;
+	cout << "\nSCCs in second graph \n";
+	Graph g2(4);
+	g2.addEdge(0, 1);
+	g2.addEdge(1, 2);
+	g2.addEdge(2, 3);
+	g2.SCC();
 
-    CreateGraph(start_vertexes, end_vertexes, m);
+	cout << "\nSCCs in third graph \n";
+	Graph g3(7);
+	g3.addEdge(0, 1);
+	g3.addEdge(1, 2);
+	g3.addEdge(2, 0);
+	g3.addEdge(1, 3);
+	g3.addEdge(1, 4);
+	g3.addEdge(1, 6);
+	g3.addEdge(3, 5);
+	g3.addEdge(4, 5);
+	g3.SCC();
 
-    cout << "Run Tarjan:" << endl;
-    for (size_t i = 1; i <= n; ++i) {
-        if (!DFN[i]) {
-            Tarjan(i);  // 当这个点没有访问过，就从此点开始。防止图没走完
-        }
-    }
-    return 0;
- }
+	cout << "\nSCCs in fourth graph \n";
+	Graph g4(11);
+	g4.addEdge(0, 1); g4.addEdge(0, 3);
+	g4.addEdge(1, 2); g4.addEdge(1, 4);
+	g4.addEdge(2, 0); g4.addEdge(2, 6);
+	g4.addEdge(3, 2);
+	g4.addEdge(4, 5); g4.addEdge(4, 6);
+	g4.addEdge(5, 6); g4.addEdge(5, 7); g4.addEdge(5, 8); g4.addEdge(5, 9);
+	g4.addEdge(6, 4);
+	g4.addEdge(7, 9);
+	g4.addEdge(8, 9);
+	g4.addEdge(9, 8);
+	g4.SCC();
+
+	cout << "\nSCCs in fifth graph \n";
+	Graph g5(5);
+	g5.addEdge(0, 1);
+	g5.addEdge(1, 2);
+	g5.addEdge(2, 3);
+	g5.addEdge(2, 4);
+	g5.addEdge(3, 0);
+	g5.addEdge(4, 2);
+	g5.SCC();
+
+	cout << "\nSCCs in sixth graph \n";
+	Graph g6(6);
+	g6.addEdge(0, 1);
+	g6.addEdge(0, 3);
+	g6.addEdge(1, 2);
+	g6.addEdge(1, 4);
+	g6.addEdge(2, 5);
+	g6.addEdge(3, 4);
+	g6.addEdge(4, 0);
+	g6.addEdge(4, 5);
+	g6.SCC();
+
+	cout << "\nSCCs in seventh graph \n";
+	Graph g7(10);
+	g7.addEdge(0, 1);  //AB
+	g7.addEdge(1, 2);  //BC
+	g7.addEdge(2, 3);  //CD
+	g7.addEdge(3, 0);  //DA
+	g7.addEdge(2, 0);  //CA
+	g7.addEdge(2, 4);  //CE
+	g7.addEdge(4, 5);  //EF
+	g7.addEdge(5, 6);  //FG
+	g7.addEdge(6, 2);  //GC
+	g7.addEdge(6, 4);  //GE
+	g7.addEdge(5, 7);  //FH
+	g7.addEdge(7, 8);  //HI
+	g7.addEdge(8, 9);  //IJ
+	g7.addEdge(9, 5);  //JF
+	g7.addEdge(8, 5);  //IF
+	g7.SCC();
+
+	cout << "\nSCCs in eighth graph \n";
+	Graph g8(8);
+	g8.addEdge(0, 1);  // A B
+	g8.addEdge(1, 7);  // B H
+	g8.addEdge(7, 0);  // H A
+	g8.addEdge(0, 2);  // A C
+	g8.addEdge(2, 5);  // C F
+	g8.addEdge(5, 0);  // F A
+	g8.addEdge(0, 6);  // A G
+	g8.addEdge(6, 5);  // G F
+	g8.addEdge(2, 3);  // C D
+	g8.addEdge(3, 4);  // D E
+	g8.SCC();
+
+	return 0;
+}
