@@ -38,7 +38,7 @@ public:
 	void SCC_Kosaraju();
 };
 
-Graph::Graph(int V) : V(V), adj(vector(V, list<int>()))
+Graph::Graph(int V) : V(V), adj(vector<list<int>>(V, list<int>()))
 {
 }
 
