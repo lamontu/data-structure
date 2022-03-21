@@ -97,18 +97,16 @@ void Graph::SCCUtil(int u, int disc[], int low[], stack<int>* st,
 	// head node found, pop the stack and print an SCC
 	if (low[u] == disc[u])
 	{
-	    int w = 0; // To store stack extracted vertices
-		while (st->top() != u)
+	    int w = -1; // To store stack extracted vertices
+		do
 		{
 			w = (int)st->top();
 			cout << w << " ";
 			stackMember[w] = false;
 			st->pop();
-		}
-		w = (int)st->top();
-		cout << w << "\n";
-		stackMember[w] = false;
-		st->pop();
+		} while (w != u);
+		cout << endl;  // End of current SCC
+
 	}
 }
 
