@@ -44,7 +44,7 @@ Graph::Graph(int V) : V(V), adj(vector<list<int>>(V, list<int>()))
 
 void Graph::addEdge(int v, int w)
 {
-	adj[v].push_back(w);
+	adj[v].push_back(w);  // directed graph
 }
 
 // A recursive function that finds and prints strongly connected
